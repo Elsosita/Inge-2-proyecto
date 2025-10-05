@@ -1,75 +1,47 @@
 package Clases;
- import java.util.ArrayList;
- import java.util.List;
+
+import Clases.Retiro;
+import Clases.Trabajo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Empleado {
+    private int id;
     private String nombre;
     private int telefono;
     private float sueldo;
-    private List<Trabajo> trabajos;
-    private List<Retiro> retiros;
+    private List<Trabajo> trabajos = new ArrayList<>();
+    private List<Retiro> retiros = new ArrayList<>();
 
     public Empleado() {}
 
-    public Empleado(String nombre, int telefono, float sueldo, List<Trabajo> trabajos, List<Retiro> retiros) {
+    // Constructor completo
+    public Empleado(int id, String nombre, int telefono, float sueldo, List<Trabajo> trabajos, List<Retiro> retiros) {
+        this.id = id;
         this.nombre = nombre;
         this.telefono = telefono;
         this.sueldo = sueldo;
-        this.trabajos = trabajos;
-        this.retiros = retiros;
+        this.trabajos = trabajos != null ? trabajos : new ArrayList<>();
+        this.retiros = retiros != null ? retiros : new ArrayList<>();
     }
 
-    public Empleado(Empleado empleado) {
-        this.nombre= empleado.nombre;
-        this.telefono= empleado.telefono;
-        this.sueldo= empleado.sueldo;
-        this.trabajos = empleado.trabajos;
-        this.retiros = empleado.retiros;
-    }
+    // Getters y setters únicos
+    public int getIdEmpleado() { return id; }
+    public void setIdEmpleado(int id) { this.id = id; }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getNombreEmpleado() { return nombre; }
+    public void setNombreEmpleado(String nombre) { this.nombre = nombre; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public int getTelefonoEmpleado() { return telefono; }
+    public void setTelefonoEmpleado(int telefono) { this.telefono = telefono; }
 
-    public int getTelefono() {
-        return telefono;
-    }
+    public float getSueldoEmpleado() { return sueldo; }
+    public void setSueldoEmpleado(float sueldo) { this.sueldo = sueldo; }
 
-    public void setTelefono(int telefono) {
-        this.telefono = telefono;
-    }
+    public List<Trabajo> getTrabajosEmpleado() { return trabajos; }
+    public void setTrabajosEmpleado(List<Trabajo> trabajos) { this.trabajos = trabajos; }
 
-    public float getSueldo() {
-        return sueldo;
-    }
-
-    public void setSueldo(float sueldo) {
-        this.sueldo = sueldo;
-    }
-
-    public List<Trabajo> getTrabajos() {
-        return trabajos;
-    }
-
-    public void agregarTrabajo(Trabajo trabajo) {
-        if (!trabajos.contains(trabajo)) {
-            trabajos.add(trabajo);
-            trabajo.agregarEmpleado(this);
-        }
-    }
-
-    public void agregarRetiro(Retiro retiro) {
-        if (!retiros.contains(retiro)) {
-            retiros.add(retiro);
-        }
-    }
-
-    public List<Retiro> getRetiros() {
-        return retiros;
-    }
-
+    public List<Retiro> getRetirosEmpleado() { return retiros; }
+    public void setRetirosEmpleado(List<Retiro> retiros) { this.retiros = retiros; }
 }
