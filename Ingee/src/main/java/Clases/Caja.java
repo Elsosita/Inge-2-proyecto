@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Caja {
+    private  int id;
     private float montototal;
     private LocalDate  fecha;
     private ArrayList<Retiro> retiros = new ArrayList<>();
@@ -28,7 +29,11 @@ public class Caja {
         this.pagos = new ArrayList<>(caja.pagos);
     }
 
+    public int getIdCaja() {
+        return id;
+    }
 
+    public void setId(int id) {}
     public float getMontototal() {
         return montototal;
     }
