@@ -1,6 +1,7 @@
 package Clases;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Trabajo {
     private int id;
@@ -15,11 +16,12 @@ public class Trabajo {
     private Estadodefacturacion estadodefacturacion;
     private Vehiculo vehiculo;
     private Aseguradora aseguradora;
+    private List<Empleado> empleados;
 
 
     public Trabajo() {}
 
-    public Trabajo(int id, String descripcion, LocalDate fecha,EstadoPago estadopago, EstadoTrabajo estadotrabajo, float monto,Estadodefacturacion estadodefacturacion, Vehiculo vehiculo,  Aseguradora aseguradora) {
+    public Trabajo(int id, String descripcion, LocalDate fecha,EstadoPago estadopago, EstadoTrabajo estadotrabajo, float monto,Estadodefacturacion estadodefacturacion, Vehiculo vehiculo,  Aseguradora aseguradora, List<Empleado> empleados) {
         this.id = id;
         this.descripcion = descripcion;
         this.fecha = fecha;
@@ -29,6 +31,7 @@ public class Trabajo {
         this.estadodefacturacion = estadodefacturacion;
         this.vehiculo = vehiculo;
         this.aseguradora = aseguradora;
+        this.empleados = empleados;
     }
 
     public Trabajo(Trabajo trabajo) {
@@ -41,6 +44,7 @@ public class Trabajo {
         this.estadodefacturacion = trabajo.estadodefacturacion;
         this.vehiculo = trabajo.vehiculo;
         this.aseguradora = trabajo.aseguradora;
+        this.empleados = trabajo.empleados;
     }
 
     public int getId() {
@@ -110,6 +114,17 @@ public class Trabajo {
     public void setAseguradora(Aseguradora aseguradora) {
         this.aseguradora = aseguradora;
     }
+
+    public List<Empleado> getEmpleados() {
+        return empleados;
+    }
+    public void agregarEmpleado(Empleado empleado) {
+        if (!empleados.contains(empleado)) {
+            empleados.add(empleado);
+            empleado.agregarTrabajo(this);
+        }
+    }
+
 
 
 }
