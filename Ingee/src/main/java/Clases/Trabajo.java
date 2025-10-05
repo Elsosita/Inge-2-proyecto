@@ -50,10 +50,10 @@ public class Trabajo {
         this.pagos = trabajo.pagos;
     }
 
-    public int getId() {
+    public int getIdTrabajo() {
         return id;
     }
-    public void setId(int id) {
+    public void setIdTrabajo(int id) {
         this.id = id;
     }
     public String getDescripcion() {

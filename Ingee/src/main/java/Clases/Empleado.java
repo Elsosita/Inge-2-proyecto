@@ -44,4 +44,16 @@ public class Empleado {
 
     public List<Retiro> getRetirosEmpleado() { return retiros; }
     public void setRetirosEmpleado(List<Retiro> retiros) { this.retiros = retiros; }
+
+    public void agregarTrabajo(Trabajo trabajo) {
+        if (!trabajos.contains(trabajo)) { // Evita duplicados
+            trabajos.add(trabajo);           // Agrega el trabajo a la lista del empleado
+
+            // Bidireccional: agrega este empleado al trabajo
+            if (!trabajo.getEmpleados().contains(this)) {
+                trabajo.agregarEmpleado(this);
+            }
+        }
+    }
+
 }
