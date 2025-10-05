@@ -9,16 +9,23 @@ public class Pago {
     private float monto;
     private LocalDate fecha;
     private LocalTime hora;
+    private Trabajo trabajo;
+    private Caja caja;
 
 
     public Pago() {
     }
 
-    public Pago(Tipo tipo, float m, LocalDate f, LocalTime h) {
+    public Pago(Tipo tipo, float m, LocalDate f, LocalTime h, Trabajo t, Caja c) {
         this.tipo = tipo;
         this.monto = m;
         this.fecha = f;
         this.hora = h;
+        this.trabajo = t;
+        this.caja = c;
+
+        trabajo.agregarPago(this);
+        caja.agregarPago(this);
     }
 
     public Pago (Pago pago) {
@@ -26,6 +33,10 @@ public class Pago {
         this.monto = pago.monto;
         this.fecha = pago.fecha;
         this.hora = pago.hora;
+        this.trabajo = pago.trabajo;
+
+        trabajo.agregarPago(this);
+        caja.agregarPago(this);
     }
 
     public Tipo getTipo() {
