@@ -11,52 +11,34 @@ public class Aseguradora {
 
     public Aseguradora() {}
 
-    public Aseguradora(String nombre, String ordenDeProvision) {
+    public Aseguradora(int id, String nombre, String ordenDeProvision) {
+        this.id = id;
         this.nombre = nombre;
         this.ordenDeProvision = ordenDeProvision;
+    }
+
+    public Aseguradora(String nombre, String ordenDeProvision, List<Trabajo> trabajos) {
+        this.nombre = nombre;
+        this.ordenDeProvision = ordenDeProvision;
+        this.trabajos = trabajos;
     }
 
     public Aseguradora(Aseguradora a) {
         this.nombre = a.nombre;
         this.ordenDeProvision = a.ordenDeProvision;
+        this.trabajos = new ArrayList<>(a.trabajos);
     }
 
-    public int getIdAseguradora() {
-        return id;
-    }
+    // Getters y Setters
+    public int getIdAseguradora() { return id; }
+    public void setIdAseguradora(int id) { this.id = id; }
 
-    public void setIdAseguradora(int id) {
-        this.id = id;
-    }
+    public String getNombreAseguradora() { return nombre; }
+    public void setNombreAseguradora(String nombre) { this.nombre = nombre; }
 
-    public String getNombreAseguradora() {
-        return nombre;
-    }
+    public String getOrdenDeProvision() { return ordenDeProvision; }
+    public void setOrdenDeProvision(String ordenDeProvision) { this.ordenDeProvision = ordenDeProvision; }
 
-    public void setNombreAseguradora(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getOrdenDeProvision() {
-        return ordenDeProvision;
-    }
-
-    public void setOrdenDeProvision(String ordenDeProvision) {
-        this.ordenDeProvision = ordenDeProvision;
-    }
-
-    public List<Trabajo> getTrabajos() {
-        return trabajos;
-    }
-
-    public void setTrabajos(List<Trabajo> trabajos) {
-        this.trabajos = trabajos;
-    }
-
-    public void agregarTrabajo(Trabajo trabajo) {
-        this.trabajos.add(trabajo);
-        trabajo.setAseguradora(this);
-    }
+    public List<Trabajo> getTrabajosAseguradora() { return trabajos; }
+    public void setTrabajosAseguradora(List<Trabajo> trabajos) { this.trabajos = trabajos; }
 }
-
-

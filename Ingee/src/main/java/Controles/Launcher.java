@@ -18,16 +18,6 @@ public class Launcher {
             e.printStackTrace();
         }
 
-        try {
-            AseguradoraDao dao = new AseguradoraDao();
-            Aseguradora nueva = new Aseguradora("La Segura S.A.", "C:/Users/User/Desktop/Facultad/Sistemas operativos/Teoría 2 AdP.pdf");
-            dao.agregarAseguradora(nueva);
-            dao.abrirOrdenDeProvision(1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
     }
 
 
