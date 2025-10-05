@@ -1,14 +1,13 @@
 package Clases;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CajaDAO {
+public class CajaDao {
     private Connection conexion;
 
-    public CajaDAO() throws SQLException {
+    public CajaDao() throws SQLException {
         this.conexion = ConexionBD.getConnection();
     }
 
