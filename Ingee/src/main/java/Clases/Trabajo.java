@@ -38,6 +38,7 @@ public class Trabajo {
         this.estadopago = trabajo.estadopago;
         this.estadotrabajo = trabajo.estadotrabajo;
         this.monto = trabajo.monto;
+        this.estadodefacturacion = trabajo.estadodefacturacion;
         this.vehiculo = trabajo.vehiculo;
         this.aseguradora = trabajo.aseguradora;
     }
@@ -85,6 +86,13 @@ public class Trabajo {
 
     public void setMonto(float monto) {
         this.monto = monto;
+    }
+
+    public Estadodefacturacion getEstadodefacturacion() {
+        return estadodefacturacion;
+    }
+    public void setEstadodefacturacion(Estadodefacturacion estadodefacturacion) {
+        this.estadodefacturacion = estadodefacturacion;
     }
 
     public Vehiculo getVehiculo() {
