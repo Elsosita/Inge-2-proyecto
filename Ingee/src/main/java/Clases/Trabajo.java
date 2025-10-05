@@ -11,19 +11,22 @@ public class Trabajo {
     private EstadoPago estadopago;
     private EstadoTrabajo estadotrabajo;
     private float monto;
+    private enum Estadodefacturacion {FACTURADO, NOFACTURADO};
+    private Estadodefacturacion estadodefacturacion;
     private Vehiculo vehiculo;
     private Aseguradora aseguradora;
 
 
     public Trabajo() {}
 
-    public Trabajo(int id, String descripcion, LocalDate fecha,EstadoPago estadopago, EstadoTrabajo estadotrabajo, float monto, Vehiculo vehiculo,  Aseguradora aseguradora) {
+    public Trabajo(int id, String descripcion, LocalDate fecha,EstadoPago estadopago, EstadoTrabajo estadotrabajo, float monto,Estadodefacturacion estadodefacturacion, Vehiculo vehiculo,  Aseguradora aseguradora) {
         this.id = id;
         this.descripcion = descripcion;
         this.fecha = fecha;
         this.estadopago = estadopago;
         this.estadotrabajo = estadotrabajo;
         this.monto = monto;
+        this.estadodefacturacion = estadodefacturacion;
         this.vehiculo = vehiculo;
         this.aseguradora = aseguradora;
     }
