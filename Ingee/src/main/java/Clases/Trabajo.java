@@ -17,11 +17,12 @@ public class Trabajo {
     private Vehiculo vehiculo;
     private Aseguradora aseguradora;
     private List<Empleado> empleados;
+    private List<Pago> pagos;
 
 
     public Trabajo() {}
 
-    public Trabajo(int id, String descripcion, LocalDate fecha,EstadoPago estadopago, EstadoTrabajo estadotrabajo, float monto,Estadodefacturacion estadodefacturacion, Vehiculo vehiculo,  Aseguradora aseguradora, List<Empleado> empleados) {
+    public Trabajo(int id, String descripcion, LocalDate fecha,EstadoPago estadopago, EstadoTrabajo estadotrabajo, float monto,Estadodefacturacion estadodefacturacion, Vehiculo vehiculo,  Aseguradora aseguradora, List<Empleado> empleados, List<Pago> pagos) {
         this.id = id;
         this.descripcion = descripcion;
         this.fecha = fecha;
@@ -32,6 +33,7 @@ public class Trabajo {
         this.vehiculo = vehiculo;
         this.aseguradora = aseguradora;
         this.empleados = empleados;
+        this.pagos = pagos;
     }
 
     public Trabajo(Trabajo trabajo) {
@@ -45,6 +47,7 @@ public class Trabajo {
         this.vehiculo = trabajo.vehiculo;
         this.aseguradora = trabajo.aseguradora;
         this.empleados = trabajo.empleados;
+        this.pagos = trabajo.pagos;
     }
 
     public int getId() {
@@ -125,6 +128,14 @@ public class Trabajo {
         }
     }
 
+    public void agregarPago(Pago pago) {
+        if (!pagos.contains(pago)) {
+            pagos.add(pago);
+        }
+    }
 
+    public List<Pago> getPagos() {
+        return pagos;
+    }
 
 }
