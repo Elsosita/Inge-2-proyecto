@@ -4,7 +4,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+
 
 import java.io.IOException;
 
@@ -12,6 +20,22 @@ public class MainController {
 
     @FXML
     private TabPane tabPane;
+
+    @FXML
+    private TextField fechatabla;
+
+    @FXML
+    public void initialize() {
+        Timeline reloj = new Timeline(
+                new KeyFrame(Duration.seconds(1), e -> {
+                    LocalDateTime ahora = LocalDateTime.now();
+                    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+                    fechatabla.setText(ahora.format(formato));
+                })
+        );
+        reloj.setCycleCount(Timeline.INDEFINITE);
+        reloj.play();
+    }
 
     @FXML
     void mostrarIngresarTrabajo() {

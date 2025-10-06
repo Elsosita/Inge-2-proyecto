@@ -27,5 +27,6 @@ public class Launcher2 extends Application {
 
     public static void main(String[] args) {
         launch(args);
+
     }
 }
