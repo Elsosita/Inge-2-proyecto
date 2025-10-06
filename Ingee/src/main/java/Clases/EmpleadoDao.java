@@ -82,7 +82,7 @@ public class EmpleadoDao {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Trabajo t = new Trabajo();
-                t.setId(rs.getInt("id"));
+                t.setIdTrabajo(rs.getInt("id"));
                 t.setDescripcion(rs.getString("descripcion"));
                 t.setMonto(rs.getFloat("monto"));
                 // Aquí podés agregar más campos de Trabajo si querés

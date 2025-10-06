@@ -10,13 +10,23 @@ public class TrabajoManager {
         this.trabajoDao = new TrabajoDao();
     }
 
-    public List<Trabajo> listarTrabajosNoFacturados() {
+    public void mostrarTrabajosNoFacturados() {
         try {
-            return trabajoDao.obtenerTrabajosNoFacturados();
+            List<Trabajo> trabajos = trabajoDao.obtenerTrabajosNoFacturados();
+            for (Trabajo t : trabajos) {
+                System.out.println("Trabajo: " + t.getDescripcion() + ", Monto: " + t.getMonto());
+                System.out.println("Vehiculo: " + t.getVehiculo().getPatente() + " ("
+                        + t.getVehiculo().getMarca() + " "
+                        + t.getVehiculo().getModelo() + ")");
+                System.out.println("Cliente: " + t.getVehiculo().getCliente().getNombre()
+                        + ", Tel: " + t.getVehiculo().getCliente().getNumero());
+                System.out.println("-------------------------------------------------");
+            }
         } catch (SQLException e) {
-            System.out.println("Error al obtener trabajos no facturados: " + e.getMessage());
-            return null;
+            System.err.println("Error al obtener trabajos no facturados: " + e.getMessage());
         }
+
     }
+
 }
 
