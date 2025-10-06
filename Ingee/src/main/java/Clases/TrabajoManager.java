@@ -1,6 +1,7 @@
 package Clases;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrabajoManager {
@@ -10,23 +11,19 @@ public class TrabajoManager {
         this.trabajoDao = new TrabajoDao();
     }
 
-    public void mostrarTrabajosNoFacturados() {
+    public List<Trabajo> obtenerTrabajosNoFacturados() throws SQLException {
+        return trabajoDao.obtenerTrabajosNoFacturados();
+    }
+    public List<Trabajo> obtenerTrabajosDelDia() {
         try {
-            List<Trabajo> trabajos = trabajoDao.obtenerTrabajosNoFacturados();
-            for (Trabajo t : trabajos) {
-                System.out.println("Trabajo: " + t.getDescripcion() + ", Monto: " + t.getMonto());
-                System.out.println("Vehiculo: " + t.getVehiculo().getPatente() + " ("
-                        + t.getVehiculo().getMarca() + " "
-                        + t.getVehiculo().getModelo() + ")");
-                System.out.println("Cliente: " + t.getVehiculo().getCliente().getNombre()
-                        + ", Tel: " + t.getVehiculo().getCliente().getNumero());
-                System.out.println("-------------------------------------------------");
-            }
+            return trabajoDao.obtenerTrabajosDelDia();
         } catch (SQLException e) {
-            System.err.println("Error al obtener trabajos no facturados: " + e.getMessage());
+            System.err.println("Error al obtener trabajos del día: " + e.getMessage());
+            return new ArrayList<>();
         }
-
     }
 
 }
+
+
 

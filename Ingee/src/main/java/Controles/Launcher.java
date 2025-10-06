@@ -28,7 +28,11 @@ public class Launcher {
         System.out.println("===== Trabajos no facturados =====");
 
         // Mostramos los trabajos no facturados
-        trabajoManager.mostrarTrabajosNoFacturados();
+        try {
+            trabajoManager.obtenerTrabajosNoFacturados();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 

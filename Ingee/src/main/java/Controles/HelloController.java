@@ -1,33 +1,65 @@
 package Controles;
 
-import javafx.event.ActionEvent;
+import Clases.Trabajo;
+import Clases.TrabajoManager;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.stage.Stage;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.beans.property.SimpleStringProperty;
 
-import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
-public class    HelloController {
-    @FXML
-    private Label welcomeText;
+public class HelloController {
 
     @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
-    }
+    private TableView<Trabajo> tableTrabajos;
 
     @FXML
-    private void abrirPanelCliente(ActionEvent event) throws IOException {
-        // Cargar el FXML de la segunda ventana
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/Segunda.fxml"));
-        Scene escenaCliente = new Scene(loader.load());
+    private TableColumn<Trabajo, String> colPatente;
 
-        // Crear un nuevo Stage (ventana independiente)
-        Stage nuevaVentana = new Stage();
-        nuevaVentana.setScene(escenaCliente);
-        nuevaVentana.setTitle("Panel Cliente");
-        nuevaVentana.show();
+    @FXML
+    private TableColumn<Trabajo, String> colModelo;
+
+    @FXML
+    private TableColumn<Trabajo, String> colDescripcion;
+
+    @FXML
+    private TableColumn<Trabajo, String> colClienteNombre;
+
+    @FXML
+    private TableColumn<Trabajo, String> colClienteTelefono;
+
+    private TrabajoManager trabajoManager;
+
+    @FXML
+    public void initialize() {
+        try {
+            trabajoManager = new TrabajoManager();
+
+            // Configurar columnas
+            colPatente.setCellValueFactory(data ->
+                    new SimpleStringProperty(data.getValue().getVehiculo().getPatente()));
+            colModelo.setCellValueFactory(data ->
+                    new SimpleStringProperty(data.getValue().getVehiculo().getModelo()));
+            colDescripcion.setCellValueFactory(data ->
+                    new SimpleStringProperty(data.getValue().getDescripcion()));
+            colClienteNombre.setCellValueFactory(data ->
+                    new SimpleStringProperty(data.getValue().getVehiculo().getCliente().getNombre()));
+            colClienteTelefono.setCellValueFactory(data ->
+                    new SimpleStringProperty(
+                            String.valueOf(data.getValue().getVehiculo().getCliente().getNumero())
+                    ));
+
+            // Obtener trabajos del día
+            List<Trabajo> trabajos = trabajoManager.obtenerTrabajosDelDia();
+            ObservableList<Trabajo> trabajosObservable = FXCollections.observableArrayList(trabajos);
+            tableTrabajos.setItems(trabajosObservable);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
