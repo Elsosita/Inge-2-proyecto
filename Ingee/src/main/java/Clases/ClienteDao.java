@@ -24,7 +24,7 @@ public class ClienteDao {
             // Obtener id generado y asignarlo al objeto
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
-                    c.setId(rs.getInt(1));
+                    c.setIdCliente(rs.getInt(1));
                 }
             }
         }
@@ -39,7 +39,7 @@ public class ClienteDao {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     cliente = new Cliente();
-                    cliente.setId(rs.getInt("id"));
+                    cliente.setIdCliente(rs.getInt("id"));
                     cliente.setNombre(rs.getString("nombre"));
                     cliente.settipodocumento(Cliente.TD.valueOf(rs.getString("tipodocumento")));
                     cliente.setNumerodoc(rs.getInt("numerodoc"));
@@ -74,7 +74,7 @@ public class ClienteDao {
             stmt.setString(2, c.gettipodocumento().name());
             stmt.setInt(3, c.getNumerodoc());
             stmt.setInt(4, c.getNumero());
-            stmt.setInt(5, c.getId());
+            stmt.setInt(5, c.getIdCliente());
             stmt.executeUpdate();
         }
     }
@@ -97,7 +97,7 @@ public class ClienteDao {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Vehiculo v = new Vehiculo();
-                    v.setId(rs.getInt("id"));
+                    v.setIdCliente(rs.getInt("id"));
                     v.setPatente(rs.getString("patente"));
                     v.setMarca(rs.getString("marca"));
                     v.setModelo(rs.getString("modelo"));

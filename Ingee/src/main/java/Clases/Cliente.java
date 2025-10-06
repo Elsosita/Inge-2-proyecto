@@ -31,10 +31,10 @@ public class Cliente {
         this.vehiculos= c.vehiculos;
     }
 
-    public int getId() {
+    public int getIdCliente() {
         return id;
     }
-    public void setId(int id) {
+    public void setIdCliente(int id) {
         this.id = id;
     }
     public String getNombre() {

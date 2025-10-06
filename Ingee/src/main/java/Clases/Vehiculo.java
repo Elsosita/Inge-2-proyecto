@@ -72,4 +72,12 @@ public class Vehiculo {
 
     public Cliente getCliente() { return cliente; }
     public void setCliente(Cliente cliente) { this.cliente = cliente; }
+
+    public void setIdCliente(int id) {
+        if (this.cliente == null) {
+            this.cliente = new Cliente(); 
+        }
+        this.cliente.setIdCliente(id); 
+    }
+
 }
