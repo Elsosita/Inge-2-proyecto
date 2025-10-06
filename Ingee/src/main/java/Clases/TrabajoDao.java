@@ -104,4 +104,25 @@ public class TrabajoDao {
             stmt.executeUpdate();
         }
     }
+
+    public List<Trabajo> obtenerTrabajosNoFacturados() throws SQLException {
+        List<Trabajo> trabajos = new ArrayList<>();
+        String sql = "SELECT * FROM Trabajo WHERE estadodefacturacion = 'NOFACTURADO'";
+
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Trabajo t = new Trabajo();
+                t.setIdTrabajo(rs.getInt("id"));
+                t.setDescripcion(rs.getString("descripcion"));
+                t.setFecha(rs.getDate("fecha").toLocalDate());
+                t.setEstadopago(Trabajo.EstadoPago.valueOf(rs.getString("estadoPago")));
+                t.setEstadotrabajo(Trabajo.EstadoTrabajo.valueOf(rs.getString("estadoTrabajo")));
+                trabajos.add(t);
+            }
+        }
+
+        return trabajos;
+    }
+
 }
