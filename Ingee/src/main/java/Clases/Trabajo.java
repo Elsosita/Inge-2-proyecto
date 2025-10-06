@@ -12,7 +12,7 @@ public class Trabajo {
     private EstadoPago estadopago;
     private EstadoTrabajo estadotrabajo;
     private float monto;
-    private enum Estadodefacturacion {FACTURADO, NOFACTURADO};
+    public enum Estadodefacturacion {FACTURADO, NOFACTURADO};
     private Estadodefacturacion estadodefacturacion;
     private Vehiculo vehiculo;
     private Aseguradora aseguradora;

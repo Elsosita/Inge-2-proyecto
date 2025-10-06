@@ -30,11 +30,11 @@ public class Vehiculo {
         this.cliente = vehiculo.cliente;
     }
 
-    public int getId() {
+    public int getIdVehiculo() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setIdVehiculo(int id) {
         this.id = id;
     }
 
