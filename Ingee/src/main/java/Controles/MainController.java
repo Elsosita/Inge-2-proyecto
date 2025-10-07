@@ -34,6 +34,8 @@ public class MainController {
 
     @FXML
     private Label fechatabla;
+    @FXML
+    private Label txtNombreVentana;
 
     @FXML
     private TableView<Trabajo> tablaTrabajos;
@@ -48,6 +50,7 @@ public class MainController {
     @FXML
     private TableColumn<Trabajo, String> colTelefono;
 
+
     private final TrabajoDao trabajoDao = new TrabajoDao();
 
     private TrabajoManager trabajoManager;
@@ -59,11 +62,21 @@ public class MainController {
 
     @FXML
     public void initialize() throws SQLException {
-        LocalDate hoy = LocalDate.now();
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        fechatabla.setText(hoy.format(formato));
+        Timeline reloj = new Timeline(
+                new KeyFrame(Duration.seconds(1), e -> {
+                    LocalDateTime ahora = LocalDateTime.now();
+                    boolean mostrarDosPuntos = (ahora.getSecond() % 2 == 0);
+                    String separador = mostrarDosPuntos ? ":" : " ";
+                    DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    String horaYMinutos = String.format("%02d%s%02d", ahora.getHour(), separador, ahora.getMinute());
+                    fechatabla.setText(formatoFecha.format(ahora) + " " + horaYMinutos);
+                })
+        );
+        reloj.setCycleCount(Timeline.INDEFINITE);
+        reloj.play();
         configurarColumnas();
         cargarTrabajosDelDia();
+        txtNombreVentana.setText("Trabajos del dia");
         try {
             trabajoManager = new TrabajoManager();
         } catch (SQLException e) {
@@ -192,6 +205,7 @@ public class MainController {
 
     @FXML
     private void mostrarFacturados() {
+        txtNombreVentana.setText("Trabajos facturados");
         try {
             List<Trabajo> trabajos = trabajoManager.obtenerTrabajosFacturados();
             ObservableList<Trabajo> trabajosObservable = FXCollections.observableArrayList(trabajos);

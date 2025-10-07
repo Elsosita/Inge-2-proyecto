@@ -21,6 +21,12 @@
     -fx-fill: #ffffff;
 }
 
+.titulo-ventana {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-fill: #ffffff;
+}
+
 .subtitulo-bienvenida {
     -fx-font-size: 16px;
     -fx-fill: #b0b0b0;
@@ -49,6 +55,10 @@
 }
 .boton-menu:hover {
     -fx-background-color: #2563eb;
+}
+
+.boton-Volver:hover {
+    -fx-background-color: #CD5C5C;
 }
 
 .boton-menu:pressed {
