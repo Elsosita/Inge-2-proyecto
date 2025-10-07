@@ -25,6 +25,7 @@ import javafx.util.Duration;
 
 
 import java.io.IOException;
+import java.util.List;
 
 public class MainController {
 
@@ -49,6 +50,10 @@ public class MainController {
 
     private final TrabajoDao trabajoDao = new TrabajoDao();
 
+    private TrabajoManager trabajoManager;
+
+
+
     public MainController() throws SQLException {
     }
 
@@ -59,6 +64,11 @@ public class MainController {
         fechatabla.setText(hoy.format(formato));
         configurarColumnas();
         cargarTrabajosDelDia();
+        try {
+            trabajoManager = new TrabajoManager();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void mostrarFechaActual() {
@@ -131,10 +141,10 @@ public class MainController {
         abrirPestaña("Manejo de Caja", "/com/tuapp/vista/CajaView.fxml");
     }
 
-    @FXML
+   /* @FXML
     void mostrarFacturados() {
         abrirPestaña("Trabajos Facturados", "/com/tuapp/vista/FacturadosView.fxml");
-    }
+    }*/
 
     private void abrirPestaña(String titulo, String rutaFXML) {
         // Revisar si la pestaña ya existe
@@ -179,5 +189,25 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void mostrarFacturados() {
+        try {
+            List<Trabajo> trabajos = trabajoManager.obtenerTrabajosFacturados();
+            ObservableList<Trabajo> trabajosObservable = FXCollections.observableArrayList(trabajos);
+            tablaTrabajos.setItems(trabajosObservable);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    private void onVolver(ActionEvent event) {
+        // Obtenemos la pestaña seleccionada
+        Tab tabActual = tabPane.getSelectionModel().getSelectedItem();
+        if (tabActual != null) {
+            tabPane.getTabs().remove(tabActual); // Cierra la pestaña
+        }
+    }
+
 
 }

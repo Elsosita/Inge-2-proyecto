@@ -37,7 +37,16 @@
     -fx-pref-height: 35;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);
 }
-
+.boton-Volver {
+    -fx-background-color: #F08080;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-pref-width: 180;
+    -fx-pref-height: 35;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
 .boton-menu:hover {
     -fx-background-color: #2563eb;
 }

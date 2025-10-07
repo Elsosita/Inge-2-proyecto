@@ -25,7 +25,7 @@ public class Trabajo {
     public Trabajo(int id, String descripcion, LocalDate fecha,EstadoPago estadopago, EstadoTrabajo estadotrabajo, float monto,Estadodefacturacion estadodefacturacion, Vehiculo vehiculo,  Aseguradora aseguradora, List<Empleado> empleados, List<Pago> pagos) {
         this.id = id;
         this.descripcion = descripcion;
-        this.fecha = fecha;
+        this.fecha = LocalDate.now();
         this.estadopago = estadopago;
         this.estadotrabajo = estadotrabajo;
         this.monto = monto;
@@ -39,7 +39,7 @@ public class Trabajo {
     public Trabajo(Trabajo trabajo) {
         this.id = trabajo.id;
         this.descripcion = trabajo.descripcion;
-        this.fecha = trabajo.fecha;
+        this.fecha = LocalDate.now();
         this.estadopago = trabajo.estadopago;
         this.estadotrabajo = trabajo.estadotrabajo;
         this.monto = trabajo.monto;

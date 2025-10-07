@@ -197,5 +197,59 @@ public class TrabajoDao {
         return trabajos;
     }
 
+    public List<Trabajo> obtenerTrabajosFacturados() throws SQLException {
+        String sql = """
+        SELECT 
+            t.id AS idTrabajo,
+            t.descripcion AS descripcion,
+            t.monto AS monto,
+            t.fecha AS fecha,
+            v.id AS idVehiculo,
+            v.patente AS patente,
+            v.marca AS marca,
+            v.modelo AS modelo,
+            c.id AS idCliente,
+            c.nombre AS nombreCliente,
+            c.numero AS telefonoCliente
+        FROM Trabajo t
+        JOIN Vehiculo v ON t.vehiculo_id = v.id
+        JOIN Cliente c ON v.cliente_id = c.id
+        WHERE t.estadodefacturacion = 'FACTURADO'
+    """;
+
+        List<Trabajo> trabajos = new ArrayList<>();
+
+        try (PreparedStatement stmt = conexion.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                // Vehiculo
+                Vehiculo v = new Vehiculo();
+                v.setIdVehiculo(rs.getInt("idVehiculo"));
+                v.setPatente(rs.getString("patente"));
+                v.setMarca(rs.getString("marca"));
+                v.setModelo(rs.getString("modelo"));
+
+                // Cliente
+                Cliente c = new Cliente();
+                c.setIdCliente(rs.getInt("idCliente"));
+                c.setNombre(rs.getString("nombreCliente"));
+                c.setNumero(rs.getInt("telefonoCliente"));
+
+                v.setCliente(c);
+
+                // Trabajo
+                Trabajo t = new Trabajo();
+                t.setIdTrabajo(rs.getInt("idTrabajo"));
+                t.setDescripcion(rs.getString("descripcion"));
+                t.setMonto(rs.getFloat("monto"));
+                t.setVehiculo(v);
+
+                trabajos.add(t);
+            }
+        }
+
+        return trabajos;
+    }
 
 }

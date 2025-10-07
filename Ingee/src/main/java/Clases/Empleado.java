@@ -1,7 +1,5 @@
 package Clases;
 
-import Clases.Retiro;
-import Clases.Trabajo;
 
 import java.util.ArrayList;
 import java.util.List;

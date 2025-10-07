@@ -18,8 +18,8 @@ public class Retiro {
         this.descripcion=descripcion;
         this.codigoempleado_retiro=codigoempleado_retiro;
         this.codigocaja_retiro=codigocaja_retiro;
-        this.fecha=fecha;
-        this.hora=hora;
+        this.fecha = LocalDate.now();
+        this.hora = LocalTime.now();
     }
 
     public Retiro(Retiro retiro){
@@ -27,8 +27,8 @@ public class Retiro {
         this.descripcion=retiro.descripcion;
         this.codigoempleado_retiro=retiro.codigoempleado_retiro;
         this.codigocaja_retiro=retiro.codigocaja_retiro;
-        this.fecha=retiro.fecha;
-        this.hora=retiro.hora;
+        this.fecha = LocalDate.now();
+        this.hora = LocalTime.now();
     }
 
     public float getMonto() {

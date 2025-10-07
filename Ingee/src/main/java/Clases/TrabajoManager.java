@@ -22,6 +22,11 @@ public class TrabajoManager {
             return new ArrayList<>();
         }
     }
+    public List<Trabajo> obtenerTrabajosFacturados() throws SQLException {
+        TrabajoDao dao = new TrabajoDao();
+        return dao.obtenerTrabajosFacturados();
+    }
+
 
 }
 

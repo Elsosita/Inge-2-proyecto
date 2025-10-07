@@ -20,8 +20,8 @@ public class Pago {
     public Pago(Tipo tipo, float m, LocalDate f, LocalTime h, Trabajo t, Caja c) {
         this.tipo = tipo;
         this.monto = m;
-        this.fecha = f;
-        this.hora = h;
+        this.fecha = LocalDate.now();
+        this.hora = LocalTime.now();
         this.trabajo = t;
         this.caja = c;
 
@@ -32,8 +32,8 @@ public class Pago {
     public Pago (Pago pago) {
         this.tipo = pago.tipo;
         this.monto = pago.monto;
-        this.fecha = pago.fecha;
-        this.hora = pago.hora;
+        this.fecha = LocalDate.now();
+        this.hora = LocalTime.now();
         this.trabajo = pago.trabajo;
 
         trabajo.agregarPago(this);
