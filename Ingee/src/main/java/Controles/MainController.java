@@ -1,6 +1,7 @@
 package Controles;
 
 import Clases.*;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -8,7 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -62,13 +62,49 @@ public class MainController {
         fechatabla.setText(hoy.format(formato));
     }
 
-   private void configurarColumnas() {
-        colPatente.setCellValueFactory(new PropertyValueFactory<>("patente"));
-        colModelo.setCellValueFactory(new PropertyValueFactory<>("modelo"));
-        colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
-        colCliente.setCellValueFactory(new PropertyValueFactory<>("cliente"));
-        colTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
+    private void configurarColumnas() {
+        // 🔹 Vehículo: patente y modelo
+        colPatente.setCellValueFactory(data ->
+                new SimpleStringProperty(
+                        data.getValue().getVehiculo() != null
+                                ? data.getValue().getVehiculo().getPatente()
+                                : ""
+                )
+        );
+
+        colModelo.setCellValueFactory(data ->
+                new SimpleStringProperty(
+                        data.getValue().getVehiculo() != null
+                                ? data.getValue().getVehiculo().getModelo()
+                                : ""
+                )
+        );
+
+        // 🔹 Trabajo: descripción (ya está directo)
+        colDescripcion.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getDescripcion())
+        );
+
+        // 🔹 Cliente: nombre y teléfono
+        colCliente.setCellValueFactory(data ->
+                new SimpleStringProperty(
+                        (data.getValue().getVehiculo() != null &&
+                                data.getValue().getVehiculo().getCliente() != null)
+                                ? data.getValue().getVehiculo().getCliente().getNombre()
+                                : ""
+                )
+        );
+
+        colTelefono.setCellValueFactory(data ->
+                new SimpleStringProperty(
+                        (data.getValue().getVehiculo() != null &&
+                                data.getValue().getVehiculo().getCliente() != null)
+                                ? String.valueOf(data.getValue().getVehiculo().getCliente().getNumero())
+                                : ""
+                )
+        );
     }
+
 
     private void cargarTrabajosDelDia() throws SQLException {
         ObservableList<Trabajo> lista = FXCollections.observableArrayList(trabajoDao.obtenerTrabajosDelDia());
