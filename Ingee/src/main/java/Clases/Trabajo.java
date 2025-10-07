@@ -8,7 +8,7 @@ public class Trabajo {
     private String descripcion;
     private LocalDate fecha;
     public enum EstadoPago { PENDIENTE, PAGADO }
-    public enum EstadoTrabajo { PENDIENTE, TERMINADO }
+    public enum EstadoTrabajo { PENDIENTE, EN_PROCESO, TERMINADO }
     private EstadoPago estadopago;
     private EstadoTrabajo estadotrabajo;
     private float monto;

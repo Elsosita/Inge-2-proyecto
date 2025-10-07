@@ -4,8 +4,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class ClienteDao {
     private Connection conexion;
+
+    public ClienteDao() throws SQLException {
+        this.conexion = ConexionBD.getConnection();
+    }
 
     public ClienteDao(Connection conexion) {
         this.conexion = conexion;
@@ -106,6 +112,42 @@ public class ClienteDao {
             }
         }
         return vehiculos;
+    }
+
+    public List<Cliente> buscarClientesPorNombre(String texto) throws SQLException {
+        List<Cliente> clientes = new ArrayList<>();
+        String sql = "SELECT * FROM Cliente WHERE nombre LIKE ? OR numero LIKE ? LIMIT 10";
+
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            String filtro = "%" + texto + "%";
+            stmt.setString(1, filtro);
+            stmt.setString(2, filtro);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Cliente c = new Cliente();
+                c.setIdCliente(rs.getInt("id"));
+                c.setNombre(rs.getString("nombre"));
+                c.setNumero(rs.getInt("numero"));
+                clientes.add(c);
+            }
+        }
+        return clientes;
+    }
+    public Cliente obtenerPorId(int id) throws SQLException {
+        String sql = "SELECT * FROM Cliente WHERE id = ?";
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Cliente c = new Cliente();
+                c.setIdCliente(rs.getInt("id"));
+                c.setNombre(rs.getString("nombre"));
+                c.setNumero(rs.getInt("numero"));
+                return c;
+            }
+        }
+        return null;
     }
 }
 

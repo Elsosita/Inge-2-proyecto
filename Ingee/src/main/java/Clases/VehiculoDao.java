@@ -100,4 +100,31 @@ public class VehiculoDao {
         }
         return lista;
     }
+
+    public List<Vehiculo> buscarVehiculosPorPatente(String filtro) throws SQLException {
+        List<Vehiculo> lista = new ArrayList<>();
+        String sql = "SELECT v.id, v.patente, v.modelo, c.nombre AS cliente_nombre " +
+                "FROM Vehiculo v JOIN Cliente c ON v.cliente_id = c.id " +
+                "WHERE v.patente LIKE ?";
+
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setString(1, "%" + filtro + "%");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Vehiculo v = new Vehiculo();
+                v.setIdVehiculo(rs.getInt("id"));
+                v.setPatente(rs.getString("patente"));
+                v.setModelo(rs.getString("modelo"));
+
+                Cliente c = new Cliente();
+                c.setNombre(rs.getString("cliente_nombre"));
+                v.setCliente(c);
+
+                lista.add(v);
+            }
+        }
+        return lista;
+    }
+
 }

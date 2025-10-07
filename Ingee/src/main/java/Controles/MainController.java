@@ -4,8 +4,11 @@ import Clases.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
@@ -15,6 +18,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 
@@ -152,4 +157,27 @@ public class MainController {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void onIngresarTrabajo(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/AgregarTrabajo.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Ingresar nuevo trabajo");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana principal mientras está abierta
+            stage.setResizable(false);
+            stage.showAndWait();
+
+            // OBTENER EL CONTROLADOR, si querés traer el trabajo creado después
+            AgregarTrabajoController controller = loader.getController();
+            // Trabajo nuevoTrabajo = controller.getTrabajoCreado();
+            // if (nuevoTrabajo != null) { ... actualizar tabla ... }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Controles.NuevoClienteController"
+      alignment="CENTER" spacing="15">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Registrar nuevo cliente"
+           style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <GridPane hgap="10" vgap="12">
+        <!-- Nombre -->
+        <Label text="Nombre:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtNombre" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <!-- Tipo de documento -->
+        <Label text="Tipo de documento:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cbTipoDocumento" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <!-- Número de documento -->
+        <Label text="Número de documento:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtNumeroDocumento" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <!-- Teléfono -->
+        <Label text="Teléfono:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtTelefono" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Guardar" onAction="#onGuardar"/>
+        <Button text="Cancelar" onAction="#onCancelar"/>
+    </HBox>
+</VBox>
