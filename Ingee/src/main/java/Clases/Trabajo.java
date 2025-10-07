@@ -53,9 +53,11 @@ public class Trabajo {
     public int getIdTrabajo() {
         return id;
     }
+
     public void setIdTrabajo(int id) {
         this.id = id;
     }
+
     public String getDescripcion() {
         return descripcion;
     }
@@ -75,6 +77,7 @@ public class Trabajo {
     public EstadoPago getEstadopago() {
         return estadopago;
     }
+
     public void setEstadopago(EstadoPago estadopago) {
         this.estadopago = estadopago;
     }

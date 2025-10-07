@@ -1,17 +1,22 @@
 package Controles;
 
+import Clases.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
+
 
 
 import java.io.IOException;
@@ -22,19 +27,52 @@ public class MainController {
     private TabPane tabPane;
 
     @FXML
-    private TextField fechatabla;
+    private Label fechatabla;
 
     @FXML
-    public void initialize() {
-        Timeline reloj = new Timeline(
-                new KeyFrame(Duration.seconds(1), e -> {
-                    LocalDateTime ahora = LocalDateTime.now();
-                    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-                    fechatabla.setText(ahora.format(formato));
-                })
-        );
-        reloj.setCycleCount(Timeline.INDEFINITE);
-        reloj.play();
+    private TableView<Trabajo> tablaTrabajos;
+    @FXML
+    private TableColumn<Trabajo, String> colPatente;
+    @FXML
+    private TableColumn<Trabajo, String> colModelo;
+    @FXML
+    private TableColumn<Trabajo, String> colDescripcion;
+    @FXML
+    private TableColumn<Trabajo, String> colCliente;
+    @FXML
+    private TableColumn<Trabajo, String> colTelefono;
+
+    private final TrabajoDao trabajoDao = new TrabajoDao();
+
+    public MainController() throws SQLException {
+    }
+
+    @FXML
+    public void initialize() throws SQLException {
+        LocalDate hoy = LocalDate.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        fechatabla.setText(hoy.format(formato));
+        configurarColumnas();
+        cargarTrabajosDelDia();
+    }
+
+    private void mostrarFechaActual() {
+        LocalDate hoy = LocalDate.now(); // Obtiene la fecha de hoy
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy"); // Cambia el formato si querés
+        fechatabla.setText(hoy.format(formato));
+    }
+
+   private void configurarColumnas() {
+        colPatente.setCellValueFactory(new PropertyValueFactory<>("patente"));
+        colModelo.setCellValueFactory(new PropertyValueFactory<>("modelo"));
+        colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+        colCliente.setCellValueFactory(new PropertyValueFactory<>("cliente"));
+        colTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
+    }
+
+    private void cargarTrabajosDelDia() throws SQLException {
+        ObservableList<Trabajo> lista = FXCollections.observableArrayList(trabajoDao.obtenerTrabajosDelDia());
+        tablaTrabajos.setItems(lista);
     }
 
     @FXML

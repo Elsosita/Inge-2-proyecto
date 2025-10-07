@@ -8,5 +8,6 @@ module com.example.ingee {
 
     // Abrir y exportar el paquete donde están tus clases y controladores
     opens Controles to javafx.fxml, javafx.graphics;
+    opens Clases to javafx.base;
     exports Controles;
 }
