@@ -153,5 +153,22 @@ public class ClienteDao {
         }
         return null;
     }
+    public Cliente buscarPorId(int id) throws SQLException {
+        String sql = "SELECT * FROM Cliente WHERE id = ?";
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Cliente c = new Cliente();
+                c.setIdCliente(rs.getInt("id"));
+                c.setNombre(rs.getString("nombre"));
+                c.setNumero(rs.getInt("numero"));
+                // agregar más atributos si tenés
+                return c;
+            }
+        }
+        return null;
+    }
+
 }
 

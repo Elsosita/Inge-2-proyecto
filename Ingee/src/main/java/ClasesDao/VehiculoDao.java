@@ -14,6 +14,9 @@ public class VehiculoDao {
     public VehiculoDao() throws SQLException {
         this.conexion = ConexionBD.getConnection();
     }
+    public VehiculoDao(Connection conexion) {
+        this.conexion = conexion;
+    }
 
     // CREATE
     /*public void agregarVehiculo(Vehiculo v) throws SQLException {
@@ -169,6 +172,32 @@ public class VehiculoDao {
                 v.setIdVehiculo(rs.getInt(1));
             }
         }
+    }
+    public Vehiculo buscarPorPatente(String patente) throws SQLException {
+        String sql = "SELECT * FROM Vehiculo WHERE patente = ?";
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setString(1, patente);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Vehiculo v = new Vehiculo();
+                v.setIdVehiculo(rs.getInt("id"));
+                v.setPatente(rs.getString("patente"));
+                v.setMarca(rs.getString("marca"));
+                v.setModelo(rs.getString("modelo"));
+
+                // Asociar cliente (si existe en la BD)
+                int idCliente = rs.getInt("cliente_id");
+                if (idCliente > 0) {
+                    ClienteDao clienteDao = new ClienteDao(conexion);
+                    Cliente cliente = clienteDao.buscarPorId(idCliente);
+                    v.setCliente(cliente);
+                }
+
+                return v;
+            }
+        }
+        return null; // No se encontró ningún vehículo con esa patente
     }
 
 

@@ -1,9 +1,8 @@
 package Controles;
 
 import Clases.*;
-import ClasesDao.TrabajoDao;
-import ClasesDao.VehiculoDao;
-import Managers.ClienteManager;
+import ClasesDao.*;
+import Managers.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -36,6 +35,7 @@ public class AgregarTrabajoController {
 
     private VehiculoDao vehiculoDao;
     private Vehiculo vehiculoSeleccionado;
+    private VehiculoManager vehiculoManager;
 
 
     private final TrabajoDao trabajoDao = new TrabajoDao();
@@ -46,9 +46,11 @@ public class AgregarTrabajoController {
             Connection conexion = ConexionBD.getConnection();
             clienteManager = new ClienteManager(conexion);
             vehiculoDao = new VehiculoDao();
+            vehiculoManager = new VehiculoManager(conexion);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
 
         // 🔹 Autocompletado de clientes
         txtCliente.textProperty().addListener((obs, oldVal, newVal) -> {
@@ -133,8 +135,19 @@ public class AgregarTrabajoController {
 
             // 2️⃣ Verificar si el vehículo ya existe en la BD
             String patenteIngresada = txtPatente.getText().trim();
-            VehiculoDao vehiculoDao = new VehiculoDao(ConexionBD.getConnection());
-            Vehiculo vehiculo = vehiculoDao.buscarPorPatente(patenteIngresada);
+            Vehiculo vehiculo = vehiculoManager.buscarPorPatente(patenteIngresada);
+
+            if (vehiculo == null) {
+                vehiculo = new Vehiculo();
+                vehiculo.setPatente(patenteIngresada);
+                vehiculo.setModelo(txtModelo.getText());
+                vehiculo.setMarca("Sin especificar");
+                vehiculo.setCliente(clienteSeleccionado);
+
+                vehiculoManager.registrarVehiculo(vehiculo);
+                System.out.println("Vehículo nuevo agregado: " + vehiculo.getPatente());
+            }
+
 
             if (vehiculo == null) {
                 // 🚗 Si no existe, crear uno nuevo y guardarlo
