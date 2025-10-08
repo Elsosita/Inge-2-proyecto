@@ -116,3 +116,22 @@
 .scroll-bar:horizontal .track {
     -fx-background-color: #e0e0e0;
 }
+
+/*@font-face {
+    font-family: "Designer";
+    src: url("/Controles/Font/Designer.ttf");
+}*/
+
+@font-face {
+    font-family: "TOMMY";
+    src: url("/Controles/Font/TOMMY.ttf");
+}
+#txtNombreVentana {
+    -fx-font-family: "TOMMY";
+    -fx-font-size: 20px; /* el tamaño que quieras */
+    -fx-font-weight: bold; /* opcional */
+}
+
+
+
+

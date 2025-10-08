@@ -4,22 +4,35 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Launcher2 extends Application {
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage primaryStage) {
         try {
-            // Carga el nuevo FXML principal con pestañas
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/Main.fxml"));
-            Parent root = loader.load();
+            // 1️⃣ Cargar la ventana de Apertura de Caja
+            FXMLLoader cajaLoader = new FXMLLoader(getClass().getResource("/Controles/AperturaCajaView.fxml"));
+            Parent cajaRoot = cajaLoader.load();
 
-            Scene scene = new Scene(root);
-            stage.setTitle("Cerrajería Nueva Troya - Sistema de Gestión");
-            stage.setScene(scene);
-            stage.setResizable(true);
-            stage.show();
+            Stage cajaStage = new Stage();
+            cajaStage.setTitle("Apertura de Caja");
+            cajaStage.setScene(new Scene(cajaRoot));
+            cajaStage.setResizable(false);
+            // ⚠️ Bloquea la ventana principal hasta cerrar la caja
+            cajaStage.initModality(Modality.APPLICATION_MODAL);
+            cajaStage.showAndWait(); // Espera a que el usuario cierre esta ventana
+
+            // 2️⃣ Luego de cerrar la ventana de apertura, abrir el Main
+            FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/Controles/Main.fxml"));
+            Parent mainRoot = mainLoader.load();
+
+            primaryStage.setTitle("Cerrajería Nueva Troya - Sistema de Gestión");
+            primaryStage.setScene(new Scene(mainRoot));
+            primaryStage.setResizable(true);
+            primaryStage.show();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -27,6 +40,5 @@ public class Launcher2 extends Application {
 
     public static void main(String[] args) {
         launch(args);
-
     }
 }

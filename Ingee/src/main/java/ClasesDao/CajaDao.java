@@ -87,4 +87,41 @@ public class CajaDao {
             stmt.executeUpdate();
         }
     }
+    public void abrirCaja(Caja caja) throws SQLException {
+        String sql = "INSERT INTO Caja (montototal, fecha, hora, estado) VALUES (?, ?, ?, ?)";
+        try (Connection con = ConexionBD.getConnection();
+             PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            pst.setFloat(1, caja.getMontototal());
+            pst.setDate(2, Date.valueOf(caja.getFecha()));
+            pst.setTime(3, Time.valueOf(caja.getHora()));
+            pst.setString(4, caja.getEstado().name());
+
+            pst.executeUpdate();
+
+            ResultSet rs = pst.getGeneratedKeys();
+            if (rs.next()) {
+                caja.setId(rs.getInt(1));
+            }
+        }
+    }
+
+    public Caja obtenerCajaAbierta() throws SQLException {
+        String sql = "SELECT * FROM Caja WHERE estado = 'ABIERTA' ORDER BY id DESC LIMIT 1";
+        try (Connection con = ConexionBD.getConnection();
+             PreparedStatement pst = con.prepareStatement(sql);
+             ResultSet rs = pst.executeQuery()) {
+
+            if (rs.next()) {
+                Caja caja = new Caja();
+                caja.setMontototal(rs.getFloat("montototal"));
+                caja.setFecha(rs.getDate("fecha").toLocalDate());
+                caja.setHora(rs.getTime("hora").toLocalTime());
+                caja.setEstado(Caja.Estado.valueOf(rs.getString("estado")));
+                return caja;
+            }
+            return null;
+        }
+    }
+
 }
