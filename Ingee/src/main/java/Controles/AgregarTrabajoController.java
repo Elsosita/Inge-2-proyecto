@@ -237,7 +237,7 @@ public class AgregarTrabajoController {
             } else {
                 // Sin aseguradora → usar id 0
                 Aseguradora sinAseguradora = new Aseguradora();
-                sinAseguradora.setIdAseguradora(0);
+                sinAseguradora.setIdAseguradora(1);
                 t.setAseguradora(sinAseguradora);
             }
 

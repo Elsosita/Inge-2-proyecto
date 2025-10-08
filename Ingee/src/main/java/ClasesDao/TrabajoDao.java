@@ -28,7 +28,7 @@ public class TrabajoDao {
             stmt.setFloat(5, t.getMonto());
             stmt.setString(6, t.getEstadodefacturacion().name());
             stmt.setInt(7, t.getVehiculo() != null ? t.getVehiculo().getIdVehiculo() : 0);
-            stmt.setInt(8, t.getAseguradora() != null ? t.getAseguradora().getIdAseguradora() : 0);
+            stmt.setInt(8, t.getAseguradora() != null ? t.getAseguradora().getIdAseguradora() : 1);
             stmt.executeUpdate();
 
             ResultSet rs = stmt.getGeneratedKeys();
