@@ -16,7 +16,9 @@ public class AseguradoraDao {
     public AseguradoraDao() throws SQLException {
         this.conexion = ConexionBD.getConnection();
     }
-
+    public AseguradoraDao(Connection conexion) {
+        this.conexion = conexion;
+    }
     // CREATE
     public void agregarAseguradora(Aseguradora a) throws SQLException {
         String sql = "INSERT INTO Aseguradora (nombre, ordenDeProvision) VALUES (?, ?)";
@@ -96,4 +98,33 @@ public class AseguradoraDao {
             System.out.println("No se encontró la aseguradora o no tiene orden de provisión.");
         }
     }
+    public List<Aseguradora> obtenerTodas() throws SQLException {
+        List<Aseguradora> lista = new ArrayList<>();
+        String sql = "SELECT * FROM Aseguradora";
+        try (PreparedStatement stmt = conexion.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Aseguradora a = new Aseguradora();
+                a.setIdAseguradora(rs.getInt("id"));
+                a.setNombreAseguradora(rs.getString("nombre"));
+                lista.add(a);
+            }
+        }
+        return lista;
+    }
+    public Aseguradora buscarPorId(int id) throws SQLException {
+        String sql = "SELECT * FROM Aseguradora WHERE id = ?";
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Aseguradora a = new Aseguradora();
+                a.setIdAseguradora(rs.getInt("id"));
+                a.setNombreAseguradora(rs.getString("nombre"));
+                return a;
+            }
+        }
+        return null;
+    }
+
 }

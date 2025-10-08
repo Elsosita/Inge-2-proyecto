@@ -24,11 +24,15 @@ public class AgregarTrabajoController {
     @FXML private TextField txtDescripcion;
     @FXML private TextField txtCliente;
     @FXML private TextField txtTelefono;
+    @FXML private TextField txtMonto;
     @FXML private Label lblMensaje;
     @FXML private ComboBox<String> cbEstadoPago;
     @FXML private ComboBox<String> cbEstadoFacturacion;
     @FXML private ListView<Cliente> listaSugerencias;
     @FXML private ListView<Vehiculo> listaPatentes;
+    @FXML private ComboBox<String> cbTieneAseguradora;
+    @FXML private ComboBox<Aseguradora> cbAseguradora;
+
 
     private ClienteManager clienteManager;
     private Cliente clienteSeleccionado;
@@ -36,6 +40,8 @@ public class AgregarTrabajoController {
     private VehiculoDao vehiculoDao;
     private Vehiculo vehiculoSeleccionado;
     private VehiculoManager vehiculoManager;
+    private AseguradoraManager aseguradoraManager;
+
 
 
     private final TrabajoDao trabajoDao = new TrabajoDao();
@@ -47,6 +53,10 @@ public class AgregarTrabajoController {
             clienteManager = new ClienteManager(conexion);
             vehiculoDao = new VehiculoDao();
             vehiculoManager = new VehiculoManager(conexion);
+            aseguradoraManager = new AseguradoraManager(conexion);
+            List<Aseguradora> aseguradoras = aseguradoraManager.obtenerTodas();
+            cbAseguradora.getItems().setAll(aseguradoras);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -117,6 +127,27 @@ public class AgregarTrabajoController {
                 listaPatentes.getItems().clear();
             }
         });
+        // Mostrar nombre de aseguradora en el ComboBox
+        cbAseguradora.setCellFactory(param -> new ListCell<>() {
+            @Override
+            protected void updateItem(Aseguradora item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "" : item.getNombreAseguradora());
+            }
+        });
+        cbAseguradora.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Aseguradora item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? "" : item.getNombreAseguradora());
+            }
+        });
+
+// Escuchar cambios en "Tiene aseguradora"
+        cbTieneAseguradora.valueProperty().addListener((obs, oldVal, newVal) -> {
+            boolean tiene = "Sí".equalsIgnoreCase(newVal);
+            cbAseguradora.setDisable(!tiene);
+        });
     }
 
 
@@ -175,11 +206,41 @@ public class AgregarTrabajoController {
                 lblMensaje.setText("⚠️ Seleccione el estado de pago y facturación.");
                 return;
             }
+            // Leer y validar monto
+            String montoTexto = txtMonto.getText().trim();
+            if (montoTexto.isEmpty()) {
+                lblMensaje.setText("⚠️ Ingrese el monto del trabajo.");
+                return;
+            }
 
+            try {
+                float monto = Float.parseFloat(montoTexto);
+                t.setMonto(monto);
+            } catch (NumberFormatException ex) {
+                lblMensaje.setText("⚠️ El monto debe ser un número válido.");
+                return;
+            }
             // 5️⃣ Asignar los estados
             t.setEstadopago(Trabajo.EstadoPago.valueOf(pagoSeleccionado));
             t.setEstadotrabajo(Trabajo.EstadoTrabajo.PENDIENTE);
             t.setEstadodefacturacion(Trabajo.Estadodefacturacion.valueOf(facturacionSeleccionada));
+
+            // Aseguradora
+            Aseguradora aseguradoraSeleccionada = null;
+            if ("Sí".equalsIgnoreCase(cbTieneAseguradora.getValue())) {
+                aseguradoraSeleccionada = cbAseguradora.getValue();
+                if (aseguradoraSeleccionada == null) {
+                    lblMensaje.setText("⚠️ Seleccione una aseguradora.");
+                    return;
+                }
+                t.setAseguradora(aseguradoraSeleccionada);
+            } else {
+                // Sin aseguradora → usar id 0
+                Aseguradora sinAseguradora = new Aseguradora();
+                sinAseguradora.setIdAseguradora(0);
+                t.setAseguradora(sinAseguradora);
+            }
+
 
             // 6️⃣ Guardar en BD
             trabajoDao.agregarTrabajo(t);
@@ -203,6 +264,7 @@ public class AgregarTrabajoController {
         txtDescripcion.clear();
         txtCliente.clear();
         txtTelefono.clear();
+        txtMonto.clear();
     }
 
     @FXML
