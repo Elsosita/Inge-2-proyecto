@@ -147,7 +147,7 @@ public class TrabajoDao {
                 Cliente c = new Cliente();
                 c.setIdCliente(rs.getInt("idCliente"));
                 c.setNombre(rs.getString("nombreCliente"));
-                c.setNumero(rs.getInt("telefonoCliente"));
+                c.setNumero(rs.getLong("telefonoCliente"));
 
                 v.setCliente(c);
 
@@ -191,7 +191,7 @@ public class TrabajoDao {
                 // Cliente
                 Cliente cliente = new Cliente();
                 cliente.setNombre(rs.getString("cliente_nombre"));
-                cliente.setNumero((int) rs.getLong("cliente_numero"));
+                cliente.setNumero(rs.getLong("cliente_numero"));
                 v.setCliente(cliente);
 
                 t.setVehiculo(v);

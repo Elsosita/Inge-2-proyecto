@@ -28,7 +28,7 @@ public class ClienteDao {
             stmt.setString(1, c.getNombre());
             stmt.setString(2, c.gettipodocumento().name()); // Convertimos enum a String
             stmt.setInt(3, c.getNumerodoc());
-            stmt.setInt(4, c.getNumero());
+            stmt.setLong(4, c.getNumero());
             stmt.executeUpdate();
 
             // Obtener id generado y asignarlo al objeto
@@ -53,7 +53,7 @@ public class ClienteDao {
                     cliente.setNombre(rs.getString("nombre"));
                     cliente.settipodocumento(Cliente.TD.valueOf(rs.getString("tipodocumento")));
                     cliente.setNumerodoc(rs.getInt("numerodoc"));
-                    cliente.setNumero(rs.getInt("numero"));
+                    cliente.setNumero(rs.getLong("numero"));
 
                     // Cargar vehículos del cliente
                     cliente.setVehiculos(obtenerVehiculosPorCliente(id));
@@ -83,7 +83,7 @@ public class ClienteDao {
             stmt.setString(1, c.getNombre());
             stmt.setString(2, c.gettipodocumento().name());
             stmt.setInt(3, c.getNumerodoc());
-            stmt.setInt(4, c.getNumero());
+            stmt.setLong(4, c.getNumero());
             stmt.setInt(5, c.getIdCliente());
             stmt.executeUpdate();
         }
@@ -132,7 +132,7 @@ public class ClienteDao {
                 Cliente c = new Cliente();
                 c.setIdCliente(rs.getInt("id"));
                 c.setNombre(rs.getString("nombre"));
-                c.setNumero(rs.getInt("numero"));
+                c.setNumero(rs.getLong("numero"));
                 clientes.add(c);
             }
         }
@@ -147,7 +147,7 @@ public class ClienteDao {
                 Cliente c = new Cliente();
                 c.setIdCliente(rs.getInt("id"));
                 c.setNombre(rs.getString("nombre"));
-                c.setNumero(rs.getInt("numero"));
+                c.setNumero(rs.getLong("numero"));
                 return c;
             }
         }
@@ -162,13 +162,20 @@ public class ClienteDao {
                 Cliente c = new Cliente();
                 c.setIdCliente(rs.getInt("id"));
                 c.setNombre(rs.getString("nombre"));
-                c.setNumero(rs.getInt("numero"));
+                c.setNumero(rs.getLong("numero"));
                 // agregar más atributos si tenés
                 return c;
             }
         }
         return null;
     }
-
+    public void actualizarTelefono(Cliente cliente) throws SQLException {
+        String sql = "UPDATE Cliente SET numero = ? WHERE id = ?";
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setLong(1, cliente.getNumero());
+            stmt.setInt(2, cliente.getIdCliente());
+            stmt.executeUpdate();
+        }
+    }
 }
 

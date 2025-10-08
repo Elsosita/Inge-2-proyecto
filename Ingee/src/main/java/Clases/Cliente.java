@@ -9,12 +9,12 @@ public class Cliente {
     public enum TD { DNI, CUIT, CUIL };
     private TD tipodocumento;
     private int numerodoc;
-    private int numero;
+    private long numero;
     private List<Vehiculo> vehiculos = new ArrayList<>();
 
     public Cliente() {}
 
-    public Cliente(int id, String nombre,TD tipodocumento, int numerodoc, int numero, List<Vehiculo> vehiculos) {
+    public Cliente(int id, String nombre,TD tipodocumento, int numerodoc, long numero, List<Vehiculo> vehiculos) {
         this.id = id;
         this.nombre = nombre;
         this.tipodocumento= tipodocumento;
@@ -34,9 +34,11 @@ public class Cliente {
     public int getIdCliente() {
         return id;
     }
+
     public void setIdCliente(int id) {
         this.id = id;
     }
+
     public String getNombre() {
         return nombre;
     }
@@ -56,15 +58,16 @@ public class Cliente {
     public int getNumerodoc() {
         return numerodoc;
     }
+
     public void setNumerodoc(int numerodoc) {
         this.numerodoc = numerodoc;
     }
 
-    public int getNumero() {
+    public long getNumero() {
         return numero;
     }
 
-    public void setNumero(int numero) {
+    public void setNumero(long numero) {
         this.numero = numero;
     }
 
@@ -74,6 +77,7 @@ public class Cliente {
     }
 
     public List<Vehiculo> getVehiculos() { return vehiculos; }
+
     public void setVehiculos(List<Vehiculo> vehiculos) { this.vehiculos = vehiculos; }
 
 }

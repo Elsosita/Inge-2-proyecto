@@ -86,12 +86,18 @@ public class AgregarTrabajoController {
         });
 
         listaSugerencias.setOnMouseClicked(event -> {
-            clienteSeleccionado = listaSugerencias.getSelectionModel().getSelectedItem();
-            if (clienteSeleccionado != null) {
-                txtCliente.setText(clienteSeleccionado.getNombre());
+            Cliente seleccionado = listaSugerencias.getSelectionModel().getSelectedItem();
+            if (seleccionado != null) {
+                clienteSeleccionado = seleccionado; // guardamos el cliente elegido
+                txtCliente.setText(seleccionado.getNombre());
+
+                // ✅ Autocompletar teléfono
+                txtTelefono.setText(String.valueOf(seleccionado.getNumero()));
+
                 listaSugerencias.getItems().clear();
             }
         });
+
 
         // 🔹 Autocompletado de patentes
         txtPatente.textProperty().addListener((obs, oldVal, newVal) -> {
@@ -244,6 +250,14 @@ public class AgregarTrabajoController {
                 t.setAseguradora(sinAseguradora);
             }
 
+            if (clienteSeleccionado != null) {
+                long telefonoIngresado = Long.parseLong(txtTelefono.getText());
+                if (clienteSeleccionado.getNumero() != telefonoIngresado) {
+                    clienteSeleccionado.setNumero(telefonoIngresado);
+                    clienteManager.actualizarTelefono(clienteSeleccionado);
+                    System.out.println("📞 Teléfono actualizado en la BD para " + clienteSeleccionado.getNombre());
+                }
+            }
 
             // 6️⃣ Guardar en BD
             trabajoDao.agregarTrabajo(t);

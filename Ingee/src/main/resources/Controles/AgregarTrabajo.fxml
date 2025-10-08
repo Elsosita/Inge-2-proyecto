@@ -25,8 +25,8 @@
       <ListView fx:id="listaPatentes" prefHeight="25.0" prefWidth="365.0" />
       <TextField fx:id="txtMarca" promptText="Marca del vehículo" />
         <TextField fx:id="txtModelo" promptText="Modelo del vehículo" />
-        <TextField fx:id="txtDescripcion" promptText="Descripción del trabajo" />
         <TextField fx:id="txtTelefono" promptText="Teléfono del cliente" />
+        <TextField fx:id="txtDescripcion" promptText="Descripción del trabajo" />
       <TextField fx:id="txtMonto" promptText="Monto" />
 
         <ComboBox fx:id="cbEstadoPago" promptText="Estado de pago">
