@@ -21,6 +21,7 @@ public class AgregarTrabajoController {
 
     @FXML private TextField txtPatente;
     @FXML private TextField txtModelo;
+    @FXML private TextField txtMarca;
     @FXML private TextField txtDescripcion;
     @FXML private TextField txtCliente;
     @FXML private TextField txtTelefono;
@@ -122,6 +123,7 @@ public class AgregarTrabajoController {
             vehiculoSeleccionado = listaPatentes.getSelectionModel().getSelectedItem();
             if (vehiculoSeleccionado != null) {
                 txtPatente.setText(vehiculoSeleccionado.getPatente());
+                txtMarca.setText(vehiculoSeleccionado.getMarca());
                 txtModelo.setText(vehiculoSeleccionado.getModelo());
                 txtCliente.setText(vehiculoSeleccionado.getCliente().getNombre());
                 listaPatentes.getItems().clear();
@@ -171,8 +173,8 @@ public class AgregarTrabajoController {
             if (vehiculo == null) {
                 vehiculo = new Vehiculo();
                 vehiculo.setPatente(patenteIngresada);
+                vehiculo.setMarca(txtMarca.getText());
                 vehiculo.setModelo(txtModelo.getText());
-                vehiculo.setMarca("Sin especificar");
                 vehiculo.setCliente(clienteSeleccionado);
 
                 vehiculoManager.registrarVehiculo(vehiculo);
@@ -184,8 +186,9 @@ public class AgregarTrabajoController {
                 // 🚗 Si no existe, crear uno nuevo y guardarlo
                 vehiculo = new Vehiculo();
                 vehiculo.setPatente(patenteIngresada);
+                vehiculo.setMarca(txtMarca.getText());
                 vehiculo.setModelo(txtModelo.getText());
-                vehiculo.setMarca("Sin especificar"); // Podés agregar un campo de marca en el futuro
+                vehiculo.setMarca(txtMarca.getText());
                 vehiculo.setCliente(clienteSeleccionado);
 
                 vehiculoDao.agregarVehiculo(vehiculo);
@@ -260,6 +263,7 @@ public class AgregarTrabajoController {
 
     private void limpiarCampos() {
         txtPatente.clear();
+        txtMarca.clear();
         txtModelo.clear();
         txtDescripcion.clear();
         txtCliente.clear();

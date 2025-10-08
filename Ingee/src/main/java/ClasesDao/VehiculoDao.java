@@ -110,7 +110,7 @@ public class VehiculoDao {
 
     public List<Vehiculo> buscarVehiculosPorPatente(String filtro) throws SQLException {
         List<Vehiculo> lista = new ArrayList<>();
-        String sql = "SELECT v.id, v.patente, v.modelo, c.nombre AS cliente_nombre " +
+        String sql = "SELECT v.id, v.patente,v.marca, v.modelo, c.nombre AS cliente_nombre " +
                 "FROM Vehiculo v JOIN Cliente c ON v.cliente_id = c.id " +
                 "WHERE v.patente LIKE ?";
 
@@ -122,6 +122,7 @@ public class VehiculoDao {
                 Vehiculo v = new Vehiculo();
                 v.setIdVehiculo(rs.getInt("id"));
                 v.setPatente(rs.getString("patente"));
+                v.setMarca(rs.getString("marca"));
                 v.setModelo(rs.getString("modelo"));
 
                 Cliente c = new Cliente();
@@ -144,6 +145,7 @@ public class VehiculoDao {
                 Vehiculo v = new Vehiculo();
                 v.setIdVehiculo(rs.getInt("id"));
                 v.setPatente(rs.getString("patente"));
+                v.setMarca(rs.getString("marca"));
                 v.setModelo(rs.getString("modelo"));
                 lista.add(v);
             }
