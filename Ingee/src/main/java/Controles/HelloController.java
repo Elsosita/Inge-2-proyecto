@@ -1,7 +1,7 @@
 package Controles;
 
 import Clases.Trabajo;
-import Clases.TrabajoManager;
+import Managers.TrabajoManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

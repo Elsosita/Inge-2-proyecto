@@ -10,4 +10,6 @@ module com.example.ingee {
     opens Controles to javafx.fxml, javafx.graphics;
     opens Clases to javafx.base;
     exports Controles;
+    opens ClasesDao to javafx.base;
+    opens Managers to javafx.base;
 }

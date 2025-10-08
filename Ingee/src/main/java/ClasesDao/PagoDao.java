@@ -1,8 +1,11 @@
-package Clases;
+package ClasesDao;
+
+import Clases.Caja;
+import Clases.ConexionBD;
+import Clases.Pago;
+import Clases.Trabajo;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,4 +1,7 @@
-package Clases;
+package Managers;
+
+import Clases.Trabajo;
+import ClasesDao.TrabajoDao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

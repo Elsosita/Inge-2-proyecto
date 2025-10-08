@@ -1,6 +1,8 @@
 package Controles;
 
 import Clases.*;
+import ClasesDao.TrabajoDao;
+import Managers.TrabajoManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,7 +12,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import java.sql.SQLException;
 import java.time.LocalDate;

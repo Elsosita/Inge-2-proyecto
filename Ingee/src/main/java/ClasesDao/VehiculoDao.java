@@ -1,4 +1,8 @@
-package Clases;
+package ClasesDao;
+
+import Clases.Cliente;
+import Clases.ConexionBD;
+import Clases.Vehiculo;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,7 +16,7 @@ public class VehiculoDao {
     }
 
     // CREATE
-    public void agregarVehiculo(Vehiculo v) throws SQLException {
+    /*public void agregarVehiculo(Vehiculo v) throws SQLException {
         String sql = "INSERT INTO Vehiculo (patente, marca, modelo, cliente_id) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, v.getPatente());
@@ -28,7 +32,7 @@ public class VehiculoDao {
                 v.setIdVehiculo(rs.getInt(1));
             }
         }
-    }
+    }*/
 
     // READ por ID
     public Vehiculo obtenerVehiculoPorId(int id) throws SQLException {
@@ -126,5 +130,46 @@ public class VehiculoDao {
         }
         return lista;
     }
+
+    public List<Vehiculo> buscarPorCliente(int idCliente) throws SQLException {
+        List<Vehiculo> lista = new ArrayList<>();
+        String sql = "SELECT * FROM Vehiculo WHERE cliente_id = ?";
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setInt(1, idCliente);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Vehiculo v = new Vehiculo();
+                v.setIdVehiculo(rs.getInt("id"));
+                v.setPatente(rs.getString("patente"));
+                v.setModelo(rs.getString("modelo"));
+                lista.add(v);
+            }
+        }
+        return lista;
+    }
+
+    public void agregarVehiculo(Vehiculo v) throws SQLException {
+        String sql = "INSERT INTO Vehiculo (patente, marca, modelo, cliente_id) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement stmt = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, v.getPatente());
+            stmt.setString(2, v.getMarca());
+            stmt.setString(3, v.getModelo());
+
+            if (v.getCliente() != null && v.getCliente().getIdCliente() > 0) {
+                stmt.setInt(4, v.getCliente().getIdCliente());
+            } else {
+                stmt.setNull(4, java.sql.Types.INTEGER);
+            }
+
+            stmt.executeUpdate();
+
+            // Obtener id autogenerado
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                v.setIdVehiculo(rs.getInt(1));
+            }
+        }
+    }
+
 
 }

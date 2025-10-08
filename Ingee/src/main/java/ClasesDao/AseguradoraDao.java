@@ -1,4 +1,7 @@
-package Clases;
+package ClasesDao;
+
+import Clases.Aseguradora;
+import Clases.ConexionBD;
 
 import java.awt.*;
 import java.io.File;

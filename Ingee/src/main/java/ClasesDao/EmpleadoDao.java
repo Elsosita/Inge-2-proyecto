@@ -1,4 +1,9 @@
-package Clases;
+package ClasesDao;
+
+import Clases.ConexionBD;
+import Clases.Empleado;
+import Clases.Retiro;
+import Clases.Trabajo;
 
 import java.sql.*;
 import java.util.ArrayList;

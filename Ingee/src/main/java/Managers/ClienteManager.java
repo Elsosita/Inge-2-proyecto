@@ -1,5 +1,8 @@
-package Clases;
+package Managers;
 
+
+import Clases.Cliente;
+import ClasesDao.ClienteDao;
 
 import java.sql.Connection;
 import java.sql.SQLException;

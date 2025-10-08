@@ -1,6 +1,9 @@
 package Controles;
 
 import Clases.*;
+import ClasesDao.TrabajoDao;
+import ClasesDao.VehiculoDao;
+import Managers.ClienteManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -122,34 +125,50 @@ public class AgregarTrabajoController {
     @FXML
     private void onGuardar() {
         try {
-            // Validar que haya un vehículo seleccionado
-            if (vehiculoSeleccionado == null) {
-                lblMensaje.setText("⚠️ Seleccione o registre un vehículo existente.");
+            // 1️⃣ Validar que haya cliente seleccionado
+            if (clienteSeleccionado == null) {
+                lblMensaje.setText("⚠️ Seleccione o registre un cliente antes de continuar.");
                 return;
             }
 
-            // Crear nuevo trabajo
+            // 2️⃣ Verificar si el vehículo ya existe en la BD
+            String patenteIngresada = txtPatente.getText().trim();
+            VehiculoDao vehiculoDao = new VehiculoDao(ConexionBD.getConnection());
+            Vehiculo vehiculo = vehiculoDao.buscarPorPatente(patenteIngresada);
+
+            if (vehiculo == null) {
+                // 🚗 Si no existe, crear uno nuevo y guardarlo
+                vehiculo = new Vehiculo();
+                vehiculo.setPatente(patenteIngresada);
+                vehiculo.setModelo(txtModelo.getText());
+                vehiculo.setMarca("Sin especificar"); // Podés agregar un campo de marca en el futuro
+                vehiculo.setCliente(clienteSeleccionado);
+
+                vehiculoDao.agregarVehiculo(vehiculo);
+                System.out.println("Vehículo nuevo agregado: " + vehiculo.getPatente());
+            }
+
+            // 3️⃣ Crear el trabajo
             Trabajo t = new Trabajo();
             t.setDescripcion(txtDescripcion.getText());
-            t.setVehiculo(vehiculoSeleccionado);
+            t.setVehiculo(vehiculo);
             t.setFecha(LocalDate.now());
 
-            // Leer los valores elegidos de los ComboBox
+            // 4️⃣ Leer los valores elegidos de los ComboBox
             String pagoSeleccionado = cbEstadoPago.getValue();
             String facturacionSeleccionada = cbEstadoFacturacion.getValue();
 
-            // Validar que no estén vacíos
             if (pagoSeleccionado == null || facturacionSeleccionada == null) {
                 lblMensaje.setText("⚠️ Seleccione el estado de pago y facturación.");
                 return;
             }
 
-            // Convertir texto a enum
+            // 5️⃣ Asignar los estados
             t.setEstadopago(Trabajo.EstadoPago.valueOf(pagoSeleccionado));
             t.setEstadotrabajo(Trabajo.EstadoTrabajo.PENDIENTE);
             t.setEstadodefacturacion(Trabajo.Estadodefacturacion.valueOf(facturacionSeleccionada));
 
-            // Guardar en BD
+            // 6️⃣ Guardar en BD
             trabajoDao.agregarTrabajo(t);
 
             lblMensaje.setText("✅ Trabajo agregado correctamente.");
@@ -160,6 +179,7 @@ public class AgregarTrabajoController {
             e.printStackTrace();
         }
     }
+
 
 
 
