@@ -56,7 +56,11 @@ public class AgregarTrabajoController {
             vehiculoManager = new VehiculoManager(conexion);
             aseguradoraManager = new AseguradoraManager(conexion);
             List<Aseguradora> aseguradoras = aseguradoraManager.obtenerTodas();
-            cbAseguradora.getItems().setAll(aseguradoras);
+            List<Aseguradora> aseguradorasFiltradas = aseguradoras.stream()
+                    .filter(a -> a.getIdAseguradora() != 1) // 👈 Ignora la de id 1
+                    .toList();
+            cbAseguradora.getItems().setAll(aseguradorasFiltradas);
+
 
         } catch (SQLException e) {
             e.printStackTrace();
