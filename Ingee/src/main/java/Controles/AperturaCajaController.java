@@ -46,7 +46,7 @@ public class AperturaCajaController {
             }
 
             float montoInicial = Float.parseFloat(texto);
-            if (montoInicial <= 0) {
+            if (montoInicial < 0) {
                 mostrarAlertaMonto();
                 return;
             }

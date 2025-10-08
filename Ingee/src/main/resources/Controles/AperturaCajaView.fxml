@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Controles.AperturaCajaController"
-            prefWidth="400" prefHeight="200">
+<AnchorPane prefHeight="200" prefWidth="400" style="-fx-background-color: #87CEFA;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.AperturaCajaController">
 
     <children>
-        <Label layoutX="20" layoutY="20" text="Apertura de Caja" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+        <Label layoutX="20" layoutY="20" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Apertura de Caja" />
 
         <Label layoutX="20" layoutY="60" text="Fecha:" />
         <Label fx:id="lblFecha" layoutX="70" layoutY="60" />
@@ -20,10 +17,9 @@
         <Label fx:id="lblHora" layoutX="70" layoutY="90" />
 
         <Label layoutX="20" layoutY="120" text="Monto inicial:" />
-        <TextField fx:id="txtMontoInicial" layoutX="120" layoutY="115" prefWidth="150" />
+        <TextField fx:id="txtMontoInicial" layoutX="120" layoutY="115" prefWidth="150" style="-fx-background-color: #FFF5EE;" />
 
-        <Button fx:id="btnAceptar" layoutX="150" layoutY="150" text="Aceptar" onAction="#onAceptar" />
+        <Button fx:id="btnAceptar" layoutX="150" layoutY="150" onAction="#onAceptar" style="-fx-background-color: #F0F8FF;" text="Aceptar" />
 
     </children>
 </AnchorPane>
-
