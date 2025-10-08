@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Controles.ConfirmacionTrabajoController"
+      alignment="CENTER"
+      spacing="20"
+      style="-fx-background-color: #f9f9f9; -fx-border-color: #4CAF50; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 25;">
+
+    <Label text="✅ Trabajo cargado correctamente"
+           style="-fx-text-fill: #2e7d32;"
+    >
+        <font>
+            <Font size="18" />
+        </font>
+    </Label>
+
+    <Button text="Aceptar"
+            fx:id="btnAceptar"
+            onAction="#onAceptar"
+            style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20; -fx-background-radius: 8;"
+    />
+
+</VBox>

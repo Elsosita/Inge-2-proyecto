@@ -262,8 +262,25 @@ public class AgregarTrabajoController {
             // 6️⃣ Guardar en BD
             trabajoDao.agregarTrabajo(t);
 
-            lblMensaje.setText("✅ Trabajo agregado correctamente.");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/ConfirmacionTrabajo.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Confirmación");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+
+            // 🚫 Deshabilita el botón “X”
+            stage.setOnCloseRequest(event -> event.consume());
+
+            stage.showAndWait();
+
+
+
+            //lblMensaje.setText("✅ Trabajo agregado correctamente.");
             limpiarCampos();
+            txtPatente.getScene().getWindow().hide();
 
         } catch (Exception e) {
             lblMensaje.setText("❌ Error al guardar: " + e.getMessage());

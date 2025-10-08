@@ -193,6 +193,7 @@ public class MainController {
             stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana principal mientras está abierta
             stage.setResizable(false);
             stage.showAndWait();
+            initialize();
 
             // OBTENER EL CONTROLADOR, si querés traer el trabajo creado después
             AgregarTrabajoController controller = loader.getController();
