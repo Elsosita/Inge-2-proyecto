@@ -128,9 +128,43 @@
 }
 #txtNombreVentana {
     -fx-font-family: "TOMMY";
-    -fx-font-size: 20px; /* el tamaño que quieras */
-    -fx-font-weight: bold; /* opcional */
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
 }
+
+/* Título principal */
+.titulo {
+    -fx-font-family: "TOMMY";
+    -fx-font-size: 18pt;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3f4248;
+}
+
+/* Labels de fecha, hora y monto */
+.label-info {
+    -fx-font-family: "TOMMY";
+    -fx-font-size: 14pt;
+    -fx-font-weight: bold;
+    -fx-text-fill6: #3f4248;
+}
+
+/* TextField */
+.textfield-custom {
+    -fx-font-family: "TOMMY";
+    -fx-font-size: 14pt;
+    -fx-font-weight: bold;
+    -fx-background-color: #3f4248;
+}
+
+/* Botón */
+.button-custom {
+    -fx-font-family: "TOMMY";
+    -fx-font-size: 14pt;
+    -fx-font-weight: bold;
+    -fx-background-color: #3f4248;
+    -fx-text-fill: white;
+}
+
 
 
 
