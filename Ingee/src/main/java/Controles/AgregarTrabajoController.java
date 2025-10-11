@@ -8,9 +8,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.CheckBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -33,6 +40,10 @@ public class AgregarTrabajoController {
     @FXML private ListView<Vehiculo> listaPatentes;
     @FXML private ComboBox<String> cbTieneAseguradora;
     @FXML private ComboBox<Aseguradora> cbAseguradora;
+    @FXML private Checkbox chkOrdenDigital;
+    @FXML private Button btnSeleccionarArchivo;
+    @FXML private TextField txtRutaArchivo;
+
 
 
     private ClienteManager clienteManager;
@@ -163,6 +174,28 @@ public class AgregarTrabajoController {
     }
 
 
+    /*@FXML
+    private void onOrdenDigitalToggled() {
+        boolean esDigital = chkOrdenDigital.isSelected();
+        btnSeleccionarArchivo.setDisable(!esDigital);
+        txtRutaArchivo.setDisable(!esDigital);
+
+        if (!esDigital) {
+            txtRutaArchivo.clear(); // Limpia si desactiva
+        }
+    }*/
+
+    @FXML
+    private void onSeleccionarArchivo() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Seleccionar archivo PDF");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos PDF", "*.pdf"));
+
+        File archivo = fileChooser.showOpenDialog(txtRutaArchivo.getScene().getWindow());
+        if (archivo != null) {
+            txtRutaArchivo.setText(archivo.getAbsolutePath());
+        }
+    }
 
     public AgregarTrabajoController() throws SQLException {
     }

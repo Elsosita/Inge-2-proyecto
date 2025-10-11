@@ -16,13 +16,14 @@ public class Trabajo {
     private Estadodefacturacion estadodefacturacion;
     private Vehiculo vehiculo;
     private Aseguradora aseguradora;
+    private String ordenDeProvision;
     private List<Empleado> empleados;
     private List<Pago> pagos;
 
 
     public Trabajo() {}
 
-    public Trabajo(int id, String descripcion, LocalDate fecha,EstadoPago estadopago, EstadoTrabajo estadotrabajo, float monto,Estadodefacturacion estadodefacturacion, Vehiculo vehiculo,  Aseguradora aseguradora, List<Empleado> empleados, List<Pago> pagos) {
+    public Trabajo(int id, String descripcion, LocalDate fecha,EstadoPago estadopago, EstadoTrabajo estadotrabajo, float monto,Estadodefacturacion estadodefacturacion, Vehiculo vehiculo,  Aseguradora aseguradora,String ordenDeProvision ,List<Empleado> empleados, List<Pago> pagos) {
         this.id = id;
         this.descripcion = descripcion;
         this.fecha = LocalDate.now();
@@ -32,6 +33,7 @@ public class Trabajo {
         this.estadodefacturacion = estadodefacturacion;
         this.vehiculo = vehiculo;
         this.aseguradora = aseguradora;
+        this.ordenDeProvision= ordenDeProvision;
         this.empleados = empleados;
         this.pagos = pagos;
     }
@@ -46,6 +48,7 @@ public class Trabajo {
         this.estadodefacturacion = trabajo.estadodefacturacion;
         this.vehiculo = trabajo.vehiculo;
         this.aseguradora = trabajo.aseguradora;
+        this.ordenDeProvision = trabajo.ordenDeProvision;
         this.empleados = trabajo.empleados;
         this.pagos = trabajo.pagos;
     }
@@ -120,6 +123,10 @@ public class Trabajo {
     public void setAseguradora(Aseguradora aseguradora) {
         this.aseguradora = aseguradora;
     }
+
+    public String getOrdenDeProvision() { return ordenDeProvision; }
+
+    public void setOrdenDeProvision(String ordenDeProvision) { this.ordenDeProvision = ordenDeProvision; }
 
     public List<Empleado> getEmpleados() {
         return empleados;
