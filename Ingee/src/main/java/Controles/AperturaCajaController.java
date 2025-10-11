@@ -29,6 +29,12 @@ public class AperturaCajaController {
 
     private final CajaManager cajaManager = new CajaManager();
 
+    private boolean cajaAbierta = false;
+
+    public boolean isCajaAbierta() {
+        return cajaAbierta;
+    }
+
     @FXML
     public void initialize() {
         // Muestra fecha y hora automáticamente
@@ -51,17 +57,13 @@ public class AperturaCajaController {
                 return;
             }
 
-            // Abrir la caja usando el manager
             cajaManager.abrirCaja(montoInicial);
+            cajaAbierta = true; // ✅ Se marcó como abierta
+            ((Stage) btnAceptar.getScene().getWindow()).close();
 
-            // Cerrar la ventana de apertura
-            Stage stage = (Stage) btnAceptar.getScene().getWindow();
-            stage.close();
-
-        } catch (NumberFormatException e) {
-            mostrarAlertaMonto();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            mostrarAlertaMonto();
         }
     }
 
