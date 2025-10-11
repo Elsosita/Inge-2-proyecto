@@ -150,10 +150,6 @@ public class MainController {
         abrirPestaña("Ingresar Pago", "/com/tuapp/vista/PagoView.fxml");
     }
 
-    @FXML
-    void mostrarManejoCaja() {
-        abrirPestaña("Manejo de Caja", "/com/tuapp/vista/CajaView.fxml");
-    }
 
    /* @FXML
     void mostrarFacturados() {
@@ -225,5 +221,21 @@ public class MainController {
         }
     }
 
+    @FXML
+    private void mostrarManejoCaja() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/ManejoCajaView.fxml"));
+            Parent root = loader.load();
 
+            Stage stage = new Stage();
+            stage.setTitle("Manejo de Caja");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

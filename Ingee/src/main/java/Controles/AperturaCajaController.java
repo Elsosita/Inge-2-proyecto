@@ -37,7 +37,7 @@ public class AperturaCajaController {
 
     @FXML
     public void initialize() {
-        // Muestra fecha y hora automáticamente
+
         lblFecha.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         lblHora.setText(LocalTime.now().withNano(0).format(DateTimeFormatter.ofPattern("HH:mm:ss")));
     }
@@ -58,7 +58,7 @@ public class AperturaCajaController {
             }
 
             cajaManager.abrirCaja(montoInicial);
-            cajaAbierta = true; // ✅ Se marcó como abierta
+            cajaAbierta = true;
             ((Stage) btnAceptar.getScene().getWindow()).close();
 
         } catch (Exception e) {
@@ -66,8 +66,6 @@ public class AperturaCajaController {
             mostrarAlertaMonto();
         }
     }
-
-    // Método auxiliar para mostrar alerta
     private void mostrarAlertaMonto() {
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
         alert.setTitle("Monto inválido");

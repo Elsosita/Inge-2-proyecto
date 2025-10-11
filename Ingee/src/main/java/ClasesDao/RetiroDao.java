@@ -17,16 +17,22 @@ public class RetiroDao {
     }
 
     // CREATE
-    public void agregarRetiro(Retiro retiro) throws SQLException {
+    public boolean insertar(Retiro retiro) {
         String sql = "INSERT INTO Retiro (monto, descripcion, codigoempleado_retiro, codigocaja_retiro, fecha, hora) VALUES (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
-            stmt.setFloat(1, retiro.getMonto());
-            stmt.setString(2, retiro.getDescripcion());
-            stmt.setInt(3, retiro.getCodigoempleado_retiro());
-            stmt.setInt(4, retiro.getCodigocaja_retiro());
-            stmt.setDate(5, Date.valueOf(retiro.getFecha()));
-            stmt.setTime(6, Time.valueOf(retiro.getHora()));
-            stmt.executeUpdate();
+
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setFloat(1, retiro.getMonto());
+            ps.setString(2, retiro.getDescripcion());
+            ps.setInt(3, retiro.getCodigoempleado_retiro());
+            ps.setInt(4, retiro.getCodigocaja_retiro());
+            ps.setDate(5, Date.valueOf(retiro.getFecha()));
+            ps.setTime(6, Time.valueOf(retiro.getHora()));
+
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

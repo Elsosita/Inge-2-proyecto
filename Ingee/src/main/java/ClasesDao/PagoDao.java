@@ -17,20 +17,23 @@ public class PagoDao {
     }
 
     // CREATE
-    public void agregarPago(Pago p) throws SQLException {
-        String sql = "INSERT INTO Pago (tipo, monto, trabajo_id, caja_id) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement stmt = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, p.getTipoPago().name()); // Digital o Efectivo
-            stmt.setFloat(2, p.getMontoPago());
-            stmt.setInt(3, p.getTrabajoPago().getIdTrabajo());
-            stmt.setInt(4, p.getCajaPago().getIdCaja());
-            stmt.executeUpdate();
 
-            // Si tu tabla Pago tiene id AUTO_INCREMENT y querés setearlo en el objeto Pago
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()) {
-                // Si agregas un campo id en Pago, podrías hacer: p.setId(rs.getInt(1));
-            }
+    public boolean insertar(Pago pago) {
+        String sql = "INSERT INTO Pago (tipo, monto, trabajo_id, caja_id, fecha, hora) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setString(1, pago.getTipoPago().name());
+            ps.setFloat(2, pago.getMontoPago());
+            ps.setInt(3, pago.getTrabajoPago().getIdTrabajo());
+            ps.setInt(4, pago.getCajaPago().getIdCaja());
+            ps.setDate(5, Date.valueOf(pago.getFechaPago()));
+            ps.setTime(6, Time.valueOf(pago.getHoraPago()));
+
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

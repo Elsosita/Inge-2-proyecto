@@ -13,7 +13,7 @@ import javafx.stage.Stage;
         @Override
         public void start(Stage primaryStage) {
             try {
-                // Cargar la ventana de Apertura de Caja
+
                 FXMLLoader cajaLoader = new FXMLLoader(getClass().getResource("/Controles/AperturaCajaView.fxml"));
                 Parent cajaRoot = cajaLoader.load();
 
@@ -23,15 +23,12 @@ import javafx.stage.Stage;
                 cajaStage.setResizable(false);
                 cajaStage.initModality(Modality.APPLICATION_MODAL);
 
-                // ⚠️ Si se cierra la ventana con la X, termina el programa
                 cajaStage.setOnCloseRequest(event -> {
                     System.exit(0);
                 });
 
                 cajaStage.showAndWait();
 
-                // Si el flujo llega aquí, significa que se aceptó correctamente
-                // (por ejemplo, desde el botón "Aceptar")
                 FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/Controles/Main.fxml"));
                 Parent mainRoot = mainLoader.load();
 
