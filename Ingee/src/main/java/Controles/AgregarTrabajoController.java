@@ -39,10 +39,14 @@ public class AgregarTrabajoController {
     @FXML private ListView<Cliente> listaSugerencias;
     @FXML private ListView<Vehiculo> listaPatentes;
     @FXML private ComboBox<String> cbTieneAseguradora;
-    @FXML private ComboBox<Aseguradora> cbAseguradora;
+    //@FXML private ComboBox<Aseguradora> cbAseguradora;
     @FXML private Checkbox chkOrdenDigital;
-    @FXML private Button btnSeleccionarArchivo;
+    //@FXML private Button btnSeleccionarArchivo;
+    //@FXML private TextField txtRutaArchivo;
+    @FXML private ComboBox<String> cbTipoOrden;
     @FXML private TextField txtRutaArchivo;
+    @FXML private Button btnSeleccionarArchivo;
+    @FXML private ComboBox<Aseguradora> cbAseguradora;
 
 
 
@@ -57,6 +61,9 @@ public class AgregarTrabajoController {
 
 
     private final TrabajoDao trabajoDao = new TrabajoDao();
+
+    public AgregarTrabajoController() throws SQLException {
+    }
 
 
     public void initialize() {
@@ -165,39 +172,62 @@ public class AgregarTrabajoController {
                 setText(empty || item == null ? "" : item.getNombreAseguradora());
             }
         });
+        //Agregue esto ultimo paso 6
+        cbAseguradora.valueProperty().addListener((obs, oldVal, newVal) -> {
+            boolean tieneAseguradora = newVal != null && newVal.getIdAseguradora() != 1; // 1 = "SinAseguradora"
+            cbTipoOrden.setDisable(!tieneAseguradora);
+            if (!tieneAseguradora) {
+                cbTipoOrden.setValue("Física");
+                txtRutaArchivo.clear();
+                txtRutaArchivo.setDisable(true);
+                btnSeleccionarArchivo.setDisable(true);
+            }
+        });
 
 // Escuchar cambios en "Tiene aseguradora"
         cbTieneAseguradora.valueProperty().addListener((obs, oldVal, newVal) -> {
             boolean tiene = "Sí".equalsIgnoreCase(newVal);
             cbAseguradora.setDisable(!tiene);
         });
+
+        // Cargar opciones del tipo de orden
+        cbTipoOrden.getItems().addAll("Física", "Digital");
+        cbTipoOrden.setValue("Física"); // valor por defecto
+
+// Por defecto el campo de ruta y botón de selección están deshabilitados
+        txtRutaArchivo.setDisable(true);
+        btnSeleccionarArchivo.setDisable(true);
+
+// Desactivar tipo de orden si no hay aseguradora
+        cbTipoOrden.setDisable(true);
     }
 
+    @FXML
+    private void onTipoOrdenChanged() {
+        String tipoSeleccionado = cbTipoOrden.getValue();
 
-    /*@FXML
-    private void onOrdenDigitalToggled() {
-        boolean esDigital = chkOrdenDigital.isSelected();
-        btnSeleccionarArchivo.setDisable(!esDigital);
+        boolean esDigital = "Digital".equals(tipoSeleccionado);
+
         txtRutaArchivo.setDisable(!esDigital);
+        btnSeleccionarArchivo.setDisable(!esDigital);
 
         if (!esDigital) {
-            txtRutaArchivo.clear(); // Limpia si desactiva
+            txtRutaArchivo.clear(); // limpiar ruta si pasa a física
         }
-    }*/
+    }
 
     @FXML
     private void onSeleccionarArchivo() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar archivo PDF");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos PDF", "*.pdf"));
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Archivos PDF", "*.pdf")
+        );
 
-        File archivo = fileChooser.showOpenDialog(txtRutaArchivo.getScene().getWindow());
-        if (archivo != null) {
-            txtRutaArchivo.setText(archivo.getAbsolutePath());
+        File archivoSeleccionado = fileChooser.showOpenDialog(null);
+        if (archivoSeleccionado != null) {
+            txtRutaArchivo.setText(archivoSeleccionado.getAbsolutePath());
         }
-    }
-
-    public AgregarTrabajoController() throws SQLException {
     }
 
     @FXML
@@ -294,6 +324,20 @@ public class AgregarTrabajoController {
                     clienteManager.actualizarTelefono(clienteSeleccionado);
                     System.out.println("📞 Teléfono actualizado en la BD para " + clienteSeleccionado.getNombre());
                 }
+            }
+
+            if (aseguradoraSeleccionada != null && aseguradoraSeleccionada.getIdAseguradora() != 1) {
+                t.setAseguradora(aseguradoraSeleccionada);
+
+                String tipoOrden = cbTipoOrden.getValue();
+                if ("Digital".equals(tipoOrden)) {
+                    t.setOrdenDeProvision(txtRutaArchivo.getText());
+                } else {
+                    t.setOrdenDeProvision(null); // Física
+                }
+            } else {
+                t.setAseguradora(null); // o asignás la de ID 1 (“Sin aseguradora”)
+                t.setOrdenDeProvision(null);
             }
 
             // 6️⃣ Guardar en BD
