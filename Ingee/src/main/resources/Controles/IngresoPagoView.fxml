@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="411.0" prefWidth="539.0" style="-fx-background-color: #f7f7f7; -fx-padding: 20;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.IngresoPagoController">
+
+    <!-- Título -->
+    <Label layoutX="155.0" layoutY="22.0" prefHeight="45.0" prefWidth="230.0" style="-fx-font-size: 30px; -fx-font-weight: bold;" text="Ingreso de Pago">
+      <font>
+         <Font size="20.0" />
+      </font></Label>
+
+    <!-- Tipo de pago -->
+    <Label layoutX="62.0" layoutY="103.0" text="Tipo de pago:">
+      <font>
+         <Font size="17.0" />
+      </font></Label>
+    <ComboBox fx:id="comboTipoPago" layoutX="232.0" layoutY="94.0" prefHeight="45.0" prefWidth="230.0" />
+
+    <!-- Monto -->
+    <Label layoutX="64.0" layoutY="266.0" text="Monto:">
+      <font>
+         <Font size="17.0" />
+      </font></Label>
+    <TextField fx:id="txtMonto" layoutX="232.0" layoutY="257.0" prefHeight="45.0" prefWidth="230.0" />
+
+    <!-- Trabajo -->
+    <Label layoutX="62.0" layoutY="181.0" text="Trabajo:">
+      <font>
+         <Font size="17.0" />
+      </font></Label>
+    <ComboBox fx:id="comboTrabajo" layoutX="232.0" layoutY="172.0" prefHeight="45.0" prefWidth="230.0" />
+
+    <!-- Botones -->
+    <Button fx:id="btnAceptar" layoutX="97.0" layoutY="341.0" onAction="#registrarPago" prefHeight="45.0" prefWidth="116.0" style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-weight: bold;" text="Aceptar">
+      <font>
+         <Font size="18.0" />
+      </font></Button>
+
+    <Button layoutX="327.0" layoutY="341.0" onAction="#cancelar" prefHeight="45.0" prefWidth="116.0" style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-font-weight: bold;" text="Cancelar">
+      <font>
+         <Font size="18.0" />
+      </font></Button>
+
+</AnchorPane>

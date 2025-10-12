@@ -33,5 +33,23 @@ public class CajaManager {
     public boolean hayCajaAbierta() throws SQLException {
         return cajaDao.obtenerCajaAbierta() != null;
     }
+
+    private static Caja cajaAbierta;
+
+    public static void setCajaAbierta(Caja caja) {
+        cajaAbierta = caja;
+    }
+
+    public static Caja getCajaAbierta() {
+        return cajaAbierta;
+    }
+
+    public void cerrarCaja() throws SQLException {
+        Caja cajaAbierta = cajaDao.obtenerCajaAbierta();
+        if (cajaAbierta != null) {
+            cajaDao.cerrarCaja(cajaAbierta);
+        }
+    }
+
 }
 

@@ -124,4 +124,15 @@ public class CajaDao {
         }
     }
 
+    public void cerrarCaja(Caja caja) throws SQLException {
+        String sql = "UPDATE Caja SET estado = 'CERRADA' WHERE id = ?";
+        try (Connection con = ConexionBD.getConnection();
+             PreparedStatement pst = con.prepareStatement(sql)) {
+
+            pst.setInt(1, caja.getIdCaja());
+            pst.executeUpdate();
+        }
+    }
+
+
 }

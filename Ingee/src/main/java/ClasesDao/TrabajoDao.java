@@ -256,4 +256,43 @@ public class TrabajoDao {
         return trabajos;
     }
 
+    public List<Trabajo> obtenerTrabajosSinPago() throws SQLException {
+        List<Trabajo> trabajos = new ArrayList<>();
+
+        String sql = "SELECT t.*, v.patente, v.marca, v.modelo, c.nombre AS cliente_nombre, c.numero AS cliente_numero " +
+                "FROM Trabajo t " +
+                "JOIN Vehiculo v ON t.vehiculo_id = v.id " +
+                "JOIN Cliente c ON v.cliente_id = c.id " +
+                "WHERE t.estadoPago = 'PENDIENTE'";
+
+        try (Connection conn = ConexionBD.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Trabajo t = new Trabajo();
+                t.setIdTrabajo(rs.getInt("id"));
+                t.setDescripcion(rs.getString("descripcion"));
+                t.setFecha(rs.getDate("fecha").toLocalDate());
+                t.setMonto(rs.getFloat("monto"));
+
+                Vehiculo v = new Vehiculo();
+                v.setPatente(rs.getString("patente"));
+                v.setMarca(rs.getString("marca"));
+                v.setModelo(rs.getString("modelo"));
+
+                Cliente cliente = new Cliente();
+                cliente.setNombre(rs.getString("cliente_nombre"));
+                cliente.setNumero(rs.getLong("cliente_numero"));
+                v.setCliente(cliente);
+
+                t.setVehiculo(v);
+                trabajos.add(t);
+            }
+        }
+
+        return trabajos;
+    }
+
+
 }

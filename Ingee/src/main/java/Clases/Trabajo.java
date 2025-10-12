@@ -1,6 +1,7 @@
 package Clases;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Trabajo {
@@ -17,7 +18,7 @@ public class Trabajo {
     private Vehiculo vehiculo;
     private Aseguradora aseguradora;
     private List<Empleado> empleados;
-    private List<Pago> pagos;
+    private List<Pago> pagos = new ArrayList<>();
 
 
     public Trabajo() {}
@@ -140,5 +141,11 @@ public class Trabajo {
     public List<Pago> getPagos() {
         return pagos;
     }
-
+    @Override
+    public String toString() {
+        return String.format("%s - %s (%s)",
+                vehiculo != null ? vehiculo.getPatente() : "Sin patente",
+                descripcion != null ? descripcion : "Sin descripción",
+                monto);
+    }
 }

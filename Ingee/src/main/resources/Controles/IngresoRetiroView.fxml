@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="500.0" style="-fx-background-color: #F5FFFA;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.IngresoRetiroController">
+
+    <children>
+        <Label layoutX="160.0" layoutY="20.0" text="Ingreso de Retiro" style="-fx-font-size: 26px; -fx-font-weight: bold;" />
+
+        <Label layoutX="60.0" layoutY="90.0" text="Monto:" style="-fx-font-size: 17px; -fx-font-weight: bold;" />
+        <TextField fx:id="txtMonto" layoutX="180.0" layoutY="85.0" prefWidth="220.0" style="-fx-background-color: #ADD8E6;" />
+
+        <Label layoutX="60.0" layoutY="140.0" text="Descripción:" style="-fx-font-size: 17px; -fx-font-weight: bold;" />
+        <TextArea fx:id="txtDescripcion" layoutX="180.0" layoutY="135.0" prefWidth="220.0" prefHeight="100.0"
+                  style="-fx-background-color: #ADD8E6;" wrapText="true" />
+
+        <Button fx:id="btnAceptar" text="Registrar Retiro" layoutX="180.0" layoutY="270.0" prefWidth="140.0" prefHeight="35.0"
+                style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;"
+                onAction="#onAceptar" />
+    </children>
+</AnchorPane>

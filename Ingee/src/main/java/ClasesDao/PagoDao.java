@@ -18,22 +18,33 @@ public class PagoDao {
 
     // CREATE
 
-    public boolean insertar(Pago pago) {
-        String sql = "INSERT INTO Pago (tipo, monto, trabajo_id, caja_id, fecha, hora) VALUES (?, ?, ?, ?, ?, ?)";
+    public void insertar(Pago pago) throws SQLException {
+        String sql = "INSERT INTO Pago (tipo, monto, trabajo_id, caja_id) VALUES (?, ?, ?, ?)";
+        String sqlUpdateTrabajo = "UPDATE Trabajo SET estadoPago = 'PAGADO' WHERE id = ?";
 
-        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
-            ps.setString(1, pago.getTipoPago().name());
-            ps.setFloat(2, pago.getMontoPago());
-            ps.setInt(3, pago.getTrabajoPago().getIdTrabajo());
-            ps.setInt(4, pago.getCajaPago().getIdCaja());
-            ps.setDate(5, Date.valueOf(pago.getFechaPago()));
-            ps.setTime(6, Time.valueOf(pago.getHoraPago()));
+        try (Connection conn = ConexionBD.getConnection()) {
+            conn.setAutoCommit(false); // 🔹 Inicia transacción
 
-            ps.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            try (PreparedStatement stmt = conn.prepareStatement(sql);
+                 PreparedStatement stmtUpdate = conn.prepareStatement(sqlUpdateTrabajo)) {
+
+                stmt.setString(1, pago.getTipoPago().name());
+                stmt.setFloat(2, pago.getMontoPago());
+                stmt.setInt(3, pago.getTrabajoPago().getIdTrabajo());
+                stmt.setInt(4, pago.getCajaPago().getIdCaja());
+                stmt.executeUpdate();
+
+
+                stmtUpdate.setInt(1, pago.getTrabajoPago().getIdTrabajo());
+                stmtUpdate.executeUpdate();
+
+                conn.commit();
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            } finally {
+                conn.setAutoCommit(true);
+            }
         }
     }
 
