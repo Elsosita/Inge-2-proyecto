@@ -19,7 +19,7 @@ public class TrabajoDao {
 
     // CREATE
     public void agregarTrabajo(Trabajo t) throws SQLException {
-        String sql = "INSERT INTO Trabajo (descripcion, fecha, estadopago, estadotrabajo, monto, estadodefacturacion, vehiculo_id, aseguradora_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Trabajo (descripcion, fecha, estadopago, estadotrabajo, monto, estadodefacturacion, vehiculo_id, aseguradora_id, ordendeprovision) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, t.getDescripcion());
             stmt.setDate(2, Date.valueOf(t.getFecha()));
@@ -29,6 +29,7 @@ public class TrabajoDao {
             stmt.setString(6, t.getEstadodefacturacion().name());
             stmt.setInt(7, t.getVehiculo() != null ? t.getVehiculo().getIdVehiculo() : 0);
             stmt.setInt(8, t.getAseguradora() != null ? t.getAseguradora().getIdAseguradora() : 1);
+            stmt.setString(9, t.getOrdenDeProvision());
             stmt.executeUpdate();
 
             ResultSet rs = stmt.getGeneratedKeys();

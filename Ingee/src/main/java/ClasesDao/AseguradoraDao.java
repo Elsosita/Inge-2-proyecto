@@ -21,10 +21,9 @@ public class AseguradoraDao {
     }
     // CREATE
     public void agregarAseguradora(Aseguradora a) throws SQLException {
-        String sql = "INSERT INTO Aseguradora (nombre, ordenDeProvision) VALUES (?, ?)";
+        String sql = "INSERT INTO Aseguradora (nombre) VALUES (?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, a.getNombreAseguradora());
-            stmt.setString(2, a.getOrdenDeProvision());
             stmt.executeUpdate();
 
             ResultSet rs = stmt.getGeneratedKeys();
@@ -41,8 +40,7 @@ public class AseguradoraDao {
             if (rs.next()) {
                 return new Aseguradora(
                         rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getString("ordenDeProvision")
+                        rs.getString("nombre")
                 );
             }
         }
@@ -58,8 +56,7 @@ public class AseguradoraDao {
             while (rs.next()) {
                 lista.add(new Aseguradora(
                         rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getString("ordenDeProvision")
+                        rs.getString("nombre")
                 ));
             }
         }
@@ -71,8 +68,7 @@ public class AseguradoraDao {
         String sql = "UPDATE Aseguradora SET nombre=?, ordenDeProvision=? WHERE id=?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, a.getNombreAseguradora());
-            stmt.setString(2, a.getOrdenDeProvision());
-            stmt.setInt(3, a.getIdAseguradora());
+            stmt.setInt(2, a.getIdAseguradora());
             stmt.executeUpdate();
         }
     }
@@ -85,7 +81,7 @@ public class AseguradoraDao {
             stmt.executeUpdate();
         }
     }
-    public void abrirOrdenDeProvision(int id) throws SQLException, IOException {
+    /*public void abrirOrdenDeProvision(int id) throws SQLException, IOException {
         Aseguradora a = obtenerAseguradoraPorId(id);
         if (a != null && a.getOrdenDeProvision() != null) {
             File archivo = new File(a.getOrdenDeProvision());
@@ -97,7 +93,7 @@ public class AseguradoraDao {
         } else {
             System.out.println("No se encontró la aseguradora o no tiene orden de provisión.");
         }
-    }
+    }*/
     public List<Aseguradora> obtenerTodas() throws SQLException {
         List<Aseguradora> lista = new ArrayList<>();
         String sql = "SELECT * FROM Aseguradora";

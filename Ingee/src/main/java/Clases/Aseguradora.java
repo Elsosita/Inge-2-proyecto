@@ -6,26 +6,23 @@ import java.util.List;
 public class Aseguradora {
     private int id;
     private String nombre;
-    private String ordenDeProvision;
     private List<Trabajo> trabajos = new ArrayList<>();
 
     public Aseguradora() {}
 
-    public Aseguradora(int id, String nombre, String ordenDeProvision) {
+    public Aseguradora(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;
-        this.ordenDeProvision = ordenDeProvision;
     }
 
-    public Aseguradora(String nombre, String ordenDeProvision, List<Trabajo> trabajos) {
+    public Aseguradora(String nombre, List<Trabajo> trabajos) {
         this.nombre = nombre;
-        this.ordenDeProvision = ordenDeProvision;
         this.trabajos = trabajos;
     }
 
     public Aseguradora(Aseguradora a) {
         this.nombre = a.nombre;
-        this.ordenDeProvision = a.ordenDeProvision;
+
         this.trabajos = new ArrayList<>(a.trabajos);
     }
 
@@ -35,9 +32,6 @@ public class Aseguradora {
 
     public String getNombreAseguradora() { return nombre; }
     public void setNombreAseguradora(String nombre) { this.nombre = nombre; }
-
-    public String getOrdenDeProvision() { return ordenDeProvision; }
-    public void setOrdenDeProvision(String ordenDeProvision) { this.ordenDeProvision = ordenDeProvision; }
 
     public List<Trabajo> getTrabajosAseguradora() { return trabajos; }
     public void setTrabajosAseguradora(List<Trabajo> trabajos) { this.trabajos = trabajos; }
