@@ -21,6 +21,7 @@ public class IngresoPagoController {
 
     @FXML
     private ComboBox<Trabajo> comboTrabajo;
+    @FXML Button btnAceptar;
 
     private PagoDao pagoDao;
     private TrabajoDao trabajoDao;
