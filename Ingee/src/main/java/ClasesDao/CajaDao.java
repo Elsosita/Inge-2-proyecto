@@ -2,7 +2,6 @@ package ClasesDao;
 
 
 import Clases.Caja;
-import Clases.ConexionBD;
 
 import java.sql.*;
 import java.util.ArrayList;

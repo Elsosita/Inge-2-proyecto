@@ -1,6 +1,5 @@
 package ClasesDao;
 
-import Clases.ConexionBD;
 import Clases.Empleado;
 import Clases.Retiro;
 import Clases.Trabajo;

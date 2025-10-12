@@ -1,7 +1,6 @@
 package ClasesDao;
 
 import Clases.Caja;
-import Clases.ConexionBD;
 import Clases.Pago;
 import Clases.Trabajo;
 

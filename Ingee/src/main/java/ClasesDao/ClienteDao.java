@@ -1,7 +1,6 @@
 package ClasesDao;
 
 import Clases.Cliente;
-import Clases.ConexionBD;
 import Clases.Vehiculo;
 
 import java.sql.*;

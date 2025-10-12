@@ -2,7 +2,6 @@ package ClasesDao;
 //aaa
 
 import Clases.Cliente;
-import Clases.ConexionBD;
 import Clases.Trabajo;
 import Clases.Vehiculo;
 

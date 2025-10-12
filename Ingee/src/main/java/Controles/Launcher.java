@@ -1,6 +1,6 @@
 package Controles;
 
-import Clases.*;
+import ClasesDao.ConexionBD;
 import Managers.TrabajoManager;
 import javafx.application.Application;
 
