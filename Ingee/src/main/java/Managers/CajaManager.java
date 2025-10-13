@@ -1,20 +1,34 @@
 package Clases;
 
 import ClasesDao.CajaDao;
+import ClasesDao.PagoDao;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class CajaManager {
 
-    private final CajaDao cajaDao;
+    private static CajaManager instancia;
 
-    public CajaManager() {
-        try {
-            cajaDao = new CajaDao();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    private final CajaDao cajaDao;
+    private final PagoDao pagoDao;
+
+    private static Caja cajaAbierta;
+
+    private CajaManager() throws SQLException {
+        cajaDao = new CajaDao();
+        pagoDao = new PagoDao();
+    }
+
+    public static CajaManager getInstancia() {
+        if (instancia == null) {
+            try {
+                instancia = new CajaManager();
+            } catch (SQLException e) {
+                throw new RuntimeException("Error al inicializar CajaManager", e);
+            }
         }
+        return instancia;
     }
 
 
@@ -34,7 +48,6 @@ public class CajaManager {
         return cajaDao.obtenerCajaAbierta() != null;
     }
 
-    private static Caja cajaAbierta;
 
     public static void setCajaAbierta(Caja caja) {
         cajaAbierta = caja;
@@ -49,6 +62,21 @@ public class CajaManager {
         if (cajaAbierta != null) {
             cajaDao.cerrarCaja(getCajaAbierta().getIdCaja());
         }
+    }
+    public void registrarPago(Pago nuevoPago) throws SQLException {
+        pagoDao.insertar(nuevoPago);
+
+        Caja caja = nuevoPago.getCajaPago();
+        float monto = nuevoPago.getMontoPago();
+
+        if (nuevoPago.getTipoPago() == Pago.Tipo.EFECTIVO) {
+            caja.setMontoefectivo(caja.getMontoefectivo() + monto);
+        } else {
+            caja.setMontodigital(caja.getMontodigital() + monto);
+        }
+        caja.setMontototal(caja.getMontototal() + monto);
+
+        cajaDao.actualizarMontos(caja);
     }
 
 }

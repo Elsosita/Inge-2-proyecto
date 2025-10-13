@@ -30,10 +30,8 @@ public class IngresoPagoController {
         pagoDao = new PagoDao();
         trabajoDao = new TrabajoDao();
 
-        // 🔹 Cargar tipos de pago
         comboTipoPago.setItems(FXCollections.observableArrayList("EFECTIVO", "DIGITAL"));
 
-        // 🔹 Cargar trabajos pendientes desde la base de datos
         try {
             comboTrabajo.setItems(FXCollections.observableArrayList(trabajoDao.obtenerTrabajosSinPago()));
         } catch (SQLException e) {
@@ -41,10 +39,8 @@ public class IngresoPagoController {
             e.printStackTrace();
         }
 
-        // 🔹 Bloquear edición del monto
         txtMonto.setEditable(false);
 
-        // 🔹 Cuando se elija un trabajo, mostrar su monto automáticamente
         comboTrabajo.setOnAction(event -> {
             Trabajo trabajoSeleccionado = comboTrabajo.getValue();
             if (trabajoSeleccionado != null) {
@@ -83,18 +79,17 @@ public class IngresoPagoController {
                 return;
             }
 
-            // Obtener la caja abierta actual (puedes reemplazar con tu propia gestión de caja)
             Caja cajaAbierta = CajaManager.getCajaAbierta();
             if (cajaAbierta == null) {
                 mostrarAlerta("Error", "No hay una caja abierta actualmente.", Alert.AlertType.ERROR);
                 return;
             }
 
-            // Crear y registrar el pago
             Pago.Tipo tipo = Pago.Tipo.valueOf(comboTipoPago.getValue());
             Pago nuevoPago = new Pago(tipo, monto, trabajoSeleccionado, cajaAbierta);
 
-            pagoDao.insertar(nuevoPago);
+            CajaManager.getInstancia().registrarPago(nuevoPago);
+
 
             mostrarAlerta("Éxito", "Pago registrado correctamente.", Alert.AlertType.INFORMATION);
             cerrarVentana();

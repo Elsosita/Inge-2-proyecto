@@ -1,6 +1,7 @@
 package ClasesDao;
 
 import Clases.Caja;
+import Clases.Pago;
 import ClasesDao.ConexionBD;
 
 import java.sql.*;
@@ -158,4 +159,17 @@ public class CajaDao {
             pst.executeUpdate();
         }
     }
+
+    public void actualizarMontos(Caja caja) throws SQLException {
+        String sql = "UPDATE Caja SET montototal=?, montoefectivo=?, montodigital=? WHERE id=?";
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setFloat(1, caja.getMontototal());
+            stmt.setFloat(2, caja.getMontoefectivo());
+            stmt.setFloat(3, caja.getMontodigital());
+            stmt.setInt(4, caja.getIdCaja());
+            stmt.executeUpdate();
+        }
+    }
+
+
 }

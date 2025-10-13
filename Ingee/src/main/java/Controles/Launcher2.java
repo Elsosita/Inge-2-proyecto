@@ -38,7 +38,7 @@ public class Launcher2 extends Application {
             // --- 3️⃣ Cerrar caja automáticamente al salir del sistema ---
             primaryStage.setOnCloseRequest(event -> {
                 try {
-                    CajaManager cajaManager = new CajaManager();
+                    CajaManager cajaManager = CajaManager.getInstancia();
                     cajaManager.cerrarCaja();
                     System.out.println("✅ Caja cerrada correctamente al salir del sistema.");
                 } catch (Exception e) {

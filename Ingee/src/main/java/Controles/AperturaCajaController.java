@@ -31,7 +31,7 @@ public class AperturaCajaController {
     @FXML
     private Button btnAceptar;
 
-    private final CajaManager cajaManager = new CajaManager();
+    private final CajaManager cajaManager = CajaManager.getInstancia();
 
     private boolean cajaAbierta = false;
 
@@ -61,7 +61,7 @@ public class AperturaCajaController {
                 return;
             }
 
-            CajaManager cajaManager = new CajaManager();
+            CajaManager cajaManager = CajaManager.getInstancia();
             Caja caja = new Caja();
             caja.setMontototal(montoInicial);
             caja.setMontoefectivo(montoInicial);
