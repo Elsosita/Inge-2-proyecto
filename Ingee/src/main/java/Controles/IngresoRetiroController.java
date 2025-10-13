@@ -13,6 +13,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import java.net.URL;
@@ -117,6 +118,8 @@ public class IngresoRetiroController implements Initializable {
             e.printStackTrace();
             mostrarAlerta("Error", "Ocurrió un error al registrar el retiro.", Alert.AlertType.ERROR);
         }
+        Stage stage = (Stage) txtMonto.getScene().getWindow();
+        stage.close();
     }
 
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
