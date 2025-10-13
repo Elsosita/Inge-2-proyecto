@@ -23,12 +23,14 @@ public class CajaDao {
 
     // ✅ CREATE
     public void agregarCaja(Caja c) throws SQLException {
-        String sql = "INSERT INTO Caja (montototal, fecha, hora, estado) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Caja (montototal, montoefectivo, montodigital, fecha, hora, estado) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setFloat(1, c.getMontototal());
-            stmt.setDate(2, Date.valueOf(c.getFecha()));
-            stmt.setTime(3, Time.valueOf(c.getHora()));
-            stmt.setString(4, c.getEstado().name());
+            stmt.setFloat(2, c.getMontoefectivo());
+            stmt.setFloat(3, c.getMontodigital());
+            stmt.setDate(4, Date.valueOf(c.getFecha()));
+            stmt.setTime(5, Time.valueOf(c.getHora()));
+            stmt.setString(6, c.getEstado().name());
             stmt.executeUpdate();
 
             try (ResultSet rs = stmt.getGeneratedKeys()) {
@@ -49,6 +51,8 @@ public class CajaDao {
                     Caja c = new Caja();
                     c.setId(rs.getInt("id"));
                     c.setMontototal(rs.getFloat("montototal"));
+                    c.setMontoefectivo(rs.getFloat("montoefectivo"));
+                    c.setMontodigital(rs.getFloat("montodigital"));
                     c.setFecha(rs.getDate("fecha").toLocalDate());
                     if (rs.getTime("hora") != null)
                         c.setHora(rs.getTime("hora").toLocalTime());
@@ -71,6 +75,8 @@ public class CajaDao {
                 Caja c = new Caja();
                 c.setId(rs.getInt("id"));
                 c.setMontototal(rs.getFloat("montototal"));
+                c.setMontoefectivo(rs.getFloat("montoefectivo"));
+                c.setMontodigital(rs.getFloat("montodigital"));
                 c.setFecha(rs.getDate("fecha").toLocalDate());
                 if (rs.getTime("hora") != null)
                     c.setHora(rs.getTime("hora").toLocalTime());
@@ -114,6 +120,8 @@ public class CajaDao {
                 Caja caja = new Caja();
                 caja.setId(rs.getInt("id"));
                 caja.setMontototal(rs.getFloat("montototal"));
+                caja.setMontoefectivo(rs.getFloat("montoefectivo"));
+                caja.setMontodigital(rs.getFloat("montodigital"));
                 caja.setFecha(rs.getDate("fecha").toLocalDate());
                 caja.setHora(rs.getTime("hora").toLocalTime());
                 caja.setEstado(Caja.Estado.valueOf(rs.getString("estado")));
@@ -125,11 +133,13 @@ public class CajaDao {
 
     // ✅ Cambiar estado a “ABIERTA”
     public void abrirCaja(Caja caja) throws SQLException {
-        String sql = "INSERT INTO Caja (montototal, fecha, hora, estado) VALUES (?, ?, ?, 'ABIERTA')";
+        String sql = "INSERT INTO Caja (montototal, montoefectivo, montodigital, fecha, hora, estado) VALUES (?, ?, ?, ?, ?, 'ABIERTA')";
         try (PreparedStatement stmt = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setFloat(1, caja.getMontototal());
-            stmt.setDate(2, Date.valueOf(caja.getFecha()));
-            stmt.setTime(3, Time.valueOf(caja.getHora()));
+            stmt.setFloat(2, caja.getMontoefectivo());
+            stmt.setFloat(3, caja.getMontodigital());
+            stmt.setDate(4, Date.valueOf(caja.getFecha()));
+            stmt.setTime(5, Time.valueOf(caja.getHora()));
             stmt.executeUpdate();
 
             try (ResultSet rs = stmt.getGeneratedKeys()) {

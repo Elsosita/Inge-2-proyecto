@@ -19,14 +19,14 @@ public class CajaManager {
 
 
     public void abrirCaja(float montoInicial) throws SQLException {
-        // Crear objeto Caja
         Caja caja = new Caja();
         caja.setMontototal(montoInicial);
+        caja.setMontoefectivo(montoInicial);
+        caja.setMontodigital(0);
         caja.setFecha(LocalDate.now());
         caja.setHora(LocalTime.now());
         caja.setEstado(Caja.Estado.ABIERTA);
 
-        // Guardar en la base de datos
         cajaDao.abrirCaja(caja);
     }
 

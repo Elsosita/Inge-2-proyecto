@@ -39,7 +39,7 @@ public class Launcher2 extends Application {
             primaryStage.setOnCloseRequest(event -> {
                 try {
                     CajaManager cajaManager = new CajaManager();
-                    cajaManager.cerrarCaja(); // <- este método lo implementás en CajaManager
+                    cajaManager.cerrarCaja();
                     System.out.println("✅ Caja cerrada correctamente al salir del sistema.");
                 } catch (Exception e) {
                     e.printStackTrace();

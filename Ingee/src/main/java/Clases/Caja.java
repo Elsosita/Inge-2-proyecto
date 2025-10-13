@@ -8,6 +8,8 @@ import java.util.List;
 public class Caja {
     private  int id;
     private float montototal;
+    private float montoefectivo;
+    private float montodigital;
     private LocalDate  fecha;
     private LocalTime hora;
     public enum Estado{ABIERTA, CERRADA}
@@ -18,7 +20,7 @@ public class Caja {
 
     public Caja(){}
 
-    public Caja(float montototal, LocalDate fecha, LocalTime hora, Estado estado, ArrayList<Retiro> retiros, List<Pago> pagos) {
+    public Caja(float montototal, float montoefectivo, float montodigital, Estado estado, ArrayList<Retiro> retiros, List<Pago> pagos) {
         this.montototal=montototal;
         this.fecha = LocalDate.now();
         this.hora = LocalTime.now();
@@ -30,6 +32,8 @@ public class Caja {
 
     public Caja(Caja caja) {
         this.montototal = caja.montototal;
+        this.montoefectivo = caja.montoefectivo;
+        this.montodigital = caja.montodigital;
         this.fecha = caja.fecha;
         this.fecha = LocalDate.now();
         this.hora = LocalTime.now();
@@ -52,6 +56,23 @@ public class Caja {
     public void setMontototal(float montototal) {
         this.montototal = montototal;
     }
+
+    public float getMontoefectivo() {
+        return montoefectivo;
+    }
+
+    public void setMontoefectivo(float montoefectivo) {
+        this.montoefectivo = montoefectivo;
+    }
+
+    public float getMontodigital() {
+        return montodigital;
+    }
+
+    public void setMontodigital(float montodigital) {
+        this.montodigital = montodigital;
+    }
+
 
     public LocalDate getFecha() {
         return fecha;
