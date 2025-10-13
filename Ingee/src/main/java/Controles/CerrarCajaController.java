@@ -3,6 +3,7 @@ package Controles;
 import Clases.Caja;
 import Clases.CajaManager;
 import ClasesDao.CajaDao;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
@@ -60,7 +61,8 @@ public class CerrarCajaController {
             Stage stage = (Stage) txtTotal.getScene().getWindow();
             stage.close();
             javafx.application.Platform.exit();
-            System.exit(0);
+            Platform.exit();
+
         } catch (Exception e) {
             e.printStackTrace();
             mostrarAlerta("Error", "No se pudo cerrar la caja.", Alert.AlertType.ERROR);
