@@ -213,12 +213,8 @@ public class MainController {
         }
     }
     @FXML
-    private void onVolver(ActionEvent event) {
-        // Obtenemos la pestaña seleccionada
-        Tab tabActual = tabPane.getSelectionModel().getSelectedItem();
-        if (tabActual != null) {
-            tabPane.getTabs().remove(tabActual); // Cierra la pestaña
-        }
+    private void onVolver(ActionEvent event) throws SQLException {
+        initialize();
     }
 
     @FXML

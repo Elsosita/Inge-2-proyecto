@@ -18,7 +18,7 @@ public class AseguradoraManager {
     }
 
     public List<Aseguradora> obtenerTodas() throws SQLException {
-        return aseguradoraDao.obtenerTodas();
+        return aseguradoraDao.listarTodas(true);
     }
 
     public Aseguradora buscarPorId(int id) throws SQLException {

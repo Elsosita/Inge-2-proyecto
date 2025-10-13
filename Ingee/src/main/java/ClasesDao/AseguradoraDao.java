@@ -1,52 +1,63 @@
 package ClasesDao;
 
 import Clases.Aseguradora;
+import ClasesDao.ConexionBD;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AseguradoraDao {
-    private Connection conexion;
 
+    private final Connection conexion;
+
+    // ✅ Constructor que usa Singleton de ConexionBD
     public AseguradoraDao() throws SQLException {
-        this.conexion = ConexionBD.getConnection();
+        this.conexion = ConexionBD.getInstance().getConnection();
     }
+
+    // ✅ Constructor alternativo por si querés inyectar conexión manualmente
     public AseguradoraDao(Connection conexion) {
         this.conexion = conexion;
     }
-    // CREATE
+
+    // ✅ CREATE
     public void agregarAseguradora(Aseguradora a) throws SQLException {
-        String sql = "INSERT INTO Aseguradora (nombre) VALUES (?, ?)";
+        String sql = "INSERT INTO Aseguradora (nombre) VALUES (?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, a.getNombreAseguradora());
             stmt.executeUpdate();
 
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()) a.setIdAseguradora(rs.getInt(1));
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) a.setIdAseguradora(rs.getInt(1));
+            }
         }
     }
 
-    // READ por ID
+    // ✅ READ - Buscar por ID
     public Aseguradora obtenerAseguradoraPorId(int id) throws SQLException {
         String sql = "SELECT * FROM Aseguradora WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Aseguradora(
-                        rs.getInt("id"),
-                        rs.getString("nombre")
-                );
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Aseguradora(
+                            rs.getInt("id"),
+                            rs.getString("nombre")
+                    );
+                }
             }
         }
         return null;
     }
 
-    // READ todos
-    public List<Aseguradora> listarTodas() throws SQLException {
+    // ✅ READ - Listar todas (menos la de id 1, si querés ocultar “Sin aseguradora”)
+    public List<Aseguradora> listarTodas(boolean incluirSinAseguradora) throws SQLException {
         List<Aseguradora> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Aseguradora";
+        String sql = incluirSinAseguradora
+                ? "SELECT * FROM Aseguradora"
+                : "SELECT * FROM Aseguradora WHERE id <> 1";
+
         try (PreparedStatement stmt = conexion.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
@@ -59,9 +70,9 @@ public class AseguradoraDao {
         return lista;
     }
 
-    // UPDATE
+    // ✅ UPDATE
     public void actualizarAseguradora(Aseguradora a) throws SQLException {
-        String sql = "UPDATE Aseguradora SET nombre=?, ordenDeProvision=? WHERE id=?";
+        String sql = "UPDATE Aseguradora SET nombre = ? WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, a.getNombreAseguradora());
             stmt.setInt(2, a.getIdAseguradora());
@@ -69,54 +80,18 @@ public class AseguradoraDao {
         }
     }
 
-    // DELETE
+    // ✅ DELETE
     public void eliminarAseguradora(int id) throws SQLException {
-        String sql = "DELETE FROM Aseguradora WHERE id=?";
+        String sql = "DELETE FROM Aseguradora WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         }
     }
-    /*public void abrirOrdenDeProvision(int id) throws SQLException, IOException {
-        Aseguradora a = obtenerAseguradoraPorId(id);
-        if (a != null && a.getOrdenDeProvision() != null) {
-            File archivo = new File(a.getOrdenDeProvision());
-            if (archivo.exists()) {
-                Desktop.getDesktop().open(archivo); // abre el PDF con el programa por defecto
-            } else {
-                System.out.println("El archivo no existe en la ruta: " + archivo.getAbsolutePath());
-            }
-        } else {
-            System.out.println("No se encontró la aseguradora o no tiene orden de provisión.");
-        }
-    }*/
-    public List<Aseguradora> obtenerTodas() throws SQLException {
-        List<Aseguradora> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Aseguradora";
-        try (PreparedStatement stmt = conexion.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                Aseguradora a = new Aseguradora();
-                a.setIdAseguradora(rs.getInt("id"));
-                a.setNombreAseguradora(rs.getString("nombre"));
-                lista.add(a);
-            }
-        }
-        return lista;
-    }
+
+    // ✅ Buscar por ID (redundancia unificada con obtenerAseguradoraPorId)
     public Aseguradora buscarPorId(int id) throws SQLException {
-        String sql = "SELECT * FROM Aseguradora WHERE id = ?";
-        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                Aseguradora a = new Aseguradora();
-                a.setIdAseguradora(rs.getInt("id"));
-                a.setNombreAseguradora(rs.getString("nombre"));
-                return a;
-            }
-        }
-        return null;
+        return obtenerAseguradoraPorId(id);
     }
 
 }

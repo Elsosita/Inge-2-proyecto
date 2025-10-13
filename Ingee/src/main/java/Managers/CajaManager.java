@@ -47,7 +47,7 @@ public class CajaManager {
     public void cerrarCaja() throws SQLException {
         Caja cajaAbierta = cajaDao.obtenerCajaAbierta();
         if (cajaAbierta != null) {
-            cajaDao.cerrarCaja(cajaAbierta);
+            cajaDao.cerrarCaja(getCajaAbierta().getIdCaja());
         }
     }
 

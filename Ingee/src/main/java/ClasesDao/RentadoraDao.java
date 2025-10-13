@@ -1,6 +1,7 @@
 package ClasesDao;
 
 import Clases.Rentadora;
+import ClasesDao.ConexionBD;
 
 import java.sql.*;
 import java.util.ArrayList;

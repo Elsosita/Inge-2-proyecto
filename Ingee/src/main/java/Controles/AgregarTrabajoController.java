@@ -1,6 +1,7 @@
 package Controles;
 
 import Clases.*;
+import ClasesDao.ConexionBD;
 import ClasesDao.*;
 import Managers.*;
 import javafx.fxml.FXML;
@@ -67,7 +68,7 @@ public class AgregarTrabajoController {
 
     public void initialize() {
         try {
-            Connection conexion = ConexionBD.getConnection();
+            Connection conexion = ConexionBD.getInstance().getConnection();
             clienteManager = new ClienteManager(conexion);
             vehiculoDao = new VehiculoDao();
             vehiculoManager = new VehiculoManager(conexion);

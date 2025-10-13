@@ -1,6 +1,7 @@
 package ClasesDao;
 
 import Clases.Caja;
+import ClasesDao.ConexionBD;
 import Clases.Pago;
 import Clases.Trabajo;
 
@@ -9,73 +10,81 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PagoDao {
-    private Connection conexion;
+    private final Connection conexion;
 
+    // ✅ Constructor que usa la conexión Singleton
     public PagoDao() throws SQLException {
-        this.conexion = ConexionBD.getConnection();
+        this.conexion = ConexionBD.getInstance().getConnection();
     }
 
-    // CREATE
+    public PagoDao(Connection conexion) {
+        this.conexion = conexion;
+    }
 
+    // ✅ CREATE → Inserta un pago y actualiza el estado del trabajo
     public void insertar(Pago pago) throws SQLException {
-        String sql = "INSERT INTO Pago (tipo, monto, trabajo_id, caja_id) VALUES (?, ?, ?, ?)";
+        String sqlInsert = "INSERT INTO Pago (tipo, monto, trabajo_id, caja_id) VALUES (?, ?, ?, ?)";
         String sqlUpdateTrabajo = "UPDATE Trabajo SET estadoPago = 'PAGADO' WHERE id = ?";
 
-        try (Connection conn = ConexionBD.getConnection()) {
-            conn.setAutoCommit(false); // 🔹 Inicia transacción
+        // ✅ Usamos la misma conexión única para la transacción
+        conexion.setAutoCommit(false);
+        try (PreparedStatement stmtPago = conexion.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
+             PreparedStatement stmtTrabajo = conexion.prepareStatement(sqlUpdateTrabajo)) {
 
-            try (PreparedStatement stmt = conn.prepareStatement(sql);
-                 PreparedStatement stmtUpdate = conn.prepareStatement(sqlUpdateTrabajo)) {
+            stmtPago.setString(1, pago.getTipoPago().name());
+            stmtPago.setFloat(2, pago.getMontoPago());
+            stmtPago.setInt(3, pago.getTrabajoPago().getIdTrabajo());
+            stmtPago.setInt(4, pago.getCajaPago().getIdCaja());
+            stmtPago.executeUpdate();
 
-                stmt.setString(1, pago.getTipoPago().name());
-                stmt.setFloat(2, pago.getMontoPago());
-                stmt.setInt(3, pago.getTrabajoPago().getIdTrabajo());
-                stmt.setInt(4, pago.getCajaPago().getIdCaja());
-                stmt.executeUpdate();
+            stmtTrabajo.setInt(1, pago.getTrabajoPago().getIdTrabajo());
+            stmtTrabajo.executeUpdate();
 
-
-                stmtUpdate.setInt(1, pago.getTrabajoPago().getIdTrabajo());
-                stmtUpdate.executeUpdate();
-
-                conn.commit();
-            } catch (SQLException e) {
-                conn.rollback();
-                throw e;
-            } finally {
-                conn.setAutoCommit(true);
-            }
+            conexion.commit();
+        } catch (SQLException e) {
+            conexion.rollback();
+            throw e;
+        } finally {
+            conexion.setAutoCommit(true);
         }
     }
 
-    // READ por id
+    // ✅ READ → obtener un pago por su ID
     public Pago obtenerPagoPorId(int id) throws SQLException {
-        String sql = "SELECT * FROM Pago p JOIN Trabajo t ON p.trabajo_id = t.id JOIN Caja c ON p.caja_id = c.id WHERE p.id = ?";
-        Pago p = null;
+        String sql = """
+                SELECT p.*, t.id AS trabajo_id, c.id AS caja_id
+                FROM Pago p
+                JOIN Trabajo t ON p.trabajo_id = t.id
+                JOIN Caja c ON p.caja_id = c.id
+                WHERE p.id = ?
+                """;
+
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                p = new Pago();
-                p.setTipoPago(Pago.Tipo.valueOf(rs.getString("tipo")));
-                p.setMontoPago(rs.getFloat("monto"));
-                // Fecha y hora si las guardas en la base
-                p.setFechaPago(rs.getDate("fecha") != null ? rs.getDate("fecha").toLocalDate() : null);
-                p.setHoraPago(rs.getTime("hora") != null ? rs.getTime("hora").toLocalTime() : null);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Pago p = new Pago();
+                    p.setTipoPago(Pago.Tipo.valueOf(rs.getString("tipo")));
+                    p.setMontoPago(rs.getFloat("monto"));
+                    p.setFechaPago(rs.getDate("fecha") != null ? rs.getDate("fecha").toLocalDate() : null);
+                    p.setHoraPago(rs.getTime("hora") != null ? rs.getTime("hora").toLocalTime() : null);
 
-                // Cargar Trabajo y Caja mínimos
-                Trabajo t = new Trabajo();
-                t.setIdTrabajo(rs.getInt("trabajo_id"));
-                p.setTrabajoPago(t);
+                    Trabajo t = new Trabajo();
+                    t.setIdTrabajo(rs.getInt("trabajo_id"));
+                    p.setTrabajoPago(t);
 
-                Caja c = new Caja();
-                c.setId(rs.getInt("caja_id"));
-                p.setCajaPago(c);
+                    Caja c = new Caja();
+                    c.setId(rs.getInt("caja_id"));
+                    p.setCajaPago(c);
+
+                    return p;
+                }
             }
         }
-        return p;
+        return null;
     }
 
-    // UPDATE
+    // ✅ UPDATE
     public void actualizarPago(Pago p, int id) throws SQLException {
         String sql = "UPDATE Pago SET tipo = ?, monto = ?, trabajo_id = ?, caja_id = ? WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -88,7 +97,7 @@ public class PagoDao {
         }
     }
 
-    // DELETE
+    // ✅ DELETE
     public void eliminarPago(int id) throws SQLException {
         String sql = "DELETE FROM Pago WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -97,12 +106,14 @@ public class PagoDao {
         }
     }
 
-    // Listar todos los pagos
+    // ✅ READ → listar todos los pagos
     public List<Pago> obtenerTodosLosPagos() throws SQLException {
         String sql = "SELECT * FROM Pago";
         List<Pago> pagos = new ArrayList<>();
-        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
-            ResultSet rs = stmt.executeQuery();
+
+        try (PreparedStatement stmt = conexion.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
             while (rs.next()) {
                 Pago p = new Pago();
                 p.setTipoPago(Pago.Tipo.valueOf(rs.getString("tipo")));
@@ -110,7 +121,6 @@ public class PagoDao {
                 p.setFechaPago(rs.getDate("fecha") != null ? rs.getDate("fecha").toLocalDate() : null);
                 p.setHoraPago(rs.getTime("hora") != null ? rs.getTime("hora").toLocalTime() : null);
 
-                // Solo seteamos ids de relaciones
                 Trabajo t = new Trabajo();
                 t.setIdTrabajo(rs.getInt("trabajo_id"));
                 p.setTrabajoPago(t);

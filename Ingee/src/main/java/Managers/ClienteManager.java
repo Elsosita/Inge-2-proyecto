@@ -36,7 +36,7 @@ public class ClienteManager {
     }
 
     public Cliente obtenerPorId(int id) throws SQLException {
-        return clienteDao.obtenerPorId(id);
+        return clienteDao.buscarPorId(id);
     }
 
     public void actualizarTelefono(Cliente cliente) throws SQLException {

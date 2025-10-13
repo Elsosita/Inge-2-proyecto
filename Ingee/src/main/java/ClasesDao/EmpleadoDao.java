@@ -1,5 +1,6 @@
 package ClasesDao;
 
+import ClasesDao.ConexionBD;
 import Clases.Empleado;
 import Clases.Retiro;
 import Clases.Trabajo;
@@ -9,65 +10,93 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmpleadoDao {
-    private Connection conexion;
+    private final Connection conexion;
 
+    // ✅ Constructor que usa la conexión única (Singleton)
     public EmpleadoDao() throws SQLException {
-        this.conexion = ConexionBD.getConnection();
+        this.conexion = ConexionBD.getInstance().getConnection();
     }
 
-    // CREATE
+    public EmpleadoDao(Connection conexion) {
+        this.conexion = conexion;
+    }
+
+    // ✅ CREATE
     public void agregarEmpleado(Empleado e) throws SQLException {
         String sql = "INSERT INTO Empleado (nombre, telefono, sueldo) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, e.getNombreEmpleado());
-            stmt.setInt(2, e.getTelefonoEmpleado());
+            stmt.setLong(2, e.getTelefonoEmpleado()); // 👈 mejor long por seguridad
             stmt.setFloat(3, e.getSueldoEmpleado());
             stmt.executeUpdate();
 
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()) {
-                e.setIdEmpleado(rs.getInt(1));
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    e.setIdEmpleado(rs.getInt(1));
+                }
             }
         }
     }
 
-    // READ por id
+    // ✅ READ por ID
     public Empleado obtenerEmpleadoPorId(int id) throws SQLException {
         String sql = "SELECT * FROM Empleado WHERE id = ?";
         Empleado e = null;
+
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                e = new Empleado();
-                e.setIdEmpleado(rs.getInt("id"));
-                e.setNombreEmpleado(rs.getString("nombre"));
-                e.setTelefonoEmpleado(rs.getInt("telefono"));
-                e.setSueldoEmpleado(rs.getFloat("sueldo"));
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    e = new Empleado();
+                    e.setIdEmpleado(rs.getInt("id"));
+                    e.setNombreEmpleado(rs.getString("nombre"));
+                    e.setTelefonoEmpleado(rs.getLong("telefono"));
+                    e.setSueldoEmpleado(rs.getFloat("sueldo"));
 
-                // Cargar trabajos
-                e.setTrabajosEmpleado(obtenerTrabajosDeEmpleado(id));
-
-                // Cargar retiros
-                e.setRetirosEmpleado(obtenerRetirosDeEmpleado(id));
+                    // Relaciones
+                    e.setTrabajosEmpleado(obtenerTrabajosDeEmpleado(id));
+                    e.setRetirosEmpleado(obtenerRetirosDeEmpleado(id));
+                }
             }
         }
+
         return e;
     }
 
-    // UPDATE
+    // ✅ READ → listar todos
+    public List<Empleado> listarTodos() throws SQLException {
+        List<Empleado> lista = new ArrayList<>();
+        String sql = "SELECT * FROM Empleado";
+
+        try (PreparedStatement stmt = conexion.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Empleado e = new Empleado();
+                e.setIdEmpleado(rs.getInt("id"));
+                e.setNombreEmpleado(rs.getString("nombre"));
+                e.setTelefonoEmpleado(rs.getLong("telefono"));
+                e.setSueldoEmpleado(rs.getFloat("sueldo"));
+                lista.add(e);
+            }
+        }
+
+        return lista;
+    }
+
+    // ✅ UPDATE
     public void actualizarEmpleado(Empleado e) throws SQLException {
         String sql = "UPDATE Empleado SET nombre = ?, telefono = ?, sueldo = ? WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, e.getNombreEmpleado());
-            stmt.setInt(2, e.getTelefonoEmpleado());
+            stmt.setLong(2, e.getTelefonoEmpleado());
             stmt.setFloat(3, e.getSueldoEmpleado());
             stmt.setInt(4, e.getIdEmpleado());
             stmt.executeUpdate();
         }
     }
 
-    // DELETE
+    // ✅ DELETE
     public void eliminarEmpleado(int id) throws SQLException {
         String sql = "DELETE FROM Empleado WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -76,44 +105,52 @@ public class EmpleadoDao {
         }
     }
 
-    // MÉTODOS AUXILIARES PARA RELACIONES
+    // ✅ RELACIONES
 
+    // 🔹 Obtener trabajos asignados al empleado
     private List<Trabajo> obtenerTrabajosDeEmpleado(int empleadoId) throws SQLException {
-        String sql = "SELECT t.* FROM Trabajo t JOIN Empleado_Trabajo et ON t.id = et.trabajo_id WHERE et.empleado_id = ?";
+        String sql = """
+                SELECT t.* FROM Trabajo t
+                JOIN Empleado_Trabajo et ON t.id = et.trabajo_id
+                WHERE et.empleado_id = ?
+                """;
+
         List<Trabajo> trabajos = new ArrayList<>();
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setInt(1, empleadoId);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                Trabajo t = new Trabajo();
-                t.setIdTrabajo(rs.getInt("id"));
-                t.setDescripcion(rs.getString("descripcion"));
-                t.setMonto(rs.getFloat("monto"));
-                // Aquí podés agregar más campos de Trabajo si querés
-                trabajos.add(t);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Trabajo t = new Trabajo();
+                    t.setIdTrabajo(rs.getInt("id"));
+                    t.setDescripcion(rs.getString("descripcion"));
+                    t.setMonto(rs.getFloat("monto"));
+                    trabajos.add(t);
+                }
             }
         }
         return trabajos;
     }
 
+    // 🔹 Obtener retiros asociados
     private List<Retiro> obtenerRetirosDeEmpleado(int empleadoId) throws SQLException {
         String sql = "SELECT * FROM Retiro WHERE codigoempleado_retiro = ?";
         List<Retiro> retiros = new ArrayList<>();
+
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setInt(1, empleadoId);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                Retiro r = new Retiro();
-                r.setMonto(rs.getFloat("monto"));
-                r.setDescripcion(rs.getString("descripcion"));
-                // Fecha y hora pueden agregarse si los guardás en la base
-                retiros.add(r);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Retiro r = new Retiro();
+                    r.setMonto(rs.getFloat("monto"));
+                    r.setDescripcion(rs.getString("descripcion"));
+                    retiros.add(r);
+                }
             }
         }
         return retiros;
     }
 
-    // Método para vincular un trabajo a un empleado
+    // ✅ Método para vincular un trabajo a un empleado
     public void agregarTrabajoAEmpleado(int empleadoId, int trabajoId) throws SQLException {
         String sql = "INSERT INTO Empleado_Trabajo (empleado_id, trabajo_id) VALUES (?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
