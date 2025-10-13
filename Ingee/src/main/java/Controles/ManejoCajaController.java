@@ -4,12 +4,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ManejoCajaController {
-    @FXML private Button btnPago;
 
     @FXML
     private void abrirPago() {
@@ -22,7 +20,6 @@ public class ManejoCajaController {
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
-            ((Stage)btnPago.getScene().getWindow()).close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -40,8 +37,6 @@ public class ManejoCajaController {
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
-            ((Stage)btnPago.getScene().getWindow()).close();
-
 
         } catch (Exception e) {
             e.printStackTrace();
