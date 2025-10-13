@@ -28,7 +28,7 @@
         <TextField fx:id="txtTelefono" promptText="Teléfono del cliente" />
         <TextField fx:id="txtDescripcion" promptText="Descripción del trabajo" />
       <TextField fx:id="txtMonto" promptText="Monto" />
-
+        <HBox spacing="10">
         <ComboBox fx:id="cbEstadoPago" promptText="Estado de pago">
             <items>
                 <FXCollections fx:factory="observableArrayList">
@@ -46,6 +46,7 @@
                 </FXCollections>
             </items>
         </ComboBox>
+        </HBox>
         <Label text="¿Tiene aseguradora?" />
         <ComboBox fx:id="cbTieneAseguradora">
             <items>
@@ -68,7 +69,7 @@
             <TextField fx:id="txtRutaArchivo" editable="false" prefWidth="220" promptText="Ruta del archivo" />
             <Button fx:id="btnSeleccionarArchivo" onAction="#onSeleccionarArchivo" text="Seleccionar..." />
         </HBox>
-        <HBox>
+        <HBox spacing="15">
             <Button onAction="#onGuardar" text="Guardar" />
             <Button onAction="#onCancelar" text="Cancelar" />
         </HBox>

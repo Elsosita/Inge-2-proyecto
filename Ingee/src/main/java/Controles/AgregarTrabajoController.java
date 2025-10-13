@@ -50,6 +50,7 @@ public class AgregarTrabajoController {
 
 
 
+
     private ClienteManager clienteManager;
     private Cliente clienteSeleccionado;
 
@@ -343,19 +344,36 @@ public class AgregarTrabajoController {
             // 6️⃣ Guardar en BD
             trabajoDao.agregarTrabajo(t);
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/ConfirmacionTrabajo.fxml"));
+            // ahora sí tiene ID
+            System.out.println("Trabajo guardado con ID: " + t.getIdTrabajo());
+
+            // abrir ventana para asignar empleados
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/AsignarEmpleados.fxml"));
             Parent root = loader.load();
 
+            // pasarle el trabajo recién creado al nuevo controller
+            AsignarEmpleadosController controller = loader.getController();
+            controller.setTrabajo(t);
+
             Stage stage = new Stage();
-            stage.setTitle("Confirmación");
+            stage.setTitle("Asignar empleados");
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setResizable(false);
+            stage.showAndWait();
+
+            FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/Controles/ConfirmacionTrabajo.fxml"));
+            Parent root2 = loader2.load();
+
+            Stage stage2 = new Stage();
+            stage2.setTitle("Confirmación");
+            stage2.setScene(new Scene(root2));
+            stage2.initModality(Modality.APPLICATION_MODAL);
+            stage2.setResizable(false);
 
             // 🚫 Deshabilita el botón “X”
-            stage.setOnCloseRequest(event -> event.consume());
+            stage2.setOnCloseRequest(event -> event.consume());
 
-            stage.showAndWait();
+            stage2.showAndWait();
 
 
 
@@ -370,6 +388,28 @@ public class AgregarTrabajoController {
     }
 
 
+    @FXML
+    private void onAsignarEmpleados() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/AsignarEmpleados.fxml"));
+            Parent root = loader.load();
+
+            AsignarEmpleadosController ctrl = loader.getController();
+
+            // si ya existe el trabajo creado (ej: lo estás editando)
+            // podés pasarle el trabajo actual
+            // ctrl.setTrabajoRecienCreado(trabajoActual);
+
+            Stage stage = new Stage();
+            stage.setTitle("Asignar empleados");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error al abrir la ventana de empleados: " + e.getMessage()).showAndWait();
+        }
+    }
 
 
 
