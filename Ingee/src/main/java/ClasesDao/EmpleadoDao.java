@@ -10,13 +10,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmpleadoDao {
+    private static EmpleadoDao instancia;
     private final Connection conexion;
 
-    // ✅ Constructor que usa la conexión única (Singleton)
-    public EmpleadoDao() throws SQLException {
+    // 🔹 Constructor privado (solo accesible dentro de la clase)
+    private EmpleadoDao() throws SQLException {
         this.conexion = ConexionBD.getInstance().getConnection();
     }
 
+    // 🔹 Método estático para obtener la única instancia
+    public static EmpleadoDao getInstancia() throws SQLException {
+        if (instancia == null) {
+            instancia = new EmpleadoDao();
+        }
+        return instancia;
+    }
     public EmpleadoDao(Connection conexion) {
         this.conexion = conexion;
     }
