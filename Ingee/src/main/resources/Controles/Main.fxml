@@ -37,7 +37,10 @@
             <Button onAction="#onIngresarTrabajo" styleClass="boton-menu" text="Ingresar trabajo" />
             <Button onAction="#mostrarManejoCaja" styleClass="boton-menu" text="Manejo de caja" />
             <Button onAction="#mostrarFacturados" styleClass="boton-menu" text="Ver trabajos facturados" />
+            <Button onAction="#cerrarCaja" styleClass="boton-menu" text="Cerrar Caja" />
          <Button onAction="#initialize" styleClass="boton-Volver" text="Volver" />
+
+
         </VBox>
     </left>
    <center>

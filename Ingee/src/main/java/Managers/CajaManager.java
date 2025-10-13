@@ -16,7 +16,7 @@ public class CajaManager {
     private static Caja cajaAbierta;
 
     private CajaManager() throws SQLException {
-        CajaDao cajaDao = CajaDao.getInstancia();
+        this.cajaDao = CajaDao.getInstancia();
         pagoDao = new PagoDao();
     }
 

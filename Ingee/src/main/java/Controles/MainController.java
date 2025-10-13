@@ -234,4 +234,22 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    private void cerrarCaja() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/CerrarCajaView.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Cerrar Caja");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
