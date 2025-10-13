@@ -6,6 +6,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.scene.control.Button;
+
+
+import java.awt.*;
 
 public class ManejoCajaController {
 
@@ -42,4 +46,13 @@ public class ManejoCajaController {
             e.printStackTrace();
         }
     }
+    @FXML
+    private Button btnVolver;
+
+    @FXML
+    private void volver() {
+        Stage stage = (Stage) btnVolver.getScene().getWindow();
+        stage.close();
+    }
+
 }
