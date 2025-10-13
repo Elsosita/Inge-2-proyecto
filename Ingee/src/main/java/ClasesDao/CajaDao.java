@@ -13,9 +13,18 @@ public class CajaDao {
     private final Connection conexion;
 
     // ✅ Constructor que usa Singleton
-    public CajaDao() throws SQLException {
+    private CajaDao() throws SQLException {
         this.conexion = ConexionBD.getInstance().getConnection();
     }
+    private static CajaDao instancia;
+
+    public static synchronized CajaDao getInstancia() throws SQLException {
+        if (instancia == null) {
+            instancia = new CajaDao();
+        }
+        return instancia;
+    }
+
 
     // ✅ Constructor alternativo (por si querés inyectar la conexión manualmente)
     public CajaDao(Connection conexion) {

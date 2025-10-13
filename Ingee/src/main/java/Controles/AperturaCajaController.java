@@ -70,7 +70,7 @@ public class AperturaCajaController {
             caja.setHora(LocalTime.now());
             caja.setEstado(Caja.Estado.ABIERTA);
 
-            CajaDao cajaDao = new CajaDao();
+            CajaDao cajaDao = CajaDao.getInstancia();
             cajaDao.abrirCaja(caja);
 
             // 🔥 Guarda la caja abierta para toda la sesión

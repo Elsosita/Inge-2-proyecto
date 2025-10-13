@@ -13,13 +13,23 @@ public class RetiroDao {
     private final Connection conexion;
 
     // ✅ Usa la instancia única del Singleton
-    public RetiroDao() throws SQLException {
+    private RetiroDao() throws SQLException {
         this.conexion = ConexionBD.getInstance().getConnection();
     }
 
     public RetiroDao(Connection conexion) {
         this.conexion = conexion;
     }
+    private static RetiroDao instancia;
+
+    public static synchronized RetiroDao getInstancia() throws SQLException {
+        if (instancia == null) {
+            instancia = new RetiroDao();
+        }
+        return instancia;
+    }
+
+
 
     // ✅ CREATE
     public boolean insertar(Retiro retiro) {

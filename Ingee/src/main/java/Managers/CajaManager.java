@@ -10,13 +10,13 @@ public class CajaManager {
 
     private static CajaManager instancia;
 
-    private final CajaDao cajaDao;
+    private static CajaDao cajaDao;
     private final PagoDao pagoDao;
 
     private static Caja cajaAbierta;
 
     private CajaManager() throws SQLException {
-        cajaDao = new CajaDao();
+        CajaDao cajaDao = CajaDao.getInstancia();
         pagoDao = new PagoDao();
     }
 

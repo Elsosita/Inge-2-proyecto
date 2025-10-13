@@ -1,5 +1,8 @@
 package Controles;
 
+import Clases.Caja;
+import Clases.CajaManager;
+import ClasesDao.CajaDao;
 import Clases.Retiro;
 import ClasesDao.RetiroDao;
 import javafx.fxml.FXML;
@@ -17,15 +20,23 @@ public class IngresoRetiroController {
     @FXML
     private TextArea txtDescripcion;
 
-    private final RetiroDao retiroDao = new RetiroDao();
+    private CajaDao cajaDao;
+    private RetiroDao retiroDao;
 
-    public IngresoRetiroController() throws SQLException {
+    public IngresoRetiroController() {
+        try {
+            retiroDao = RetiroDao.getInstancia();
+            cajaDao = CajaDao.getInstancia();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
 
     @FXML
     private void onAceptar() {
         try {
-            // Validaciones básicas
+            // 🔹 Validaciones básicas
             if (txtMonto.getText().isEmpty() || txtDescripcion.getText().isEmpty()) {
                 mostrarAlerta("Error", "Debe completar todos los campos.", Alert.AlertType.ERROR);
                 return;
@@ -44,19 +55,40 @@ public class IngresoRetiroController {
                 return;
             }
 
-            // 🔹 Datos fijos por ahora (puedes reemplazarlos con el usuario o caja actual)
-            int codigoEmpleado = 1;
-            int codigoCaja = 1;
+            // 🔹 Obtener la caja abierta actual
+            Caja cajaAbierta = CajaManager.getCajaAbierta();
+            if (cajaAbierta == null) {
+                mostrarAlerta("Error", "No hay una caja abierta actualmente.", Alert.AlertType.ERROR);
+                return;
+            }
 
-            // Crear el objeto Retiro
-            Retiro retiro = new Retiro(monto, txtDescripcion.getText(), codigoEmpleado, codigoCaja);
+            // 🔹 Verificar que haya suficiente efectivo
+            if (monto > cajaAbierta.getMontoefectivo()) {
+                mostrarAlerta("Error", "El monto a retirar supera el efectivo disponible ("
+                        + cajaAbierta.getMontoefectivo() + ").", Alert.AlertType.ERROR);
+                return;
+            }
 
-            // Guardar en la BD
+            // 🔹 Crear el retiro
+            Retiro retiro = new Retiro(
+                    monto,
+                    txtDescripcion.getText(),
+                    1, // o el ID real del empleado logueado
+                    cajaAbierta.getIdCaja()
+            );
+
+            // 🔹 Guardar en BD
             retiroDao.insertar(retiro);
 
-            mostrarAlerta("Éxito", "Retiro registrado correctamente.", Alert.AlertType.INFORMATION);
+            // 🔹 Actualizar montos en la caja
+            cajaAbierta.setMontoefectivo(cajaAbierta.getMontoefectivo() - monto);
+            cajaAbierta.setMontototal(cajaAbierta.getMontototal() - monto);
 
-            // Limpiar campos después de guardar
+            cajaDao.actualizarMontos(cajaAbierta);
+
+            mostrarAlerta("Éxito", "Retiro registrado y caja actualizada correctamente.", Alert.AlertType.INFORMATION);
+
+            // 🔹 Limpiar campos
             txtMonto.clear();
             txtDescripcion.clear();
 
@@ -65,7 +97,6 @@ public class IngresoRetiroController {
             mostrarAlerta("Error", "Ocurrió un error al registrar el retiro.", Alert.AlertType.ERROR);
         }
     }
-
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alerta = new Alert(tipo);
         alerta.setTitle(titulo);
