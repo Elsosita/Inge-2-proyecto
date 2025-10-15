@@ -12,7 +12,7 @@ import java.util.List;
 public class TrabajoDao {
     private final Connection conexion;
 
-    // ✅ Usa la conexión única del Singleton
+
     public TrabajoDao() throws SQLException {
         this.conexion = ConexionBD.getInstance().getConnection();
     }
@@ -21,7 +21,7 @@ public class TrabajoDao {
         this.conexion = conexion;
     }
 
-    // ✅ CREATE
+
     public void agregarTrabajo(Trabajo t) throws SQLException {
         String sql = """
             INSERT INTO Trabajo 
@@ -47,7 +47,7 @@ public class TrabajoDao {
         }
     }
 
-    // ✅ READ por ID
+
     public Trabajo obtenerTrabajoPorId(int id) throws SQLException {
         String sql = "SELECT * FROM Trabajo WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -59,7 +59,7 @@ public class TrabajoDao {
         return null;
     }
 
-    // ✅ READ todos
+
     public List<Trabajo> obtenerTodosLosTrabajos() throws SQLException {
         String sql = "SELECT * FROM Trabajo";
         List<Trabajo> trabajos = new ArrayList<>();
@@ -71,7 +71,7 @@ public class TrabajoDao {
         return trabajos;
     }
 
-    // ✅ UPDATE
+
     public void actualizarTrabajo(Trabajo t) throws SQLException {
         String sql = """
             UPDATE Trabajo 
@@ -94,7 +94,7 @@ public class TrabajoDao {
         }
     }
 
-    // ✅ DELETE
+
     public void eliminarTrabajo(int id) throws SQLException {
         String sql = "DELETE FROM Trabajo WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -103,7 +103,7 @@ public class TrabajoDao {
         }
     }
 
-    // ✅ TRABAJOS NO FACTURADOS
+
     public List<Trabajo> obtenerTrabajosNoFacturados() throws SQLException {
         String sql = """
             SELECT t.id AS idTrabajo, t.descripcion, t.monto, t.fecha,
@@ -123,7 +123,7 @@ public class TrabajoDao {
         return trabajos;
     }
 
-    // ✅ TRABAJOS DEL DÍA
+
     public List<Trabajo> obtenerTrabajosDelDia() throws SQLException {
         String sql = """
             SELECT t.*, v.patente, v.marca, v.modelo, c.nombre AS cliente_nombre, c.numero AS cliente_numero
@@ -141,7 +141,7 @@ public class TrabajoDao {
         return trabajos;
     }
 
-    // ✅ TRABAJOS FACTURADOS
+
     public List<Trabajo> obtenerTrabajosFacturados() throws SQLException {
         String sql = """
             SELECT t.id AS id, t.descripcion, t.monto, t.fecha,
@@ -161,7 +161,7 @@ public class TrabajoDao {
         return trabajos;
     }
 
-    // ✅ TRABAJOS SIN PAGO
+
     public List<Trabajo> obtenerTrabajosSinPago() throws SQLException {
         String sql = """
             SELECT t.*, v.patente, v.marca, v.modelo, c.nombre AS cliente_nombre, c.numero AS cliente_numero
@@ -179,7 +179,6 @@ public class TrabajoDao {
         return trabajos;
     }
 
-    // ✅ MÉTODOS AUXILIARES
 
     private Trabajo mapearTrabajo(ResultSet rs) throws SQLException {
         Trabajo t = new Trabajo();

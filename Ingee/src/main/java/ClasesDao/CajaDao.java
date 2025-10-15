@@ -12,7 +12,7 @@ public class CajaDao {
 
     private final Connection conexion;
 
-    // ✅ Constructor que usa Singleton
+
     private CajaDao() throws SQLException {
         this.conexion = ConexionBD.getInstance().getConnection();
     }
@@ -26,12 +26,11 @@ public class CajaDao {
     }
 
 
-    // ✅ Constructor alternativo (por si querés inyectar la conexión manualmente)
     public CajaDao(Connection conexion) {
         this.conexion = conexion;
     }
 
-    // ✅ CREATE
+
     public void agregarCaja(Caja c) throws SQLException {
         String sql = "INSERT INTO Caja (montototal, montoefectivo, montodigital, fecha, hora, estado) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -51,7 +50,7 @@ public class CajaDao {
         }
     }
 
-    // ✅ READ por ID
+
     public Caja obtenerCajaPorId(int id) throws SQLException {
         String sql = "SELECT * FROM Caja WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -75,7 +74,7 @@ public class CajaDao {
         return null;
     }
 
-    // ✅ LISTAR todas
+
     public List<Caja> listarTodas() throws SQLException {
         List<Caja> lista = new ArrayList<>();
         String sql = "SELECT * FROM Caja ORDER BY fecha DESC";
@@ -98,20 +97,7 @@ public class CajaDao {
         return lista;
     }
 
-    /*// ✅ UPDATE
-    public void actualizarCaja(Caja c) throws SQLException {
-        String sql = "UPDATE Caja SET montototal = ?, fecha = ?, hora = ?, estado = ? WHERE id = ?";
-        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
-            stmt.setFloat(1, c.getMontototal());
-            stmt.setDate(2, Date.valueOf(c.getFecha()));
-            stmt.setTime(3, Time.valueOf(c.getHora()));
-            stmt.setString(4, c.getEstado().name());
-            stmt.setInt(5, c.getId());
-            stmt.executeUpdate();
-        }
-    }*/
 
-    // ✅ DELETE
     public void eliminarCaja(int id) throws SQLException {
         String sql = "DELETE FROM Caja WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -120,7 +106,6 @@ public class CajaDao {
         }
     }
 
-    // ✅ Obtener la última caja abierta
     public Caja obtenerCajaAbierta() throws SQLException {
         String sql = "SELECT * FROM Caja WHERE estado = 'ABIERTA' ORDER BY id DESC LIMIT 1";
         try (PreparedStatement stmt = conexion.prepareStatement(sql);
@@ -141,7 +126,7 @@ public class CajaDao {
         return null;
     }
 
-    // ✅ Cambiar estado a “ABIERTA”
+
     public void abrirCaja(Caja caja) throws SQLException {
         String sql = "INSERT INTO Caja (montototal, montoefectivo, montodigital, fecha, hora, estado) VALUES (?, ?, ?, ?, ?, 'ABIERTA')";
         try (PreparedStatement stmt = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -160,7 +145,7 @@ public class CajaDao {
         }
     }
 
-    // CERRAR CAJA
+
     public void cerrarCaja(int idCaja) throws SQLException {
         String sql = "UPDATE Caja SET estado = 'CERRADA' WHERE id = ?";
         try (PreparedStatement pst = conexion.prepareStatement(sql)) {

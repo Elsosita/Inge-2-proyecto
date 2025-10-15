@@ -11,17 +11,16 @@ public class AseguradoraDao {
 
     private final Connection conexion;
 
-    // ✅ Constructor que usa Singleton de ConexionBD
     public AseguradoraDao() throws SQLException {
         this.conexion = ConexionBD.getInstance().getConnection();
     }
 
-    // ✅ Constructor alternativo por si querés inyectar conexión manualmente
+
     public AseguradoraDao(Connection conexion) {
         this.conexion = conexion;
     }
 
-    // ✅ CREATE
+
     public void agregarAseguradora(Aseguradora a) throws SQLException {
         String sql = "INSERT INTO Aseguradora (nombre) VALUES (?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -34,7 +33,7 @@ public class AseguradoraDao {
         }
     }
 
-    // ✅ READ - Buscar por ID
+
     public Aseguradora obtenerAseguradoraPorId(int id) throws SQLException {
         String sql = "SELECT * FROM Aseguradora WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -51,7 +50,7 @@ public class AseguradoraDao {
         return null;
     }
 
-    // ✅ READ - Listar todas (menos la de id 1, si querés ocultar “Sin aseguradora”)
+
     public List<Aseguradora> listarTodas(boolean incluirSinAseguradora) throws SQLException {
         List<Aseguradora> lista = new ArrayList<>();
         String sql = incluirSinAseguradora
@@ -70,7 +69,7 @@ public class AseguradoraDao {
         return lista;
     }
 
-    // ✅ UPDATE
+
     public void actualizarAseguradora(Aseguradora a) throws SQLException {
         String sql = "UPDATE Aseguradora SET nombre = ? WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -80,7 +79,7 @@ public class AseguradoraDao {
         }
     }
 
-    // ✅ DELETE
+
     public void eliminarAseguradora(int id) throws SQLException {
         String sql = "DELETE FROM Aseguradora WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -89,7 +88,7 @@ public class AseguradoraDao {
         }
     }
 
-    // ✅ Buscar por ID (redundancia unificada con obtenerAseguradoraPorId)
+
     public Aseguradora buscarPorId(int id) throws SQLException {
         return obtenerAseguradoraPorId(id);
     }

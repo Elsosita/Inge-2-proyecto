@@ -14,7 +14,7 @@ public class RentadoraDao {
         this.conexion = ConexionBD.getConnection();
     }
 
-    // CREATE
+
     public void agregarRentadora(Rentadora r) throws SQLException {
         String sql = "INSERT INTO Rentadora (nombrerentadora) VALUES (?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -29,7 +29,7 @@ public class RentadoraDao {
         }
     }
 
-    // READ (por id)
+
     public Rentadora obtenerRentadoraPorId(int id) throws SQLException {
         String sql = "SELECT * FROM Rentadora WHERE idr = ?";
         Rentadora r = null;
@@ -45,7 +45,7 @@ public class RentadoraDao {
         return r;
     }
 
-    // READ (todas)
+
     public List<Rentadora> obtenerTodasLasRentadoras() throws SQLException {
         String sql = "SELECT * FROM Rentadora";
         List<Rentadora> rentadoras = new ArrayList<>();
@@ -61,7 +61,7 @@ public class RentadoraDao {
         return rentadoras;
     }
 
-    // UPDATE
+
     public void actualizarRentadora(Rentadora r) throws SQLException {
         String sql = "UPDATE Rentadora SET nombrerentadora = ? WHERE idr = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -71,7 +71,7 @@ public class RentadoraDao {
         }
     }
 
-    // DELETE
+
     public void eliminarRentadora(int id) throws SQLException {
         String sql = "DELETE FROM Rentadora WHERE idr = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {

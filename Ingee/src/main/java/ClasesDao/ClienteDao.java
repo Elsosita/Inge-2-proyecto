@@ -11,7 +11,7 @@ import java.util.List;
 public class ClienteDao {
     private final Connection conexion;
 
-    // ✅ Usa la conexión singleton
+
     public ClienteDao() throws SQLException {
         this.conexion = ConexionBD.getInstance().getConnection();
     }
@@ -20,7 +20,7 @@ public class ClienteDao {
         this.conexion = conexion;
     }
 
-    // ✅ CREATE → agregar cliente
+
     public void agregarCliente(Cliente c) throws SQLException {
         String sql = "INSERT INTO Cliente (nombre, tipodocumento, numerodoc, numero) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -38,7 +38,7 @@ public class ClienteDao {
         }
     }
 
-    // ✅ READ → obtener cliente por ID (con sus vehículos)
+
     public Cliente obtenerClientePorId(int id) throws SQLException {
         String sql = "SELECT * FROM Cliente WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -60,7 +60,7 @@ public class ClienteDao {
         return null;
     }
 
-    // ✅ READ → listar todos los clientes
+
     public List<Cliente> obtenerTodosClientes() throws SQLException {
         List<Cliente> lista = new ArrayList<>();
         String sql = "SELECT * FROM Cliente";
@@ -79,7 +79,7 @@ public class ClienteDao {
         return lista;
     }
 
-    // ✅ UPDATE → modificar cliente completo
+
     public void actualizarCliente(Cliente c) throws SQLException {
         String sql = "UPDATE Cliente SET nombre=?, tipodocumento=?, numerodoc=?, numero=? WHERE id=?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -92,7 +92,7 @@ public class ClienteDao {
         }
     }
 
-    // ✅ UPDATE → solo actualizar teléfono
+
     public void actualizarTelefono(Cliente cliente) throws SQLException {
         String sql = "UPDATE Cliente SET numero = ? WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -102,7 +102,7 @@ public class ClienteDao {
         }
     }
 
-    // ✅ DELETE → eliminar cliente
+
     public void eliminarCliente(int id) throws SQLException {
         String sql = "DELETE FROM Cliente WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -111,7 +111,7 @@ public class ClienteDao {
         }
     }
 
-    // ✅ Buscar clientes por nombre o teléfono
+
     public List<Cliente> buscarClientesPorNombre(String texto) throws SQLException {
         List<Cliente> clientes = new ArrayList<>();
         String sql = "SELECT * FROM Cliente WHERE nombre LIKE ? OR numero LIKE ? LIMIT 10";
@@ -134,7 +134,7 @@ public class ClienteDao {
         return clientes;
     }
 
-    // ✅ Método auxiliar → obtener vehículos del cliente
+
     private List<Vehiculo> obtenerVehiculosPorCliente(int clienteId) throws SQLException {
         List<Vehiculo> vehiculos = new ArrayList<>();
         String sql = "SELECT * FROM Vehiculo WHERE cliente_id = ?";
@@ -154,7 +154,7 @@ public class ClienteDao {
         return vehiculos;
     }
 
-    // ✅ READ → obtener por ID (simple)
+
     public Cliente buscarPorId(int id) throws SQLException {
         String sql = "SELECT * FROM Cliente WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {

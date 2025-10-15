@@ -17,7 +17,7 @@ public class ConfirmacionTrabajoController {
 
     @FXML
     private void onAceptar() {
-        // Cierra la ventana
+
         Stage stage = (Stage) btnAceptar.getScene().getWindow();
         stage.close();
     }

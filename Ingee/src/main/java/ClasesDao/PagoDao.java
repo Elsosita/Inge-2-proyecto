@@ -12,7 +12,7 @@ import java.util.List;
 public class PagoDao {
     private final Connection conexion;
 
-    // ✅ Constructor que usa la conexión Singleton
+
     public PagoDao() throws SQLException {
         this.conexion = ConexionBD.getInstance().getConnection();
     }
@@ -21,12 +21,12 @@ public class PagoDao {
         this.conexion = conexion;
     }
 
-    // ✅ CREATE → Inserta un pago y actualiza el estado del trabajo
+
     public void insertar(Pago pago) throws SQLException {
         String sqlInsert = "INSERT INTO Pago (tipo, monto, trabajo_id, caja_id) VALUES (?, ?, ?, ?)";
         String sqlUpdateTrabajo = "UPDATE Trabajo SET estadoPago = 'PAGADO' WHERE id = ?";
 
-        // ✅ Usamos la misma conexión única para la transacción
+
         conexion.setAutoCommit(false);
         try (PreparedStatement stmtPago = conexion.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS);
              PreparedStatement stmtTrabajo = conexion.prepareStatement(sqlUpdateTrabajo)) {
@@ -49,7 +49,7 @@ public class PagoDao {
         }
     }
 
-    // ✅ READ → obtener un pago por su ID
+
     public Pago obtenerPagoPorId(int id) throws SQLException {
         String sql = """
                 SELECT p.*, t.id AS trabajo_id, c.id AS caja_id
@@ -84,7 +84,7 @@ public class PagoDao {
         return null;
     }
 
-    // ✅ UPDATE
+
     public void actualizarPago(Pago p, int id) throws SQLException {
         String sql = "UPDATE Pago SET tipo = ?, monto = ?, trabajo_id = ?, caja_id = ? WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -97,7 +97,7 @@ public class PagoDao {
         }
     }
 
-    // ✅ DELETE
+
     public void eliminarPago(int id) throws SQLException {
         String sql = "DELETE FROM Pago WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -106,7 +106,7 @@ public class PagoDao {
         }
     }
 
-    // ✅ READ → listar todos los pagos
+
     public List<Pago> obtenerTodosLosPagos() throws SQLException {
         String sql = "SELECT * FROM Pago";
         List<Pago> pagos = new ArrayList<>();

@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
-public class IngresoPagoController {
+public class    IngresoPagoController {
 
     @FXML
     private TextField txtMonto;

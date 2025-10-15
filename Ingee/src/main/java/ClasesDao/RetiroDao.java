@@ -12,7 +12,7 @@ import java.util.List;
 public class RetiroDao {
     private final Connection conexion;
 
-    // ✅ Usa la instancia única del Singleton
+
     private RetiroDao() throws SQLException {
         this.conexion = ConexionBD.getInstance().getConnection();
     }
@@ -31,7 +31,7 @@ public class RetiroDao {
 
 
 
-    // ✅ CREATE
+
     public boolean insertar(Retiro retiro) {
         String sql = "INSERT INTO Retiro (monto, descripcion, codigoempleado_retiro, codigocaja_retiro, fecha, hora) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = conexion.prepareStatement(sql)) {
@@ -50,7 +50,7 @@ public class RetiroDao {
         }
     }
 
-    // ✅ READ → por empleado
+
     public List<Retiro> obtenerRetirosPorEmpleado(int codigoEmpleado) throws SQLException {
         String sql = "SELECT * FROM Retiro WHERE codigoempleado_retiro = ?";
         List<Retiro> retiros = new ArrayList<>();
@@ -66,7 +66,7 @@ public class RetiroDao {
         return retiros;
     }
 
-    // ✅ READ → todos
+
     public List<Retiro> obtenerTodosLosRetiros() throws SQLException {
         String sql = "SELECT * FROM Retiro";
         List<Retiro> retiros = new ArrayList<>();
@@ -80,7 +80,7 @@ public class RetiroDao {
         return retiros;
     }
 
-    // ✅ UPDATE
+
     public void actualizarRetiro(Retiro retiro) throws SQLException {
         String sql = """
             UPDATE Retiro 
@@ -98,7 +98,7 @@ public class RetiroDao {
         }
     }
 
-    // ✅ DELETE
+
     public void eliminarRetiro(int codigoEmpleado, LocalDate fecha, LocalTime hora) throws SQLException {
         String sql = "DELETE FROM Retiro WHERE codigoempleado_retiro = ? AND fecha = ? AND hora = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -109,7 +109,7 @@ public class RetiroDao {
         }
     }
 
-    // ✅ Método auxiliar para mapear ResultSet → Retiro
+
     private Retiro mapearRetiro(ResultSet rs) throws SQLException {
         Retiro r = new Retiro();
         r.setMonto(rs.getFloat("monto"));

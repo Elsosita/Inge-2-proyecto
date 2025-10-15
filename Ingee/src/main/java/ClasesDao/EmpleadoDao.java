@@ -13,12 +13,12 @@ public class EmpleadoDao {
     private static EmpleadoDao instancia;
     private final Connection conexion;
 
-    // 🔹 Constructor privado (solo accesible dentro de la clase)
+
     private EmpleadoDao() throws SQLException {
         this.conexion = ConexionBD.getInstance().getConnection();
     }
 
-    // 🔹 Método estático para obtener la única instancia
+
     public static EmpleadoDao getInstancia() throws SQLException {
         if (instancia == null) {
             instancia = new EmpleadoDao();
@@ -29,7 +29,7 @@ public class EmpleadoDao {
         this.conexion = conexion;
     }
 
-    // ✅ CREATE
+
     public void agregarEmpleado(Empleado e) throws SQLException {
         String sql = "INSERT INTO Empleado (nombre, telefono, sueldo) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -46,7 +46,7 @@ public class EmpleadoDao {
         }
     }
 
-    // ✅ READ por ID
+
     public Empleado obtenerEmpleadoPorId(int id) throws SQLException {
         String sql = "SELECT * FROM Empleado WHERE id = ?";
         Empleado e = null;
@@ -71,7 +71,7 @@ public class EmpleadoDao {
         return e;
     }
 
-    // ✅ READ → listar todos
+
     public List<Empleado> listarTodos() throws SQLException {
         List<Empleado> lista = new ArrayList<>();
         String sql = "SELECT * FROM Empleado";
@@ -92,7 +92,7 @@ public class EmpleadoDao {
         return lista;
     }
 
-    // ✅ UPDATE
+
     public void actualizarEmpleado(Empleado e) throws SQLException {
         String sql = "UPDATE Empleado SET nombre = ?, telefono = ?, sueldo = ? WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -104,7 +104,7 @@ public class EmpleadoDao {
         }
     }
 
-    // ✅ DELETE
+
     public void eliminarEmpleado(int id) throws SQLException {
         String sql = "DELETE FROM Empleado WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -113,9 +113,7 @@ public class EmpleadoDao {
         }
     }
 
-    // ✅ RELACIONES
 
-    // 🔹 Obtener trabajos asignados al empleado
     private List<Trabajo> obtenerTrabajosDeEmpleado(int empleadoId) throws SQLException {
         String sql = """
                 SELECT t.* FROM Trabajo t
@@ -139,7 +137,7 @@ public class EmpleadoDao {
         return trabajos;
     }
 
-    // 🔹 Obtener retiros asociados
+
     private List<Retiro> obtenerRetirosDeEmpleado(int empleadoId) throws SQLException {
         String sql = "SELECT * FROM Retiro WHERE codigoempleado_retiro = ?";
         List<Retiro> retiros = new ArrayList<>();
@@ -158,7 +156,7 @@ public class EmpleadoDao {
         return retiros;
     }
 
-    // ✅ Método para vincular un trabajo a un empleado
+
     public void agregarTrabajoAEmpleado(int empleadoId, int trabajoId) throws SQLException {
         String sql = "INSERT INTO Empleado_Trabajo (empleado_id, trabajo_id) VALUES (?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {

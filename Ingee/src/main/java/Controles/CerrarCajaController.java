@@ -51,7 +51,7 @@ public class CerrarCajaController {
                 return;
             }
 
-            cajaDao.cerrarCaja(cajaAbierta); // este método lo implementamos abajo
+            cajaDao.cerrarCaja(cajaAbierta);
             CajaManager cajaManager = CajaManager.getInstancia();
             cajaManager.cerrarCaja();
 

@@ -151,11 +151,6 @@ public class MainController {
     }
 
 
-   /* @FXML
-    void mostrarFacturados() {
-        abrirPestaña("Trabajos Facturados", "/com/tuapp/vista/FacturadosView.fxml");
-    }*/
-
     private void abrirPestaña(String titulo, String rutaFXML) {
         // Revisar si la pestaña ya existe
         for (Tab tab : tabPane.getTabs()) {
@@ -190,12 +185,6 @@ public class MainController {
             stage.setResizable(false);
             stage.showAndWait();
             initialize();
-
-            // OBTENER EL CONTROLADOR, si querés traer el trabajo creado después
-            AgregarTrabajoController controller = loader.getController();
-            // Trabajo nuevoTrabajo = controller.getTrabajoCreado();
-            // if (nuevoTrabajo != null) { ... actualizar tabla ... }
-
         } catch (Exception e) {
             e.printStackTrace();
         }

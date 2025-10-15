@@ -11,7 +11,7 @@ import java.util.List;
 public class VehiculoDao {
     private final Connection conexion;
 
-    // ✅ Usa la única conexión del Singleton
+
     public VehiculoDao() throws SQLException {
         this.conexion = ConexionBD.getInstance().getConnection();
     }
@@ -20,7 +20,7 @@ public class VehiculoDao {
         this.conexion = conexion;
     }
 
-    // ✅ CREATE
+
     public void agregarVehiculo(Vehiculo v) throws SQLException {
         String sql = "INSERT INTO Vehiculo (patente, marca, modelo, cliente_id) VALUES (?, ?, ?, ?)";
 
@@ -45,7 +45,7 @@ public class VehiculoDao {
         }
     }
 
-    // ✅ READ - por ID
+
     public Vehiculo obtenerVehiculoPorId(int id) throws SQLException {
         String sql = "SELECT * FROM Vehiculo WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -57,7 +57,7 @@ public class VehiculoDao {
         return null;
     }
 
-    // ✅ READ - todos
+
     public List<Vehiculo> obtenerTodosLosVehiculos() throws SQLException {
         List<Vehiculo> lista = new ArrayList<>();
         String sql = "SELECT * FROM Vehiculo";
@@ -69,7 +69,7 @@ public class VehiculoDao {
         return lista;
     }
 
-    // ✅ UPDATE
+
     public void actualizarVehiculo(Vehiculo v) throws SQLException {
         String sql = "UPDATE Vehiculo SET patente=?, marca=?, modelo=?, cliente_id=? WHERE id=?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -86,7 +86,7 @@ public class VehiculoDao {
         }
     }
 
-    // ✅ DELETE
+
     public void eliminarVehiculo(int id) throws SQLException {
         String sql = "DELETE FROM Vehiculo WHERE id = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -95,7 +95,7 @@ public class VehiculoDao {
         }
     }
 
-    // ✅ Buscar por cliente
+
     public List<Vehiculo> buscarPorCliente(int idCliente) throws SQLException {
         List<Vehiculo> lista = new ArrayList<>();
         String sql = "SELECT * FROM Vehiculo WHERE cliente_id = ?";
@@ -109,7 +109,7 @@ public class VehiculoDao {
         return lista;
     }
 
-    // ✅ Buscar por patente (uno solo)
+
     public Vehiculo buscarPorPatente(String patente) throws SQLException {
         String sql = "SELECT * FROM Vehiculo WHERE patente = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -132,7 +132,7 @@ public class VehiculoDao {
         return null;
     }
 
-    // ✅ Buscar vehículos por texto de patente (parcial)
+
     public List<Vehiculo> buscarVehiculosPorPatente(String filtro) throws SQLException {
         List<Vehiculo> lista = new ArrayList<>();
         String sql = """
@@ -163,7 +163,6 @@ public class VehiculoDao {
         return lista;
     }
 
-    // ✅ Método auxiliar para mapear ResultSet → Vehiculo
     private Vehiculo mapearVehiculo(ResultSet rs) throws SQLException {
         Vehiculo v = new Vehiculo();
         v.setIdVehiculo(rs.getInt("id"));

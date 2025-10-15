@@ -86,7 +86,7 @@ public class AgregarTrabajoController {
         }
 
 
-        // 🔹 Autocompletado de clientes
+        //Autocompletado de clientes
         txtCliente.textProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal.isBlank()) {
                 listaSugerencias.getItems().clear();
@@ -122,7 +122,7 @@ public class AgregarTrabajoController {
         });
 
 
-        // 🔹 Autocompletado de patentes
+        //Autocompletado de patentes
         txtPatente.textProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal.isBlank()) {
                 listaPatentes.getItems().clear();
@@ -185,7 +185,7 @@ public class AgregarTrabajoController {
             }
         });
 
-// Escuchar cambios en "Tiene aseguradora"
+        // Escuchar cambios en "Tiene aseguradora"
         cbTieneAseguradora.valueProperty().addListener((obs, oldVal, newVal) -> {
             boolean tiene = "Sí".equalsIgnoreCase(newVal);
             cbAseguradora.setDisable(!tiene);
@@ -195,11 +195,11 @@ public class AgregarTrabajoController {
         cbTipoOrden.getItems().addAll("Física", "Digital");
         cbTipoOrden.setValue("Física"); // valor por defecto
 
-// Por defecto el campo de ruta y botón de selección están deshabilitados
+        // Por defecto el campo de ruta y botón de selección están deshabilitados
         txtRutaArchivo.setDisable(true);
         btnSeleccionarArchivo.setDisable(true);
 
-// Desactivar tipo de orden si no hay aseguradora
+        // Desactivar tipo de orden si no hay aseguradora
         cbTipoOrden.setDisable(true);
     }
 
@@ -234,13 +234,13 @@ public class AgregarTrabajoController {
     @FXML
     private void onGuardar() {
         try {
-            // 1️⃣ Validar que haya cliente seleccionado
+            //Validar que haya cliente seleccionado
             if (clienteSeleccionado == null) {
                 lblMensaje.setText("⚠️ Seleccione o registre un cliente antes de continuar.");
                 return;
             }
 
-            // 2️⃣ Verificar si el vehículo ya existe en la BD
+            //Verificar si el vehículo ya existe en la BD
             String patenteIngresada = txtPatente.getText().trim();
             Vehiculo vehiculo = vehiculoManager.buscarPorPatente(patenteIngresada);
 
@@ -252,12 +252,12 @@ public class AgregarTrabajoController {
                 vehiculo.setCliente(clienteSeleccionado);
 
                 vehiculoManager.registrarVehiculo(vehiculo);
-                System.out.println("Vehículo nuevo agregado: " + vehiculo.getPatente());
+
             }
 
 
             if (vehiculo == null) {
-                // 🚗 Si no existe, crear uno nuevo y guardarlo
+                //i no existe, crear uno nuevo y guardarlo
                 vehiculo = new Vehiculo();
                 vehiculo.setPatente(patenteIngresada);
                 vehiculo.setMarca(txtMarca.getText());
@@ -266,16 +266,15 @@ public class AgregarTrabajoController {
                 vehiculo.setCliente(clienteSeleccionado);
 
                 vehiculoDao.agregarVehiculo(vehiculo);
-                System.out.println("Vehículo nuevo agregado: " + vehiculo.getPatente());
             }
 
-            // 3️⃣ Crear el trabajo
+            //Crear el trabajo
             Trabajo t = new Trabajo();
             t.setDescripcion(txtDescripcion.getText());
             t.setVehiculo(vehiculo);
             t.setFecha(LocalDate.now());
 
-            // 4️⃣ Leer los valores elegidos de los ComboBox
+            //Leer los valores elegidos de los ComboBox
             String pagoSeleccionado = cbEstadoPago.getValue();
             String facturacionSeleccionada = cbEstadoFacturacion.getValue();
 
@@ -283,7 +282,7 @@ public class AgregarTrabajoController {
                 lblMensaje.setText("⚠️ Seleccione el estado de pago y facturación.");
                 return;
             }
-            // Leer y validar monto
+            //Leer y validar monto
             String montoTexto = txtMonto.getText().trim();
             if (montoTexto.isEmpty()) {
                 lblMensaje.setText("⚠️ Ingrese el monto del trabajo.");
@@ -297,7 +296,7 @@ public class AgregarTrabajoController {
                 lblMensaje.setText("⚠️ El monto debe ser un número válido.");
                 return;
             }
-            // 5️⃣ Asignar los estados
+            //Asignar los estados
             t.setEstadopago(Trabajo.EstadoPago.valueOf(pagoSeleccionado));
             t.setEstadotrabajo(Trabajo.EstadoTrabajo.PENDIENTE);
             t.setEstadodefacturacion(Trabajo.Estadodefacturacion.valueOf(facturacionSeleccionada));
@@ -323,7 +322,6 @@ public class AgregarTrabajoController {
                 if (clienteSeleccionado.getNumero() != telefonoIngresado) {
                     clienteSeleccionado.setNumero(telefonoIngresado);
                     clienteManager.actualizarTelefono(clienteSeleccionado);
-                    System.out.println("📞 Teléfono actualizado en la BD para " + clienteSeleccionado.getNombre());
                 }
             }
 
@@ -341,17 +339,12 @@ public class AgregarTrabajoController {
                 t.setOrdenDeProvision(null);
             }
 
-            // 6️⃣ Guardar en BD
+            //Guardar en BD
             trabajoDao.agregarTrabajo(t);
-
-            // ahora sí tiene ID
-            System.out.println("Trabajo guardado con ID: " + t.getIdTrabajo());
-
-            // abrir ventana para asignar empleados
+            //asignar empl
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/AsignarEmpleados.fxml"));
             Parent root = loader.load();
 
-            // pasarle el trabajo recién creado al nuevo controller
             AsignarEmpleadosController controller = loader.getController();
             controller.setTrabajo(t);
 
@@ -370,19 +363,16 @@ public class AgregarTrabajoController {
             stage2.initModality(Modality.APPLICATION_MODAL);
             stage2.setResizable(false);
 
-            // 🚫 Deshabilita el botón “X”
+
             stage2.setOnCloseRequest(event -> event.consume());
 
             stage2.showAndWait();
 
-
-
-            //lblMensaje.setText("✅ Trabajo agregado correctamente.");
             limpiarCampos();
             txtPatente.getScene().getWindow().hide();
 
         } catch (Exception e) {
-            lblMensaje.setText("❌ Error al guardar: " + e.getMessage());
+            lblMensaje.setText("Error al guardar: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -393,13 +383,7 @@ public class AgregarTrabajoController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/AsignarEmpleados.fxml"));
             Parent root = loader.load();
-
             AsignarEmpleadosController ctrl = loader.getController();
-
-            // si ya existe el trabajo creado (ej: lo estás editando)
-            // podés pasarle el trabajo actual
-            // ctrl.setTrabajoRecienCreado(trabajoActual);
-
             Stage stage = new Stage();
             stage.setTitle("Asignar empleados");
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -425,30 +409,20 @@ public class AgregarTrabajoController {
 
     @FXML
     private void onCancelar() {
-        // Cierra la ventana actual
         txtPatente.getScene().getWindow().hide();
     }
     @FXML
     private void onAgregarNuevoCliente() {
         try {
-            // Cargar el FXML del nuevo cliente
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/NuevoCliente.fxml"));
             Parent root = loader.load();
-
-            // Crear una nueva ventana (Stage)
             Stage stage = new Stage();
             stage.setTitle("Registrar nuevo cliente");
             stage.setScene(new Scene(root));
 
-            // Que sea modal (bloquea la ventana anterior hasta cerrar esta)
             stage.initModality(Modality.APPLICATION_MODAL);
 
-            // Mostrar la ventana
             stage.showAndWait();
-
-            // Luego podrías recuperar el cliente agregado (si devuelves datos desde el controller)
-            // NuevoClienteController controller = loader.getController();
-            // Cliente nuevoCliente = controller.getClienteCreado();
 
         } catch (IOException e) {
             e.printStackTrace();
