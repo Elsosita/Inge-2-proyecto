@@ -249,6 +249,23 @@ public class MainController {
     }
 
     @FXML
+    private void onConsultarTrabajo() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/ConsultarTrabajo.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Consulta de Trabajos");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
     private void mostrarTrabajosNoFacturados() {
         cargarTrabajosNoFacturados(); // Refresca la tabla
     }

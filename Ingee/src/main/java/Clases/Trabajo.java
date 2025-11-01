@@ -82,6 +82,10 @@ public class Trabajo {
         return estadopago;
     }
 
+    public String getEstadopagoString(){
+        return estadopago.name();
+    }
+
     public void setEstadopago(EstadoPago estadopago) {
         this.estadopago = estadopago;
     }
