@@ -37,23 +37,34 @@ public class HelloController {
     @FXML
     public void initialize() {
         try {
-            trabajoManager = new TrabajoManager();
+            // Usar el Singleton
+            trabajoManager = TrabajoManager.getInstancia();
 
             // Configurar columnas
             colPatente.setCellValueFactory(data ->
-                    new SimpleStringProperty(data.getValue().getVehiculo().getPatente()));
+                    new SimpleStringProperty(
+                            data.getValue().getVehiculo() != null ? data.getValue().getVehiculo().getPatente() : ""
+                    ));
             colModelo.setCellValueFactory(data ->
-                    new SimpleStringProperty(data.getValue().getVehiculo().getModelo()));
+                    new SimpleStringProperty(
+                            data.getValue().getVehiculo() != null ? data.getValue().getVehiculo().getModelo() : ""
+                    ));
             colDescripcion.setCellValueFactory(data ->
                     new SimpleStringProperty(data.getValue().getDescripcion()));
             colClienteNombre.setCellValueFactory(data ->
-                    new SimpleStringProperty(data.getValue().getVehiculo().getCliente().getNombre()));
+                    new SimpleStringProperty(
+                            (data.getValue().getVehiculo() != null && data.getValue().getVehiculo().getCliente() != null)
+                                    ? data.getValue().getVehiculo().getCliente().getNombre()
+                                    : ""
+                    ));
             colClienteTelefono.setCellValueFactory(data ->
                     new SimpleStringProperty(
-                            String.valueOf(data.getValue().getVehiculo().getCliente().getNumero())
+                            (data.getValue().getVehiculo() != null && data.getValue().getVehiculo().getCliente() != null)
+                                    ? String.valueOf(data.getValue().getVehiculo().getCliente().getNumero())
+                                    : ""
                     ));
 
-            // Obtener trabajos del día
+            // Llenar la tabla con trabajos del día
             List<Trabajo> trabajos = trabajoManager.obtenerTrabajosDelDia();
             ObservableList<Trabajo> trabajosObservable = FXCollections.observableArrayList(trabajos);
             tableTrabajos.setItems(trabajosObservable);
@@ -62,4 +73,5 @@ public class HelloController {
             e.printStackTrace();
         }
     }
+
 }

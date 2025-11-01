@@ -106,19 +106,21 @@ public class TrabajoDao {
 
     public List<Trabajo> obtenerTrabajosNoFacturados() throws SQLException {
         String sql = """
-            SELECT t.id AS idTrabajo, t.descripcion, t.monto, t.fecha,
-                   v.id AS idVehiculo, v.patente, v.marca, v.modelo,
-                   c.id AS idCliente, c.nombre AS nombreCliente, c.numero AS telefonoCliente
-            FROM Trabajo t
-            JOIN Vehiculo v ON t.vehiculo_id = v.id
-            JOIN Cliente c ON v.cliente_id = c.id
-            WHERE t.estadodefacturacion = 'NOFACTURADO'
-        """;
+    SELECT t.id AS id, t.descripcion, t.monto, t.fecha,
+           v.id AS idVehiculo, v.patente, v.marca, v.modelo,
+           c.id AS idCliente, c.nombre AS cliente_nombre, c.numero AS cliente_numero
+    FROM Trabajo t
+    JOIN Vehiculo v ON t.vehiculo_id = v.id
+    JOIN Cliente c ON v.cliente_id = c.id
+    WHERE t.estadodefacturacion != 'FACTURADO' OR t.estadodefacturacion IS NULL
+""";
 
         List<Trabajo> trabajos = new ArrayList<>();
         try (PreparedStatement stmt = conexion.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) trabajos.add(mapearTrabajoConCliente(rs));
+            while (rs.next()) {
+                trabajos.add(mapearTrabajoConCliente(rs));
+            }
         }
         return trabajos;
     }

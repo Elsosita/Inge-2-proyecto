@@ -78,11 +78,8 @@ public class MainController {
         configurarColumnas();
         cargarTrabajosDelDia();
         txtNombreVentana.setText("Trabajos del dia");
-        try {
-            trabajoManager = new TrabajoManager();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        trabajoManager = TrabajoManager.getInstancia();
+
     }
 
     private void mostrarFechaActual() {
@@ -241,4 +238,19 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
+    private void cargarTrabajosNoFacturados() {
+        try {
+            List<Trabajo> trabajos = trabajoManager.obtenerTrabajosNoFacturados();
+            tablaTrabajos.getItems().setAll(trabajos);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void mostrarTrabajosNoFacturados() {
+        cargarTrabajosNoFacturados(); // Refresca la tabla
+    }
+
 }

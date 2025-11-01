@@ -13,11 +13,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane fx:id="root" prefHeight="514.0" prefWidth="777.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.MainController">
+<BorderPane fx:id="root" prefHeight="607.0" prefWidth="893.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.MainController">
 
     <!-- Menú lateral -->
     <left>
-        <VBox alignment="TOP_CENTER" prefHeight="432.0" prefWidth="233.0" spacing="20" styleClass="menu-lateral">
+        <VBox alignment="TOP_CENTER" prefHeight="653.0" prefWidth="346.0" spacing="20" styleClass="menu-lateral">
             <padding>
                 <Insets bottom="20" left="10" right="10" top="40" />
             </padding>
@@ -29,45 +29,42 @@
             </ImageView>
 
             <Text styleClass="titulo-bienvenida" text="Bienvenido">
-            <font>
-               <Font name="Bernard MT Condensed" size="12.0" />
-            </font></Text>
+                <font>
+                    <Font name="Bernard MT Condensed" size="12.0" />
+                </font>
+            </Text>
             <Text styleClass="subtitulo-bienvenida" text="Cerrajería" />
 
             <Button onAction="#onIngresarTrabajo" styleClass="boton-menu" text="Ingresar trabajo" />
             <Button onAction="#mostrarManejoCaja" styleClass="boton-menu" text="Manejo de caja" />
             <Button onAction="#mostrarFacturados" styleClass="boton-menu" text="Ver trabajos facturados" />
             <Button onAction="#cerrarCaja" styleClass="boton-menu" text="Cerrar Caja" />
-         <Button onAction="#initialize" styleClass="boton-Volver" text="Volver" />
-
+            <Button onAction="#mostrarTrabajosNoFacturados" styleClass="boton-menu" text="Ver trabajos no facturados" />
+            <Button onAction="#initialize" styleClass="boton-Volver" text="Volver" />
 
         </VBox>
     </left>
-   <center>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <TableView fx:id="tablaTrabajos" layoutY="57.0" prefHeight="464.0" prefWidth="547.0">
-              <columns>
-                <TableColumn fx:id="colPatente" editable="false" prefWidth="75.0" text="Patente" />
-                <TableColumn fx:id="colModelo" prefWidth="75.0" text="Modelo" />
-                  <TableColumn fx:id="colDescripcion" prefWidth="138.39999389648438" text="Descripción" />
-                  <TableColumn fx:id="colCliente" prefWidth="106.4000244140625" text="Cliente" />
-                  <TableColumn fx:id="colTelefono" prefWidth="152.00009155273438" text="Teléfono" />
 
-
-              </columns>
-            </TableView>
-            <Label fx:id="fechatabla" layoutX="28.0" layoutY="25.0" prefHeight="18.0" prefWidth="141.0" text="Label">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Label>
-             <Label fx:id="txtNombreVentana" layoutX="186.0" layoutY="19.0" prefHeight="30.0" prefWidth="220.0" text="Trabajos del día" textAlignment="CENTER" />
-
-
-
-         </children>
-      </AnchorPane>
-   </center>
+    <center>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+                <TableView fx:id="tablaTrabajos" layoutY="57.0" prefHeight="552.0" prefWidth="547.0">
+                    <columns>
+                        <TableColumn fx:id="colPatente" editable="false" prefWidth="75.0" text="Patente" />
+                        <TableColumn fx:id="colModelo" prefWidth="75.0" text="Modelo" />
+                        <TableColumn fx:id="colDescripcion" prefWidth="138.4" text="Descripción" />
+                        <TableColumn fx:id="colCliente" prefWidth="106.4" text="Cliente" />
+                        <TableColumn fx:id="colTelefono" prefWidth="152.0" text="Teléfono" />
+                    </columns>
+                </TableView>
+                <Label fx:id="fechatabla" layoutX="28.0" layoutY="25.0" prefHeight="18.0" prefWidth="141.0" text="Label">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+                <Label fx:id="txtNombreVentana" layoutX="186.0" layoutY="19.0" prefHeight="30.0" prefWidth="220.0" text="Trabajos del día" textAlignment="CENTER" />
+            </children>
+        </AnchorPane>
+    </center>
 
 </BorderPane>
