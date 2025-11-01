@@ -11,7 +11,7 @@ public class RentadoraDao {
     private Connection conexion;
 
     public RentadoraDao() throws SQLException {
-        this.conexion = ConexionBD.getConnection();
+        this.conexion = ConexionBD.getInstance().getConnection();
     }
 
 

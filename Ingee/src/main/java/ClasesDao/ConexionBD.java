@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class ConexionBD {
 
     private static ConexionBD instancia;
-    private static Connection conexion;
+    private Connection conexion;
 
     private static final String URL = "jdbc:mysql://localhost:3306/GestionVehicular";
     private static final String USER = "root";
@@ -28,7 +28,7 @@ public class ConexionBD {
         return instancia;
     }
 
-    public static Connection getConnection() {
+    public Connection getConnection() {
         return conexion;
     }
 }

@@ -27,7 +27,7 @@ public class AsignarEmpleadosController {
 
     public void initialize() {
         try {
-            conexion = ConexionBD.getConnection();
+            conexion = ConexionBD.getInstance().getConnection();
             empleadoDao = new EmpleadoDao(conexion);
             empleadoTrabajoDao = new EmpleadoTrabajoDao(conexion);
 
