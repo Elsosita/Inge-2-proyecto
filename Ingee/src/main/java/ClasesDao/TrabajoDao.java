@@ -63,21 +63,16 @@ public class TrabajoDao {
     public void actualizarTrabajo(Trabajo t) throws SQLException {
         String sql = """
             UPDATE Trabajo 
-            SET descripcion = ?, fecha = ?, estadopago = ?, estadotrabajo = ?, monto = ?, 
-                estadodefacturacion = ?, vehiculo_id = ?, aseguradora_id = ?, ordendeprovision = ?
+            SET descripcion = ?,   estadotrabajo = ?, monto = ?, 
+                estadodefacturacion = ?
             WHERE id = ?
         """;
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, t.getDescripcion());
-            stmt.setDate(2, Date.valueOf(t.getFecha()));
-            stmt.setString(3, t.getEstadopago().name());
-            stmt.setString(4, t.getEstadotrabajo().name());
-            stmt.setFloat(5, t.getMonto());
-            stmt.setString(6, t.getEstadodefacturacion().name());
-            stmt.setObject(7, t.getVehiculo() != null ? t.getVehiculo().getIdVehiculo() : null, Types.INTEGER);
-            stmt.setObject(8, t.getAseguradora() != null ? t.getAseguradora().getIdAseguradora() : null, Types.INTEGER);
-            stmt.setString(9, t.getOrdenDeProvision());
-            stmt.setInt(10, t.getIdTrabajo());
+            stmt.setString(2, t.getEstadotrabajo().name());
+            stmt.setFloat(3, t.getMonto());
+            stmt.setString(4, t.getEstadodefacturacion().name());
+            stmt.setInt(5, t.getIdTrabajo());
             stmt.executeUpdate();
         }
     }

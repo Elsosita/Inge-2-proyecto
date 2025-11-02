@@ -1,132 +1,87 @@
-/*package Controles;
+package Controles;
 
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
+import Clases.Trabajo;
+import ClasesDao.TrabajoDao;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
-
-// Importa tus clases Modelo, Manager y los Enums
-import Clases.*;
-import ClasesDao.*; // Importante
-// ... otras importaciones
 
 public class ModificarTrabajoController {
 
-    // --- Campos FXML ---
-    @FXML private TextField txtIdTrabajo;
+    @FXML private TextField txtId;
     @FXML private TextField txtCliente;
-    @FXML private TextField txtMarca;
-    @FXML private TextField txtModelo;
-    @FXML private TextArea txtDescripcion;
+    @FXML private TextField txtVehiculo;
+    @FXML private TextField txtDescripcion;
     @FXML private TextField txtMonto;
-    @FXML private ComboBox<String> cmbEstadoTrabajo;
-    @FXML private ComboBox<String> cmbEstadoFacturacion;
+    @FXML private ComboBox<String> cbEstadoPago;
+    @FXML private ComboBox<String> cbEstadoFacturacion;
 
-    @FXML private Button btnCancelar;
-    @FXML private Button btnGuardar;
+    private Trabajo trabajo;
+    private TrabajoDao trabajoDao;
 
-    // --- Variables de lógica ---
-    private Trabajo trabajoActual;
-    //private TrabajoManager manager; // Usa tu Manager
-
-    @FXML
-    private void initialize() {
-        //this.manager = TrabajoManager.getInstance();
-
-        // --- ASÍ SE HACE ---
-        // 1. Llena el ComboBox de Estados de Trabajo
-        // .values() devuelve un array [PENDIENTE, NO_REALIZADO, REALIZADO]
-        // El ComboBox llamará a .toString() en cada uno y mostrará el String.
-        cmbEstadoTrabajo.setItems(FXCollections.observableArrayList(EstadoTrabajo.values()));
-
-        // 2. Llena el ComboBox de Estados de Facturación
-        cmbEstadoFacturacion.setItems(FXCollections.observableArrayList(EstadoFacturacion.values()));
-    }
-    }
-
-    /**
-     * MÉTODO PÚBLICO para recibir el objeto desde el controlador anterior.
-
-    public void initData(Trabajo trabajo) {
-        this.trabajoActual = trabajo;
-
-        // 2. Poblar todos los campos con los datos del trabajo
-        txtIdTrabajo.setText(String.valueOf(trabajo.getId()));
-        txtDescripcion.setText(trabajo.getDescripcion());
-        txtMonto.setText(String.valueOf(trabajo.getMonto())); // Asume que getMonto() devuelve double o float
-
-        // Asigno los valores actuales a los ComboBox
-        cmbEstadoTrabajo.setValue(trabajo.getEstadotrabajo()); // Asume que getEstadoTrabajo() devuelve el Enum
-        cmbEstadoFacturacion.setValue(trabajo.getEstadoFacturacion()); // Asume que getEstadoFacturacion() devuelve el Enum
-
-        // --- Campos no modificables ---
-        // Asumo que tu objeto Trabajo tiene objetos Cliente y Vehiculo anidados.
-        // Si solo tienes IDs (ej. trabajo.getIdCliente()), necesitarías
-        // llamar al ClienteManager/VehiculoManager para obtener los nombres.
-        // Pero es mejor si la consulta original de 'ConsultarTrabajo' ya trajo esta info.
-
-        // Asumiendo que trabajo.getCliente() devuelve un objeto Cliente
-        if (trabajo.getCliente() != null) {
-            txtCliente.setText(trabajo.getCliente().getNombreCompleto()); // O getNombre()
-        }
-
-        // Asumiendo que trabajo.getVehiculo() devuelve un objeto Vehiculo
-        if (trabajo.getVehiculo() != null) {
-            txtMarca.setText(trabajo.getVehiculo().getMarca());
-            txtModelo.setText(trabajo.getVehiculo().getModelo());
-        }
-    }
-
-    @FXML
-    private void onGuardarClick(ActionEvent event) {
-        // 3. Validar y Guardar
-        double monto;
+    public ModificarTrabajoController() {
         try {
-            monto = Double.parseDouble(txtMonto.getText());
-        } catch (NumberFormatException e) {
-            mostrarAlerta(Alert.AlertType.ERROR, "Error de Formato", "El monto debe ser un número válido.");
-            return;
+            trabajoDao = new TrabajoDao();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
 
-        // 4. Actualizar el objeto 'trabajoActual'
-        trabajoActual.setDescripcion(txtDescripcion.getText());
-        trabajoActual.setMonto(monto);
-        trabajoActual.setEstadoTrabajo(cmbEstadoTrabajo.getValue());
-        trabajoActual.setEstadoFacturacion(cmbEstadoFacturacion.getValue());
+    public void setTrabajo(Trabajo trabajo) {
+        this.trabajo = trabajo;
+        cargarDatos();
+    }
 
-        // 5. Llamar al Manager (o DAO) para actualizar la BD
-        boolean exito = manager.modificarTrabajo(trabajoActual); // O el nombre de tu método de update
+    private void cargarDatos() {
+        txtId.setText(String.valueOf(trabajo.getIdTrabajo()));
+        txtCliente.setText(trabajo.getVehiculo().getCliente().getNombre());
+        txtVehiculo.setText(trabajo.getVehiculo().getPatente());
+        txtDescripcion.setText(trabajo.getDescripcion());
+        txtMonto.setText(String.valueOf(trabajo.getMonto()));
 
-        if (exito) {
-            mostrarAlerta(Alert.AlertType.INFORMATION, "Éxito", "El trabajo se modificó correctamente.");
+        cbEstadoPago.getItems().addAll("PENDIENTE", "EN_PROCESO", "TERMINADO");
+        cbEstadoFacturacion.getItems().addAll("NOFACTURADO", "FACTURADO");
+
+        if (trabajo.getEstadotrabajo() != null)
+            cbEstadoPago.setValue(trabajo.getEstadotrabajo().name());
+
+        if (trabajo.getEstadodefacturacion() != null)
+            cbEstadoFacturacion.setValue(trabajo.getEstadodefacturacion().name());
+    }
+
+    @FXML
+    private void onGuardar() {
+        try {
+            trabajo.setDescripcion(txtDescripcion.getText());
+            trabajo.setMonto(Float.parseFloat(txtMonto.getText()));
+
+            trabajo.setEstadotrabajo(Trabajo.EstadoTrabajo.valueOf(cbEstadoPago.getValue()));
+            trabajo.setEstadodefacturacion(Trabajo.Estadodefacturacion.valueOf(cbEstadoFacturacion.getValue()));
+
+            trabajoDao.actualizarTrabajo(trabajo);
+
+            mostrarAlerta("✅ Cambios guardados correctamente.");
             cerrarVentana();
-        } else {
-            mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se pudo modificar el trabajo en la base de datos.");
+        } catch (Exception e) {
+            mostrarAlerta("⚠️ Error al guardar: " + e.getMessage());
+            System.out.println("Error al guardar: " + e.getMessage());
         }
     }
 
     @FXML
-    private void onCancelarClick(ActionEvent event) {
+    private void onCancelar() {
         cerrarVentana();
     }
 
     private void cerrarVentana() {
-        // Obtiene el Stage (ventana) actual desde uno de los botones y la cierra
-        Stage stage = (Stage) btnCancelar.getScene().getWindow();
+        Stage stage = (Stage) txtId.getScene().getWindow();
         stage.close();
     }
 
-    // Método de utilidad para alertas
-    private void mostrarAlerta(Alert.AlertType tipo, String titulo, String contenido) {
-        Alert alert = new Alert(tipo);
-        alert.setTitle(titulo);
+    private void mostrarAlerta(String msg) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(null);
-        alert.setContentText(contenido);
+        alert.setContentText(msg);
         alert.showAndWait();
     }
-}*/
+}

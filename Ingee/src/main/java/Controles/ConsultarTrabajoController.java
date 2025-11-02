@@ -5,9 +5,14 @@ import ClasesDao.TrabajoDao;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -82,19 +87,37 @@ public class ConsultarTrabajoController {
 
     @FXML
     private void onModificar() {
-        Trabajo seleccionado = tablaTrabajos.getSelectionModel().getSelectedItem();
-        if (seleccionado == null) {
-            new Alert(Alert.AlertType.WARNING, "Seleccione un trabajo para modificar.").showAndWait();
+        Trabajo trabajoSeleccionado = tablaTrabajos.getSelectionModel().getSelectedItem();
+        if (trabajoSeleccionado == null) {
+            mostrarAlerta("Debe seleccionar un trabajo para modificar.");
             return;
         }
-        aux=seleccionado.getIdTrabajo();
 
-        // Podés abrir aquí tu ventana “AgregarTrabajo.fxml” pero en modo edición
-        // Pasándole el trabajo seleccionado al controlador
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/ModificarTrabajo.fxml"));
+            Parent root = loader.load();
+
+            // obtener el controller de la nueva ventana
+            ModificarTrabajoController controller = loader.getController();
+            controller.setTrabajo(trabajoSeleccionado); // le pasamos el trabajo
+
+            Stage stage = new Stage();
+            stage.setTitle("Modificar trabajo");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+            // refrescar la tabla después de cerrar
+            cargarTrabajos();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Error al abrir la ventana de modificación.");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
-    public static int getTrabajo(){
-        return aux;
-    }
+
 
     @FXML
     private void onEliminar() {
@@ -132,4 +155,13 @@ public class ConsultarTrabajoController {
         Stage stage = (Stage) txtBuscar.getScene().getWindow();
         stage.close();
     }
+
+    private void mostrarAlerta(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Información");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
 }
