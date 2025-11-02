@@ -1,11 +1,12 @@
 package ClasesDao;
-    //xdxd
+//xdxd
 import Clases.Cliente;
 import ClasesDao.ConexionBD;
 import Clases.Trabajo;
 import Clases.Vehiculo;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -288,5 +289,70 @@ public class TrabajoDao {
             while (rs.next()) trabajos.add(mapearTrabajoConCliente2(rs));
         }
         return trabajos;
+    }
+    /**
+     * Suma el monto de todos los Trabajos asignados a un Empleado
+     * y que estén TERMINADOS y PAGADOS desde una fecha específica.
+     * @param idEmpleado ID del empleado.
+     * @param fechaInicio Fecha desde la cual contar los trabajos (fecha de apertura de caja).
+     * @return Suma total de montos de trabajos.
+     */
+    public float sumarMontoTrabajosPorEmpleadoYFecha(int idEmpleado, LocalDate fechaInicio) throws SQLException {
+
+        // Consulta SQL verificada contra tu esquema:
+        String sql = """
+        SELECT SUM(T.monto) AS total_facturado
+        FROM Trabajo T
+        JOIN Empleado_Trabajo ET ON T.id = ET.trabajo_id
+        WHERE ET.empleado_id = ?
+        AND T.estadoPago = 'PAGADO' -- 👈 Verifica el case: 'PAGADO'
+        AND T.fecha >= ?
+        """;
+
+        float totalFacturado = 0;
+
+        // Asumiendo que 'this.conexion' es la conexión del DAO
+        try (PreparedStatement stmt = this.conexion.prepareStatement(sql)) {
+
+            stmt.setInt(1, idEmpleado);
+            stmt.setDate(2, Date.valueOf(fechaInicio));
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    // Si la suma no encuentra resultados, devuelve 0.
+                    totalFacturado = rs.getFloat("total_facturado");
+                }
+            }
+        }
+        return totalFacturado;
+    }
+
+    /**
+     * Suma la comisión (5%) de todos los trabajos PAGADOS por un empleado desde una fecha.
+     * @param idEmpleado ID del empleado.
+     * @param fechaInicio Fecha desde la cual calcular (normalmente, fecha de apertura de caja).
+     * @return La suma total de las comisiones ganadas.
+     */
+    public float sumarComisionesPagadasPorEmpleadoDesdeFecha(int idEmpleado, LocalDate fechaInicio) throws SQLException {
+        String sql = """
+        SELECT SUM(T.monto * 0.05) AS comision_total
+        FROM Trabajo T
+        JOIN Empleado_Trabajo ET ON T.id = ET.trabajo_id
+        WHERE ET.empleado_id = ?
+        AND T.estadopago = 'PAGADO'
+        AND T.fecha >= ?
+        """;
+        float comisionTotal = 0;
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            stmt.setInt(1, idEmpleado);
+            stmt.setDate(2, Date.valueOf(fechaInicio));
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    // Obtiene la columna alias 'comision_total'
+                    comisionTotal = rs.getFloat("comision_total");
+                }
+            }
+        }
+        return comisionTotal;
     }
 }

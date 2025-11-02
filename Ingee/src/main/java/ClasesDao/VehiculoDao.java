@@ -58,13 +58,33 @@ public class VehiculoDao {
     }
 
 
-    public List<Vehiculo> obtenerTodosLosVehiculos() throws SQLException {
+    public List<Vehiculo> obtenerTodosVehiculos() throws SQLException {
         List<Vehiculo> lista = new ArrayList<>();
-        String sql = "SELECT * FROM Vehiculo";
+        String sql = """
+        SELECT v.*, c.id AS cliente_id, c.nombre AS cliente_nombre, c.numero AS cliente_numero
+        FROM Vehiculo v
+        JOIN Cliente c ON v.cliente_id = c.id
+        ORDER BY v.patente ASC
+    """;
 
         try (PreparedStatement stmt = conexion.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) lista.add(mapearVehiculo(rs));
+
+            while (rs.next()) {
+                Vehiculo v = new Vehiculo();
+                v.setIdVehiculo(rs.getInt("id"));
+                v.setPatente(rs.getString("patente"));
+                v.setMarca(rs.getString("marca"));
+                v.setModelo(rs.getString("modelo"));
+
+                Cliente c = new Cliente();
+                c.setIdCliente(rs.getInt("cliente_id"));
+                c.setNombre(rs.getString("cliente_nombre"));
+                c.setNumero(rs.getLong("cliente_numero"));
+                v.setCliente(c);
+
+                lista.add(v);
+            }
         }
         return lista;
     }

@@ -32,22 +32,29 @@ public class NuevoClienteController {
     @FXML
     private void onGuardar(ActionEvent event) {
         try {
-            String nombre = txtNombre.getText();
+            String nombre = txtNombre.getText().trim(); // Limpiar espacios del nombre
             String tipoDocumento = cbTipoDocumento.getValue();
-            String numeroDocumento = txtNumeroDocumento.getText();
-            String telefono = txtTelefono.getText();
+            String numeroDocumentoTexto = txtNumeroDocumento.getText().trim(); // Limpiar espacios del documento
+            String telefonoTexto = txtTelefono.getText().trim(); // 🔥 Limpiar espacios del teléfono
 
             // Validaciones básicas
-            if (nombre.isBlank() || tipoDocumento == null || numeroDocumento.isBlank() || telefono.isBlank()) {
+            if (nombre.isBlank() || tipoDocumento == null || numeroDocumentoTexto.isBlank() || telefonoTexto.isBlank()) {
                 mostrarAlerta("Campos incompletos", "Por favor complete todos los campos requeridos.");
                 return;
             }
 
+            // Conversión a números antes de crear el objeto.
+            // Usamos Integer.parseInt y Long.parseLong. El try-catch manejará los fallos.
+            int numeroDoc = Integer.parseInt(numeroDocumentoTexto);
+
+            // 🔥 CORRECCIÓN CLAVE: Usar Long.parseLong() y eliminar cualquier espacio interno (\s+)
+            long telefono = Long.parseLong(telefonoTexto.replaceAll("\\s+", ""));
+
             Cliente nuevo = new Cliente();
             nuevo.setNombre(nombre);
             nuevo.settipodocumento(Cliente.TD.valueOf(tipoDocumento));
-            nuevo.setNumerodoc(Integer.parseInt(numeroDocumento));
-            nuevo.setNumero(Integer.parseInt(telefono));
+            nuevo.setNumerodoc(numeroDoc);
+            nuevo.setNumero(telefono); // setNumero ahora recibe el valor long correcto
 
             // Llama al manager para registrar el cliente
             clienteManager.registrarCliente(nuevo);
@@ -57,7 +64,8 @@ public class NuevoClienteController {
             cerrarVentana();
 
         } catch (NumberFormatException e) {
-            mostrarAlerta("Error", "El número de teléfono debe contener solo dígitos.");
+            // Este catch maneja los errores si númeroDocumento o teléfono no son dígitos válidos.
+            mostrarAlerta("Error", "Los campos de documento y teléfono deben contener solo dígitos válidos.");
         } catch (Exception e) {
             e.printStackTrace();
             mostrarAlerta("Error", "No se pudo agregar el cliente. Revise la conexión o los datos ingresados.");

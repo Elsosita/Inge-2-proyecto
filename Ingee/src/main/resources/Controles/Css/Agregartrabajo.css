@@ -1,0 +1,72 @@
+/* Agregartrabajo.css */
+
+/* Estilo base (el root debe tener una clase si no usas .root) */
+.root {
+    -fx-background-color: #E8F8F5; /* Fondo blanco-gris */
+    -fx-padding: 15px;
+}
+
+/* Títulos y Secciones */
+.label-titulo {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #343A40;
+    -fx-padding: 0 0 10px 0;
+}
+
+.label-seccion {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #007BFF; /* Azul para secciones */
+    -fx-padding: 10px 0 5px 0;
+}
+
+/* Estilo para TextFields, ComboBoxes, y ListViews */
+.text-field, .combo-box, .list-view {
+    -fx-font-size: 14px;
+    -fx-padding: 8px;
+    -fx-border-color: #CED4DA;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-background-color: white;
+}
+
+/* Efecto al enfocar */
+.text-field:focused, .combo-box:focused {
+    -fx-border-color: #007BFF;
+    -fx-effect: innershadow(gaussian, rgba(0, 123, 255, 0.5), 5, 0, 0, 0);
+}
+
+/* Contenedores HBox para el diseño de dos columnas */
+.hbox {
+    -fx-spacing: 15px;
+    -fx-alignment: CENTER_LEFT;
+}
+
+/* Estilo para los botones */
+.button {
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 15px;
+    -fx-background-radius: 5px;
+    -fx-text-fill: white;
+}
+
+/* Botón Guardar */
+.button-guardar {
+    -fx-background-color: #007BFF; /* Verde */
+}
+
+/* Botón Cancelar/Secundario */
+.button-cancelar, .button-secundario {
+    -fx-background-color: #6C757D; /* Gris */
+}
+
+
+
+/* Mensajes de Error/Validación */
+#lblMensaje {
+    -fx-text-fill: #DC3545; /* Rojo */
+    -fx-font-weight: bold;
+}

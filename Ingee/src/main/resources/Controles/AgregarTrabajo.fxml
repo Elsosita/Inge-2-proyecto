@@ -11,70 +11,89 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="811.0" prefWidth="553.0" style="-fx-background-color: #f9f9f9; -fx-padding: 20;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.AgregarTrabajoController">
+<?import java.net.URL?>
+<AnchorPane prefHeight="750.0" prefWidth="650.0"
+            styleClass="root"  xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.AgregarTrabajoController">
 
-    <VBox layoutX="31.2" layoutY="30.4" prefHeight="798.0" prefWidth="539.0" spacing="10" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="10.0">
+    <VBox layoutX="11.0" layoutY="10.0" prefHeight="798.0" prefWidth="628.0" spacing="10"
+          AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="10.0">
 
-        <Label prefWidth="126.0" style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Nuevo Trabajo" />
-        <TextField fx:id="txtCliente" promptText="Nombre del cliente" />
-      <ListView fx:id="listaSugerencias" prefHeight="25.0" prefWidth="274.0" visible="true" />
+        <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Nuevo Trabajo" />
 
-      <Button mnemonicParsing="false" onAction="#onAgregarNuevoCliente" text="Agregar nuevo cliente" />
-
-        <TextField fx:id="txtPatente" promptText="Patente del vehículo" />
-      <ListView fx:id="listaPatentes" prefHeight="25.0" prefWidth="365.0" />
-      <TextField fx:id="txtMarca" promptText="Marca del vehículo" />
-        <TextField fx:id="txtModelo" promptText="Modelo del vehículo" />
-        <TextField fx:id="txtTelefono" promptText="Teléfono del cliente" />
-        <TextField fx:id="txtDescripcion" promptText="Descripción del trabajo" />
-      <TextField fx:id="txtMonto" promptText="Monto" />
+        <Label text="Datos del Cliente" style="-fx-font-weight: bold;" />
         <HBox spacing="10">
-        <ComboBox fx:id="cbEstadoPago" promptText="Estado de pago">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="PENDIENTE" />
-                    <String fx:value="PAGADO" />
-                </FXCollections>
-            </items>
-        </ComboBox>
-
-        <ComboBox fx:id="cbEstadoFacturacion" promptText="Estado de facturación">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="NOFACTURADO" />
-                    <String fx:value="FACTURADO" />
-                </FXCollections>
-            </items>
-        </ComboBox>
+            <ComboBox fx:id="cmbCliente" promptText="Seleccione el cliente" prefWidth="300.0" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="txtTelefono" promptText="Teléfono del cliente" prefWidth="300.0" editable="false" HBox.hgrow="ALWAYS" />
         </HBox>
-        <Label text="¿Tiene aseguradora?" />
-        <ComboBox fx:id="cbTieneAseguradora">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="No" />
-                    <String fx:value="Sí" />
-                </FXCollections>
-            </items>
-        </ComboBox>
+        <Button mnemonicParsing="false" onAction="#onAgregarNuevoCliente" text="Agregar nuevo cliente" styleClass="button-guardar" />
 
-        <Label text="Seleccione aseguradora" />
-        <ComboBox fx:id="cbAseguradora" disable="true" promptText="Seleccione aseguradora..." />
+        <Label text="Datos del Vehículo" style="-fx-font-weight: bold;" />
+        <HBox spacing="10">
+            <ComboBox fx:id="cmbPatente" promptText="Seleccione la patente" prefWidth="300" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="txtPatente" promptText="O ingrese patente nueva aquí" prefWidth="300" HBox.hgrow="ALWAYS" />
+        </HBox>
+        <HBox spacing="10">
+            <TextField fx:id="txtMarca" promptText="Marca del vehículo" prefWidth="300" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="txtModelo" promptText="Modelo del vehículo" prefWidth="300" HBox.hgrow="ALWAYS" />
+        </HBox>
+
+        <TextField fx:id="txtDescripcion" promptText="Descripción del trabajo" />
+        <HBox spacing="10">
+            <TextField fx:id="txtMonto" promptText="Monto" prefWidth="300" HBox.hgrow="ALWAYS" />
+            <ComboBox fx:id="cmbEmpleado" prefWidth="300" promptText="Seleccione el empleado principal" HBox.hgrow="ALWAYS" />
+        </HBox>
+
+        <Label text="Estados" style="-fx-font-weight: bold;" />
+        <HBox spacing="10">
+            <ComboBox fx:id="cbEstadoPago" promptText="Estado de pago" HBox.hgrow="ALWAYS">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="PENDIENTE" />
+                        <String fx:value="PAGADO" />
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            <ComboBox fx:id="cbEstadoFacturacion" promptText="Estado de facturación" HBox.hgrow="ALWAYS">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="NOFACTURADO" />
+                        <String fx:value="FACTURADO" />
+                    </FXCollections>
+                </items>
+            </ComboBox>
+        </HBox>
+
+        <Label text="Aseguradora y Documentación" style="-fx-font-weight: bold;" />
+        <HBox spacing="10">
+            <Label text="¿Tiene aseguradora?" />
+            <ComboBox fx:id="cbTieneAseguradora">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="No" />
+                        <String fx:value="Sí" />
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            <ComboBox fx:id="cbAseguradora" disable="true" promptText="Seleccione aseguradora..." HBox.hgrow="ALWAYS" />
+        </HBox>
+
         <HBox alignment="CENTER_LEFT" spacing="10">
             <Label text="Tipo de orden:" />
             <ComboBox fx:id="cbTipoOrden" onAction="#onTipoOrdenChanged" prefWidth="150" />
-        </HBox>
-
-        <HBox alignment="CENTER_LEFT" spacing="10">
             <Label text="Archivo PDF:" />
-            <TextField fx:id="txtRutaArchivo" editable="false" prefWidth="220" promptText="Ruta del archivo" />
+            <TextField fx:id="txtRutaArchivo" editable="false" prefWidth="220" promptText="Ruta del archivo" HBox.hgrow="ALWAYS" />
             <Button fx:id="btnSeleccionarArchivo" onAction="#onSeleccionarArchivo" text="Seleccionar..." />
         </HBox>
-        <HBox spacing="15">
-            <Button onAction="#onGuardar" text="Guardar" />
-            <Button onAction="#onCancelar" text="Cancelar" />
+        <Label prefHeight="15.0" />
+        <HBox alignment="CENTER_RIGHT" spacing="10">
+            <Button onAction="#onGuardar" text="Guardar" styleClass="button-guardar" />
+            <Button onAction="#onCancelar" text="Cancelar" styleClass="button-cancelar" />
         </HBox>
 
         <Label fx:id="lblMensaje" textFill="green" />
 
     </VBox>
+    <stylesheets>
+        <URL value="@Css/Agregartrabajo.css" />
+    </stylesheets>
 </AnchorPane>

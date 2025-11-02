@@ -50,6 +50,8 @@ public class MainController {
     private TableColumn<Trabajo, String> colCliente;
     @FXML
     private TableColumn<Trabajo, String> colTelefono;
+    @FXML
+    private TableColumn<Trabajo, String> colFecha;
 
 
     private final TrabajoDao trabajoDao = new TrabajoDao();
@@ -89,6 +91,30 @@ public class MainController {
     }
 
     private void configurarColumnas() {
+
+        DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        // ==========================================================
+        // 🔹 CONFIGURACIÓN DE COLUMNA FECHA (NUEVO)
+        // ==========================================================
+        colFecha.setCellValueFactory(data ->
+                new SimpleStringProperty(
+                        data.getValue().getFecha() != null
+                                ? data.getValue().getFecha().format(formatoFecha) // Formatea LocalDate a String
+                                : ""
+                )
+        );
+        colFecha.setComparator((fechaStr1, fechaStr2) -> {
+            try {
+                // Convertimos la cadena formateada de vuelta a LocalDate para la comparación
+                LocalDate date1 = LocalDate.parse(fechaStr1, formatoFecha);
+                LocalDate date2 = LocalDate.parse(fechaStr2, formatoFecha);
+                return date1.compareTo(date2); // Devuelve -1, 0, o 1
+            } catch (Exception e) {
+                // Si el parseo falla (ej., celdas vacías), se asumen iguales.
+                return 0;
+            }
+        });
         // 🔹 Vehículo: patente y modelo
         colPatente.setCellValueFactory(data ->
                 new SimpleStringProperty(

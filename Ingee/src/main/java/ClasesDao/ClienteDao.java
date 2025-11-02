@@ -39,25 +39,33 @@ public class ClienteDao {
     }
 
 
-    public Cliente obtenerClientePorId(int id) throws SQLException {
-        String sql = "SELECT * FROM Cliente WHERE id = ?";
-        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    Cliente cliente = new Cliente();
-                    cliente.setIdCliente(rs.getInt("id"));
-                    cliente.setNombre(rs.getString("nombre"));
-                    cliente.settipodocumento(Cliente.TD.valueOf(rs.getString("tipodocumento")));
-                    cliente.setNumerodoc(rs.getInt("numerodoc"));
-                    cliente.setNumero(rs.getLong("numero"));
+    public List<Cliente> obtenerTodos() throws SQLException {
+        List<Cliente> lista = new ArrayList<>();
+        // 1. Cambiar la consulta para seleccionar TODOS los clientes
+        String sql = "SELECT * FROM Cliente";
 
-                    cliente.setVehiculos(obtenerVehiculosPorCliente(id));
-                    return cliente;
-                }
+        // 2. Ejecutar la consulta sin parámetros (ya que buscamos todos)
+        try (PreparedStatement stmt = conexion.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            // 3. Iterar sobre todos los resultados
+            while (rs.next()) {
+                Cliente c = new Cliente();
+                c.setIdCliente(rs.getInt("id"));
+                c.setNombre(rs.getString("nombre"));
+                c.settipodocumento(Cliente.TD.valueOf(rs.getString("tipodocumento")));
+                c.setNumerodoc(rs.getInt("numerodoc"));
+                c.setNumero(rs.getLong("numero"));
+
+                // OJO: Se recomienda no cargar vehículos aquí para evitar problemas de rendimiento (N+1),
+                // pero si tu lógica lo requiere, debes pasarlo a un método.
+                // c.setVehiculos(obtenerVehiculosPorCliente(c.getIdCliente()));
+
+                lista.add(c);
             }
         }
-        return null;
+        // 4. Devolver la lista (vacía si no hay resultados)
+        return lista;
     }
 
 

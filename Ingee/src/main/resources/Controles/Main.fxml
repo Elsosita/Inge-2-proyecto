@@ -51,12 +51,18 @@
             <children>
                 <TableView fx:id="tablaTrabajos" layoutY="57.0" prefHeight="552.0" prefWidth="547.0">
                     <columns>
+                        <TableColumn fx:id="colFecha" prefWidth="75.0" text="Fecha" />
                         <TableColumn fx:id="colPatente" editable="false" prefWidth="75.0" text="Patente" />
                         <TableColumn fx:id="colModelo" prefWidth="75.0" text="Modelo" />
-                        <TableColumn fx:id="colDescripcion" prefWidth="138.4" text="Descripción" />
-                        <TableColumn fx:id="colCliente" prefWidth="106.4" text="Cliente" />
-                        <TableColumn fx:id="colTelefono" prefWidth="152.0" text="Teléfono" />
+
+                        <TableColumn fx:id="colDescripcion" text="Descripción" />
+                        <TableColumn fx:id="colCliente" text="Cliente" />
+                        <TableColumn fx:id="colTelefono" text="Teléfono" />
+
                     </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                    </columnResizePolicy>
                 </TableView>
                 <Label fx:id="fechatabla" layoutX="28.0" layoutY="25.0" prefHeight="18.0" prefWidth="141.0" text="Label">
                     <font>

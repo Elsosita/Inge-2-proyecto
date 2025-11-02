@@ -29,7 +29,7 @@ public class RentadoraDao {
         }
     }
 
-
+    // READ (por id)
     public Rentadora obtenerRentadoraPorId(int id) throws SQLException {
         String sql = "SELECT * FROM Rentadora WHERE idr = ?";
         Rentadora r = null;
@@ -71,7 +71,7 @@ public class RentadoraDao {
         }
     }
 
-
+    // DELETE
     public void eliminarRentadora(int id) throws SQLException {
         String sql = "DELETE FROM Rentadora WHERE idr = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {

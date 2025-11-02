@@ -26,18 +26,17 @@ import java.util.List;
 
 public class AgregarTrabajoController {
 
-    @FXML private TextField txtPatente;
+
     @FXML private TextField txtModelo;
     @FXML private TextField txtMarca;
     @FXML private TextField txtDescripcion;
-    @FXML private TextField txtCliente;
+    @FXML private TextField txtPatente;
     @FXML private TextField txtTelefono;
     @FXML private TextField txtMonto;
     @FXML private Label lblMensaje;
     @FXML private ComboBox<String> cbEstadoPago;
     @FXML private ComboBox<String> cbEstadoFacturacion;
-    @FXML private ListView<Cliente> listaSugerencias;
-    @FXML private ListView<Vehiculo> listaPatentes;
+    @FXML private ComboBox<Cliente> cmbCliente;
     @FXML private ComboBox<String> cbTieneAseguradora;
     //@FXML private ComboBox<Aseguradora> cbAseguradora;
     @FXML private Checkbox chkOrdenDigital;
@@ -47,10 +46,11 @@ public class AgregarTrabajoController {
     @FXML private TextField txtRutaArchivo;
     @FXML private Button btnSeleccionarArchivo;
     @FXML private ComboBox<Aseguradora> cbAseguradora;
+    @FXML private ComboBox<Empleado> cmbEmpleado;
+    @FXML private ComboBox<Vehiculo> cmbPatente;
 
 
-
-
+    private final EmpleadoDao empleadoDao = EmpleadoDao.getInstancia();
     private ClienteManager clienteManager;
     private Cliente clienteSeleccionado;
 
@@ -58,6 +58,7 @@ public class AgregarTrabajoController {
     private Vehiculo vehiculoSeleccionado;
     private VehiculoManager vehiculoManager;
     private AseguradoraManager aseguradoraManager;
+    private List<Vehiculo> todosLosVehiculos;
 
 
 
@@ -79,6 +80,112 @@ public class AgregarTrabajoController {
                     .filter(a -> a.getIdAseguradora() != 1) // 👈 Ignora la de id 1
                     .toList();
             cbAseguradora.getItems().setAll(aseguradorasFiltradas);
+            // 🔥 Cargar Empleados en el ComboBox
+            List<Empleado> empleados = empleadoDao.listarTodos();
+            cmbEmpleado.getItems().setAll(empleados);
+            cmbEmpleado.setCellFactory(param -> new ListCell<>() {
+                @Override
+                protected void updateItem(Empleado item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? "" : item.getNombreEmpleado());
+                }
+            });
+            cmbEmpleado.setButtonCell(new ListCell<>() {
+                @Override
+                protected void updateItem(Empleado item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? "" : item.getNombreEmpleado());
+                }
+            });
+
+            List<Vehiculo> vehiculos = vehiculoDao.obtenerTodosVehiculos(); // <--- REQUIERE ESTE MÉTODO EN DAO
+            cmbPatente.getItems().setAll(vehiculos);
+
+
+            cmbPatente.setCellFactory(param -> new ListCell<>() {
+                @Override
+                protected void updateItem(Vehiculo item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? "" : item.getPatente() + " (" + item.getCliente().getNombre() + ")");
+                }
+            });
+            cmbPatente.setButtonCell(new ListCell<>() {
+                @Override
+                protected void updateItem(Vehiculo item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? "" : item.getPatente() + " (" + item.getCliente().getNombre() + ")");
+                }
+            });
+
+// Escuchar la SELECCIÓN del vehículo para autocompletar otros campos
+            cmbPatente.valueProperty().addListener((obs, oldVal, newVal) -> {
+                vehiculoSeleccionado = newVal;
+                if (newVal != null) {
+                    txtMarca.setText(newVal.getMarca());
+                    txtModelo.setText(newVal.getModelo());
+                    txtPatente.clear();
+                    // Seleccionar el cliente correcto en el ComboBox de Clientes
+                    Cliente clienteDePatente = newVal.getCliente();
+
+                    // 🔥 INICIO DE LA LÓGICA DE VALIDACIÓN 🔥
+                    if (clienteSeleccionado != null &&
+                            clienteDePatente != null &&
+                            clienteDePatente.getIdCliente() != clienteSeleccionado.getIdCliente())
+                    {
+                        // La patente pertenece a otro cliente.
+                        // Limpiamos el cliente actual y el teléfono.
+                        cmbCliente.getSelectionModel().clearSelection();
+
+                        // Opcional: Mostrar un error
+                        lblMensaje.setText("⚠️ Patente no pertenece al cliente previamente seleccionado.");
+
+                    } else if (clienteDePatente != null) {
+                        // Si no hay conflicto o si el cliente no estaba seleccionado,
+                        // actualizamos el combo de cliente.
+                        cmbCliente.setValue(clienteDePatente);
+                        lblMensaje.setText(""); // Limpiar mensaje
+                        txtPatente.clear();
+                    }
+                    // 🔥 FIN DE LA LÓGICA DE VALIDACIÓN 🔥
+
+                } else {
+                    txtMarca.clear();
+                    txtModelo.clear();
+                    cmbCliente.getSelectionModel().clearSelection();
+                }
+            });
+            // 🔥 INICIO: NUEVA LÓGICA DE COMBOBOX CLIENTE 🔥
+
+            // Cargar TODOS los clientes al iniciar
+            List<Cliente> clientes = clienteManager.obtenerTodos(); // Asumo que existe este método en ClienteManager
+            cmbCliente.getItems().setAll(clientes);
+
+            // Configurar cómo se muestra el objeto Cliente en el ComboBox
+            cmbCliente.setCellFactory(param -> new ListCell<>() {
+                @Override
+                protected void updateItem(Cliente item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? "" : item.getNombre());
+                }
+            });
+            cmbCliente.setButtonCell(new ListCell<>() {
+                @Override
+                protected void updateItem(Cliente item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(empty || item == null ? "" : item.getNombre());
+                }
+            });
+
+            // Escuchar la SELECCIÓN del cliente
+            cmbCliente.valueProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal != null) {
+                    clienteSeleccionado = newVal;
+                    txtTelefono.setText(String.valueOf(newVal.getNumero()));
+                } else {
+                    clienteSeleccionado = null;
+                    txtTelefono.clear();
+                }
+            });
 
 
         } catch (SQLException e) {
@@ -86,78 +193,9 @@ public class AgregarTrabajoController {
         }
 
 
-        //Autocompletado de clientes
-        txtCliente.textProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal.isBlank()) {
-                listaSugerencias.getItems().clear();
-                return;
-            }
-            try {
-                List<Cliente> sugerencias = clienteManager.buscarClientes(newVal);
-                listaSugerencias.getItems().setAll(sugerencias);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
-
-        listaSugerencias.setCellFactory(param -> new ListCell<>() {
-            @Override
-            protected void updateItem(Cliente item, boolean empty) {
-                super.updateItem(item, empty);
-                setText(empty || item == null ? "" : item.getNombre());
-            }
-        });
-
-        listaSugerencias.setOnMouseClicked(event -> {
-            Cliente seleccionado = listaSugerencias.getSelectionModel().getSelectedItem();
-            if (seleccionado != null) {
-                clienteSeleccionado = seleccionado; // guardamos el cliente elegido
-                txtCliente.setText(seleccionado.getNombre());
-
-                // ✅ Autocompletar teléfono
-                txtTelefono.setText(String.valueOf(seleccionado.getNumero()));
-
-                listaSugerencias.getItems().clear();
-            }
-        });
 
 
-        //Autocompletado de patentes
-        txtPatente.textProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal.isBlank()) {
-                listaPatentes.getItems().clear();
-                return;
-            }
-            try {
-                List<Vehiculo> sugerencias = vehiculoDao.buscarVehiculosPorPatente(newVal);
-                listaPatentes.getItems().setAll(sugerencias);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
 
-        listaPatentes.setCellFactory(param -> new ListCell<>() {
-            @Override
-            protected void updateItem(Vehiculo item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText("");
-                } else {
-                    setText(item.getPatente() + " (" + item.getCliente().getNombre() + ")");
-                }
-            }
-        });
-
-        listaPatentes.setOnMouseClicked(event -> {
-            vehiculoSeleccionado = listaPatentes.getSelectionModel().getSelectedItem();
-            if (vehiculoSeleccionado != null) {
-                txtPatente.setText(vehiculoSeleccionado.getPatente());
-                txtMarca.setText(vehiculoSeleccionado.getMarca());
-                txtModelo.setText(vehiculoSeleccionado.getModelo());
-                txtCliente.setText(vehiculoSeleccionado.getCliente().getNombre());
-                listaPatentes.getItems().clear();
-            }
-        });
         // Mostrar nombre de aseguradora en el ComboBox
         cbAseguradora.setCellFactory(param -> new ListCell<>() {
             @Override
@@ -185,7 +223,7 @@ public class AgregarTrabajoController {
             }
         });
 
-        // Escuchar cambios en "Tiene aseguradora"
+// Escuchar cambios en "Tiene aseguradora"
         cbTieneAseguradora.valueProperty().addListener((obs, oldVal, newVal) -> {
             boolean tiene = "Sí".equalsIgnoreCase(newVal);
             cbAseguradora.setDisable(!tiene);
@@ -195,11 +233,11 @@ public class AgregarTrabajoController {
         cbTipoOrden.getItems().addAll("Física", "Digital");
         cbTipoOrden.setValue("Física"); // valor por defecto
 
-        // Por defecto el campo de ruta y botón de selección están deshabilitados
+// Por defecto el campo de ruta y botón de selección están deshabilitados
         txtRutaArchivo.setDisable(true);
         btnSeleccionarArchivo.setDisable(true);
 
-        // Desactivar tipo de orden si no hay aseguradora
+// Desactivar tipo de orden si no hay aseguradora
         cbTipoOrden.setDisable(true);
     }
 
@@ -234,47 +272,53 @@ public class AgregarTrabajoController {
     @FXML
     private void onGuardar() {
         try {
-            //Validar que haya cliente seleccionado
+            // 1️⃣ Validar que haya cliente seleccionado
             if (clienteSeleccionado == null) {
-                lblMensaje.setText("⚠️ Seleccione o registre un cliente antes de continuar.");
+                lblMensaje.setText("⚠️ Seleccione un cliente antes de continuar.");
                 return;
             }
 
-            //Verificar si el vehículo ya existe en la BD
-            String patenteIngresada = txtPatente.getText().trim();
-            Vehiculo vehiculo = vehiculoManager.buscarPorPatente(patenteIngresada);
+            Vehiculo vehiculo;
 
-            if (vehiculo == null) {
+            // Opción A: Se seleccionó un vehículo existente del ComboBox
+            if (vehiculoSeleccionado != null) {
+                vehiculo = vehiculoSeleccionado;
+                System.out.println("Vehículo existente seleccionado: " + vehiculo.getPatente());
+            }
+            // Opción B: No se seleccionó nada. Se trata como NUEVO vehículo/patente.
+            else {
+                String patenteIngresada = txtPatente.getText().trim();
+
+                // 2️⃣ Validación de datos mínimos para el nuevo vehículo
+                if (patenteIngresada.isEmpty() || txtMarca.getText().isEmpty()) {
+                    lblMensaje.setText("⚠️ Ingrese Patente y Marca si está registrando un vehículo nuevo.");
+                    return;
+                }
+
+                // 3️⃣ Crear, asignar y registrar el vehículo nuevo
+                Vehiculo vehiculoExistente = vehiculoManager.buscarPorPatente(patenteIngresada);
+                if (vehiculoExistente != null) {
+                    lblMensaje.setText("⚠️ Error: La patente ya existe. Seleccione el vehículo del combo.");
+                    return;
+                }
+
                 vehiculo = new Vehiculo();
                 vehiculo.setPatente(patenteIngresada);
                 vehiculo.setMarca(txtMarca.getText());
                 vehiculo.setModelo(txtModelo.getText());
-                vehiculo.setCliente(clienteSeleccionado);
+                vehiculo.setCliente(clienteSeleccionado); // Asignamos el cliente seleccionado
 
                 vehiculoManager.registrarVehiculo(vehiculo);
-
+                System.out.println("Vehículo nuevo agregado: " + vehiculo.getPatente());
             }
 
-
-            if (vehiculo == null) {
-                //i no existe, crear uno nuevo y guardarlo
-                vehiculo = new Vehiculo();
-                vehiculo.setPatente(patenteIngresada);
-                vehiculo.setMarca(txtMarca.getText());
-                vehiculo.setModelo(txtModelo.getText());
-                vehiculo.setMarca(txtMarca.getText());
-                vehiculo.setCliente(clienteSeleccionado);
-
-                vehiculoDao.agregarVehiculo(vehiculo);
-            }
-
-            //Crear el trabajo
+            // 3️⃣ Crear el trabajo
             Trabajo t = new Trabajo();
             t.setDescripcion(txtDescripcion.getText());
             t.setVehiculo(vehiculo);
             t.setFecha(LocalDate.now());
 
-            //Leer los valores elegidos de los ComboBox
+            // 4️⃣ Leer los valores elegidos de los ComboBox
             String pagoSeleccionado = cbEstadoPago.getValue();
             String facturacionSeleccionada = cbEstadoFacturacion.getValue();
 
@@ -282,7 +326,7 @@ public class AgregarTrabajoController {
                 lblMensaje.setText("⚠️ Seleccione el estado de pago y facturación.");
                 return;
             }
-            //Leer y validar monto
+            // Leer y validar monto
             String montoTexto = txtMonto.getText().trim();
             if (montoTexto.isEmpty()) {
                 lblMensaje.setText("⚠️ Ingrese el monto del trabajo.");
@@ -296,7 +340,7 @@ public class AgregarTrabajoController {
                 lblMensaje.setText("⚠️ El monto debe ser un número válido.");
                 return;
             }
-            //Asignar los estados
+            // 5️⃣ Asignar los estados
             t.setEstadopago(Trabajo.EstadoPago.valueOf(pagoSeleccionado));
             t.setEstadotrabajo(Trabajo.EstadoTrabajo.PENDIENTE);
             t.setEstadodefacturacion(Trabajo.Estadodefacturacion.valueOf(facturacionSeleccionada));
@@ -322,6 +366,7 @@ public class AgregarTrabajoController {
                 if (clienteSeleccionado.getNumero() != telefonoIngresado) {
                     clienteSeleccionado.setNumero(telefonoIngresado);
                     clienteManager.actualizarTelefono(clienteSeleccionado);
+                    System.out.println("📞 Teléfono actualizado en la BD para " + clienteSeleccionado.getNombre());
                 }
             }
 
@@ -338,62 +383,47 @@ public class AgregarTrabajoController {
                 t.setAseguradora(null); // o asignás la de ID 1 (“Sin aseguradora”)
                 t.setOrdenDeProvision(null);
             }
+            Empleado empleadoSeleccionado = cmbEmpleado.getValue();
 
-            //Guardar en BD
+            if (empleadoSeleccionado == null) {
+                lblMensaje.setText("⚠️ Debe seleccionar un empleado para asignar el trabajo.");
+                return;
+            }
+
+            // 6️⃣ Guardar en BD
             trabajoDao.agregarTrabajo(t);
-            //asignar empl
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/AsignarEmpleados.fxml"));
+            empleadoDao.agregarTrabajoAEmpleado(
+                    empleadoSeleccionado.getIdEmpleado(),
+                    t.getIdTrabajo()
+            );
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/ConfirmacionTrabajo.fxml"));
             Parent root = loader.load();
 
-            AsignarEmpleadosController controller = loader.getController();
-            controller.setTrabajo(t);
-
             Stage stage = new Stage();
-            stage.setTitle("Asignar empleados");
+            stage.setTitle("Confirmación");
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+
+            // 🚫 Deshabilita el botón “X”
+            stage.setOnCloseRequest(event -> event.consume());
+
             stage.showAndWait();
 
-            FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/Controles/ConfirmacionTrabajo.fxml"));
-            Parent root2 = loader2.load();
-
-            Stage stage2 = new Stage();
-            stage2.setTitle("Confirmación");
-            stage2.setScene(new Scene(root2));
-            stage2.initModality(Modality.APPLICATION_MODAL);
-            stage2.setResizable(false);
 
 
-            stage2.setOnCloseRequest(event -> event.consume());
-
-            stage2.showAndWait();
-
+            //lblMensaje.setText("✅ Trabajo agregado correctamente.");
             limpiarCampos();
             txtPatente.getScene().getWindow().hide();
 
         } catch (Exception e) {
-            lblMensaje.setText("Error al guardar: " + e.getMessage());
+            lblMensaje.setText("❌ Error al guardar: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
 
-    @FXML
-    private void onAsignarEmpleados() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/AsignarEmpleados.fxml"));
-            Parent root = loader.load();
-            AsignarEmpleadosController ctrl = loader.getController();
-            Stage stage = new Stage();
-            stage.setTitle("Asignar empleados");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-        } catch (Exception e) {
-            e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "Error al abrir la ventana de empleados: " + e.getMessage()).showAndWait();
-        }
-    }
 
 
 
@@ -402,31 +432,67 @@ public class AgregarTrabajoController {
         txtMarca.clear();
         txtModelo.clear();
         txtDescripcion.clear();
-        txtCliente.clear();
         txtTelefono.clear();
         txtMonto.clear();
+        cmbPatente.getSelectionModel().clearSelection();
+        cmbCliente.getSelectionModel().clearSelection();
+        cmbEmpleado.getSelectionModel().clearSelection();
     }
 
     @FXML
     private void onCancelar() {
+        // Cierra la ventana actual
         txtPatente.getScene().getWindow().hide();
     }
     @FXML
     private void onAgregarNuevoCliente() {
         try {
+            // Cargar el FXML del nuevo cliente
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/NuevoCliente.fxml"));
             Parent root = loader.load();
+
+            // Crear una nueva ventana (Stage)
             Stage stage = new Stage();
             stage.setTitle("Registrar nuevo cliente");
             stage.setScene(new Scene(root));
 
+            // Que sea modal (bloquea la ventana anterior hasta cerrar esta)
             stage.initModality(Modality.APPLICATION_MODAL);
 
+            // Mostrar la ventana
             stage.showAndWait();
+
+            // Luego podrías recuperar el cliente agregado (si devuelves datos desde el controller)
+            // NuevoClienteController controller = loader.getController();
+            // Cliente nuevoCliente = controller.getClienteCreado();
 
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Error al abrir la ventana de nuevo cliente: " + e.getMessage());
+        }
+    }
+
+    private void filtrarPatentesPorCliente(Cliente cliente) {
+        cmbPatente.getItems().clear();
+        cmbPatente.getSelectionModel().clearSelection();
+
+        if (cliente == null) {
+            // Cargar todos los vehículos de la lista maestra
+            cmbPatente.getItems().setAll(this.todosLosVehiculos);
+            cmbPatente.setPromptText("Seleccione la patente...");
+        } else {
+            // Filtrar la lista maestra por el cliente seleccionado
+            List<Vehiculo> patentesFiltradas = this.todosLosVehiculos.stream()
+                    .filter(v -> v.getCliente() != null && v.getCliente().getIdCliente() == cliente.getIdCliente())
+                    .toList();
+
+            cmbPatente.getItems().setAll(patentesFiltradas);
+
+            if (patentesFiltradas.isEmpty()) {
+                cmbPatente.setPromptText("No hay patentes registradas para este cliente.");
+            } else {
+                cmbPatente.getSelectionModel().selectFirst();
+            }
         }
     }
 }

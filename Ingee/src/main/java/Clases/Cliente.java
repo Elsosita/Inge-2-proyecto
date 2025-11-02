@@ -71,6 +71,14 @@ public class Cliente {
         this.numero = numero;
     }
 
+    @Override
+    public String toString() {
+        // Retorna el nombre del cliente. Así, cuando un objeto Cliente
+        // se use en un ComboBox, ListView, o se imprima en un TextField,
+        // mostrará su nombre en lugar de "Clases.Cliente@...".
+        return this.nombre;
+    }
+
     public void agregarVehiculo(Vehiculo v) {
         vehiculos.add(v);
         v.setCliente(this);
