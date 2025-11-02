@@ -88,6 +88,7 @@ public class ConsultarTrabajoController {
     @FXML
     private void onModificar() {
         Trabajo trabajoSeleccionado = tablaTrabajos.getSelectionModel().getSelectedItem();
+        //trabajoSeleccionado.setEstadodefacturacion();
         if (trabajoSeleccionado == null) {
             mostrarAlerta("Debe seleccionar un trabajo para modificar.");
             return;

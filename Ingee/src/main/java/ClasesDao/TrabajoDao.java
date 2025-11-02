@@ -257,6 +257,7 @@ public class TrabajoDao {
         t.setMonto(rs.getFloat("monto"));
         t.setEstadopago(Trabajo.EstadoPago.valueOf(rs.getString("estadoPago")));
         t.setEstadotrabajo(Trabajo.EstadoTrabajo.valueOf(rs.getString("estadoTrabajo")));
+        t.setEstadodefacturacion(Trabajo.Estadodefacturacion.valueOf(rs.getString("estadodefacturacion")));
 
         Vehiculo v = new Vehiculo();
         v.setPatente(rs.getString("patente"));

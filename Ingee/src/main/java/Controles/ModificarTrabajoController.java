@@ -44,9 +44,9 @@ public class ModificarTrabajoController {
 
         if (trabajo.getEstadotrabajo() != null)
             cbEstadoPago.setValue(trabajo.getEstadotrabajo().name());
-
+        System.out.print(trabajo.getEstadodefacturacion());
         if (trabajo.getEstadodefacturacion() != null)
-            cbEstadoFacturacion.setValue(trabajo.getEstadodefacturacion().name());
+            cbEstadoFacturacion.setValue(trabajo.getEstadodefacturacion().toString());
     }
 
     @FXML
