@@ -22,6 +22,12 @@ import javafx.animation.Timeline;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.IOException;
+import java.io.File;
+import javafx.scene.control.Alert;
+import javafx.stage.FileChooser;
 
 
 
@@ -81,6 +87,7 @@ public class MainController {
         cargarTrabajosDelDia();
         txtNombreVentana.setText("Trabajos del dia");
         trabajoManager = TrabajoManager.getInstancia();
+        btnGuardarNoFacturados.setVisible(false);
 
     }
 
@@ -290,10 +297,69 @@ public class MainController {
         }
     }
 
+    @FXML
+    private Button btnGuardarNoFacturados;
 
     @FXML
     private void mostrarTrabajosNoFacturados() {
-        cargarTrabajosNoFacturados(); // Refresca la tabla
+        txtNombreVentana.setText("Trabajos no facturados");
+        cargarTrabajosNoFacturados();
+        btnGuardarNoFacturados.setVisible(true); // <-- aparece el botón
+    }
+
+    @FXML
+    private void guardarTrabajosNoFacturados() {
+        try {
+            List<Trabajo> trabajos = trabajoManager.obtenerTrabajosNoFacturados();
+
+            if (trabajos.isEmpty()) {
+                Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+                alerta.setTitle("Guardar Trabajos");
+                alerta.setHeaderText(null);
+                alerta.setContentText("No hay trabajos no facturados para guardar.");
+                alerta.showAndWait();
+                return;
+            }
+
+            // Abrir un diálogo para elegir dónde guardar
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Guardar archivo de Trabajos No Facturados");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("TXT", "*.txt"));
+            fileChooser.setInitialFileName("trabajos_no_facturados.txt"); // nombre por defecto
+            File file = fileChooser.showSaveDialog(tablaTrabajos.getScene().getWindow());
+
+            if (file == null) return; // Si el usuario cancela
+
+            // Guardar los datos en el archivo seleccionado
+            try (PrintWriter pw = new PrintWriter(new FileWriter(file))) {
+                for (Trabajo t : trabajos) {
+                    String linea = String.format(
+                            "Patente: %s, Modelo: %s, Cliente: %s, Telefono: %s, Descripcion: %s, Fecha: %s",
+                            t.getVehiculo() != null ? t.getVehiculo().getPatente() : "",
+                            t.getVehiculo() != null ? t.getVehiculo().getModelo() : "",
+                            t.getVehiculo() != null && t.getVehiculo().getCliente() != null ? t.getVehiculo().getCliente().getNombre() : "",
+                            t.getVehiculo() != null && t.getVehiculo().getCliente() != null ? t.getVehiculo().getCliente().getNumero() : "",
+                            t.getDescripcion(),
+                            t.getFecha() != null ? t.getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : ""
+                    );
+                    pw.println(linea);
+                }
+            }
+
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setTitle("Guardar Trabajos");
+            alerta.setHeaderText(null);
+            alerta.setContentText("Archivo guardado correctamente en:\n" + file.getAbsolutePath());
+            alerta.showAndWait();
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+            Alert alerta = new Alert(Alert.AlertType.ERROR);
+            alerta.setTitle("Error");
+            alerta.setHeaderText(null);
+            alerta.setContentText("No se pudo guardar el archivo: " + e.getMessage());
+            alerta.showAndWait();
+        }
     }
 
 }

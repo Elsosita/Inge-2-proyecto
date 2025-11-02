@@ -41,6 +41,7 @@
             <Button onAction="#cerrarCaja" styleClass="boton-menu" text="Cerrar Caja" />
             <Button onAction="#mostrarTrabajosNoFacturados" styleClass="boton-menu" text="Ver trabajos no facturados" />
          <Button onAction="#onConsultarTrabajo" styleClass="boton-menu" text="Consultar trabajos" />
+            <Button fx:id="btnGuardarNoFacturados" onAction="#guardarTrabajosNoFacturados" styleClass="boton-menu" text="Guardar no facturados" visible="false"/>
             <Button onAction="#initialize" styleClass="boton-Volver" text="Volver" />
 
         </VBox>
