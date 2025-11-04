@@ -157,15 +157,9 @@ public class CajaManager {
         return sueldoFijo + comision;
     }
 
-    // ==========================================================
-    // LÓGICA DE VISUALIZACIÓN: SIMULAR CIERRE PARA EL CONTROLLER
-    // ==========================================================
 
-    /**
-     * Simula el proceso de cierre para calcular los montos finales 
-     * (incluyendo el pago de sueldos).
-     * @return Una nueva instancia de Caja con los montos finales simulados.
-     */
+
+
     public Caja simularCierreCajaConSueldos() throws SQLException {
         Caja cajaAbiertaActual = getCajaAbierta();
 

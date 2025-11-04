@@ -44,7 +44,7 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);
 }
 .boton-Volver {
-    -fx-background-color: #F08080;
+    -fx-background-color: #DC3545;
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-radius: 10;

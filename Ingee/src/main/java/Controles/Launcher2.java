@@ -13,6 +13,28 @@ public class Launcher2 extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
+            // 🔥 PASO 1: Cargar la vista de LOGIN 🔥
+            FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/Controles/LoginView.fxml"));
+            Parent loginRoot = loginLoader.load();
+
+            // 🔥 1. CAPTURAR LA INSTANCIA DEL CONTROLLER 🔥
+            LoginController loginController = loginLoader.getController();
+
+            Stage loginStage = new Stage();
+            loginStage.setTitle("Acceso al Sistema");
+            loginStage.setScene(new Scene(loginRoot));
+            loginStage.initModality(Modality.APPLICATION_MODAL);
+            loginStage.setResizable(false);
+
+            loginStage.showAndWait(); // Espera el cierre
+
+            // 🔥 2. COMPROBACIÓN CORREGIDA 🔥
+            // Llama al método en el objeto 'loginController', no en la clase.
+            if (!loginController.isLoginExitoso()) {
+                // Si el login no fue exitoso (el usuario cerró con la X o falló al ingresar)
+                System.exit(0); // Termina la aplicación inmediatamente
+                return; // Detiene la ejecución del resto del método start
+            }
             //Cargar vista de apertura de caja
             FXMLLoader cajaLoader = new FXMLLoader(getClass().getResource("/Controles/AperturaCajaView.fxml"));
             Parent cajaRoot = cajaLoader.load();

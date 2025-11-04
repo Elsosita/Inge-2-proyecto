@@ -1,0 +1,57 @@
+/* cerrar_caja.css */
+
+/* 1. Fondo principal del Root */
+.root-caja {
+    -fx-background-color: #F0F4F8; /* Fondo claro/Azul pálido (Consistente) */
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* Título */
+.label-titulo {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495E;
+    -fx-padding: 0 0 10px 0;
+}
+
+/* Títulos de los inputs (ej: Monto Total) */
+.label-input-titulo {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* 2. Estilo para Campos de Lectura (ReadOnly TextFields) */
+.text-field-readonly {
+    -fx-font-size: 16px;
+    -fx-padding: 10px;
+    -fx-border-color: #C0C0C0; /* Borde más sutil */
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-background-color: #ECEFF1; /* Fondo gris claro para indicar 'read only' */
+    -fx-text-fill: #1C2833; /* Texto oscuro */
+    -fx-min-height: 40px;
+}
+
+/* 3. Botones */
+.button {
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+/* Botón Aceptar (Principal) */
+.button-aceptar {
+    -fx-background-color: #1976D2; /* Azul fuerte */
+    -fx-font-size: 16px;
+    -fx-padding: 10px 30px;
+}
+
+/* Botón Ver Detalle (Secundario) */
+.button-secundario {
+    -fx-background-color: #6C757D; /* Gris sutil */
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+}

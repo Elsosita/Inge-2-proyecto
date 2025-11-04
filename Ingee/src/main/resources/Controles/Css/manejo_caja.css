@@ -1,0 +1,51 @@
+/* manejo_caja.css */
+
+/* 1. Fondo principal y estilo del Root */
+/* Usar un color que contraste con el fondo de la ventana principal si es necesario */
+.root-main {
+    -fx-background-color: #F8F8F8;
+}
+
+/* 2. Estilo específico para el título */
+.label-titulo-caja {
+    /* Usamos estilos similares a los títulos Tommy que ya tienes */
+    -fx-font-family: "TOMMY";
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495E;
+    -fx-padding: 10px 0 20px 0;
+}
+
+.boton-menu {
+    -fx-background-color: #3b82f6;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10; /* Puedes ajustar esto para más cuadrado si quieres */
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);
+    /* Permitimos que el FXML controle el tamaño (prefHeight/prefWidth) */
+}
+.boton-menu:hover {
+    -fx-background-color: #2563eb;
+}
+.boton-menu:pressed {
+    -fx-background-color: #1e40af;
+}
+
+/* Estilo para el botón Volver */
+.boton-Volver {
+    -fx-background-color: #ef4444; /* Rojo para volver/cancelar */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+.boton-Volver:hover {
+    -fx-background-color: #CD5C5C;
+}
+
+/* El fondo principal de la ventana (para el estilo Root) */
+.root-main {
+    -fx-background-color: #F8F8F8; /* Un color base neutro */
+}

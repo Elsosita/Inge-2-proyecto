@@ -80,7 +80,7 @@ public class AgregarTrabajoController {
                     .filter(a -> a.getIdAseguradora() != 1) // 👈 Ignora la de id 1
                     .toList();
             cbAseguradora.getItems().setAll(aseguradorasFiltradas);
-            // 🔥 Cargar Empleados en el ComboBox
+
             List<Empleado> empleados = empleadoDao.listarTodos();
             cmbEmpleado.getItems().setAll(empleados);
             cmbEmpleado.setCellFactory(param -> new ListCell<>() {
@@ -98,7 +98,7 @@ public class AgregarTrabajoController {
                 }
             });
 
-            List<Vehiculo> vehiculos = vehiculoDao.obtenerTodosVehiculos(); // <--- REQUIERE ESTE MÉTODO EN DAO
+            List<Vehiculo> vehiculos = vehiculoDao.obtenerTodosVehiculos();
             cmbPatente.getItems().setAll(vehiculos);
 
 
@@ -124,37 +124,30 @@ public class AgregarTrabajoController {
                     txtMarca.setText(newVal.getMarca());
                     txtModelo.setText(newVal.getModelo());
                     txtPatente.clear();
-                    // Seleccionar el cliente correcto en el ComboBox de Clientes
+
                     Cliente clienteDePatente = newVal.getCliente();
 
-                    // 🔥 INICIO DE LA LÓGICA DE VALIDACIÓN 🔥
-                    if (clienteSeleccionado != null &&
-                            clienteDePatente != null &&
-                            clienteDePatente.getIdCliente() != clienteSeleccionado.getIdCliente())
-                    {
-                        // La patente pertenece a otro cliente.
-                        // Limpiamos el cliente actual y el teléfono.
-                        cmbCliente.getSelectionModel().clearSelection();
 
-                        // Opcional: Mostrar un error
-                        lblMensaje.setText("⚠️ Patente no pertenece al cliente previamente seleccionado.");
-
-                    } else if (clienteDePatente != null) {
-                        // Si no hay conflicto o si el cliente no estaba seleccionado,
-                        // actualizamos el combo de cliente.
+                    if (clienteDePatente != null) {
+                        // Esto actualizará cmbCliente.setValue(Cliente B) y disparará el listener de cmbCliente
                         cmbCliente.setValue(clienteDePatente);
-                        lblMensaje.setText(""); // Limpiar mensaje
-                        txtPatente.clear();
+                        lblMensaje.setText("");
+
+
+                    } else {
+
+                        cmbCliente.getSelectionModel().clearSelection();
                     }
-                    // 🔥 FIN DE LA LÓGICA DE VALIDACIÓN 🔥
+
 
                 } else {
+
                     txtMarca.clear();
                     txtModelo.clear();
                     cmbCliente.getSelectionModel().clearSelection();
                 }
             });
-            // 🔥 INICIO: NUEVA LÓGICA DE COMBOBOX CLIENTE 🔥
+
 
             // Cargar TODOS los clientes al iniciar
             List<Cliente> clientes = clienteManager.obtenerTodos(); // Asumo que existe este método en ClienteManager
@@ -277,6 +270,7 @@ public class AgregarTrabajoController {
                 lblMensaje.setText("⚠️ Seleccione un cliente antes de continuar.");
                 return;
             }
+
 
             Vehiculo vehiculo;
 
@@ -451,24 +445,42 @@ public class AgregarTrabajoController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/NuevoCliente.fxml"));
             Parent root = loader.load();
 
-            // Crear una nueva ventana (Stage)
+            // 🔥 OBTENER EL CONTROLADOR
+            NuevoClienteController controller = loader.getController();
+
+            // Crear y configurar la ventana modal
             Stage stage = new Stage();
             stage.setTitle("Registrar nuevo cliente");
             stage.setScene(new Scene(root));
-
-            // Que sea modal (bloquea la ventana anterior hasta cerrar esta)
             stage.initModality(Modality.APPLICATION_MODAL);
 
-            // Mostrar la ventana
+            // Mostrar la ventana y esperar a que se cierre
             stage.showAndWait();
 
-            // Luego podrías recuperar el cliente agregado (si devuelves datos desde el controller)
-            // NuevoClienteController controller = loader.getController();
-            // Cliente nuevoCliente = controller.getClienteCreado();
+            // 🔥 1. CAPTURAR EL OBJETO DEVUELTO POR LA VENTANA SECUNDARIA
+            Cliente nuevoCliente = controller.getClienteCreado();
+
+            // 🔥 2. VERIFICAR SI SE CREÓ UN CLIENTE Y ACTUALIZAR EL COMBO
+            if (nuevoCliente != null) {
+
+                // ✅ AÑADIR el nuevo cliente al ObservableList del ComboBox
+                cmbCliente.getItems().add(nuevoCliente);
+
+                // ✅ SELECCIONAR el nuevo cliente en el ComboBox
+                cmbCliente.setValue(nuevoCliente);
+
+                // ✅ Mostrar un mensaje de éxito
+                lblMensaje.setText("✅ Cliente " + nuevoCliente.getNombre() + " agregado y seleccionado.");
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Error al abrir la ventana de nuevo cliente: " + e.getMessage());
+        }
+        // Añadir catch para otras excepciones si es necesario
+        catch (Exception e) {
+            e.printStackTrace();
+            lblMensaje.setText("❌ Error inesperado al procesar el cliente.");
         }
     }
 

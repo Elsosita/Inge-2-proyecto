@@ -1,0 +1,64 @@
+/* modificar_trabajo.css */
+
+/* 1. Estilo Root General */
+.root-modificar {
+    -fx-background-color: #F8F8F8; /* Fondo uniforme y claro */
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* 2. Título */
+.label-titulo {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495E;
+    -fx-padding: 0 0 10px 0;
+}
+
+/* 3. Etiquetas de Input (GridPane) */
+.label-input-titulo {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* 4. Inputs Editables (TextField y ComboBox) */
+.text-field, .combo-box {
+    -fx-font-size: 14px;
+    -fx-padding: 8px;
+    -fx-border-color: #CED4DA;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-background-color: white;
+    -fx-min-height: 50px;
+}
+
+/* 5. Inputs de Solo Lectura (ID, Cliente, Vehículo) */
+.text-field-readonly {
+    -fx-font-size: 14px;
+    -fx-padding: 8px;
+    -fx-border-color: #BDC3C7;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-background-color: #ECEFF1; /* Fondo gris claro para indicar 'read only' */
+    -fx-text-fill: #1C2833;
+    -fx-min-height: 38px;
+}
+
+/* 6. Botones (Consistencia Global) */
+.button {
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+    -fx-text-fill: white;
+}
+
+.button-principal {
+    -fx-background-color: #1976D2;
+}
+
+.button-cancelar {
+    -fx-background-color: #DC3545;
+}

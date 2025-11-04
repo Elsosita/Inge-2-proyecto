@@ -1,0 +1,104 @@
+¡Perfecto! Vamos a darle ese estilo coherente a tu ventana de Apertura de Caja utilizando tu archivo Caja.css.
+
+El problema es que la mayoría de los estilos están definidos en línea (usando el atributo style="..."), lo cual tiene la máxima prioridad y anula tu CSS externo. Además, la estructura está basada en coordenadas absolutas (AnchorPane), que no se ajusta bien a los estilos de contenedor.
+
+Aquí tienes el plan para reestructurar el FXML para que use el CSS y luego el CSS para el diseño.
+
+🛠️ 1. Modificación de AperturaCajaView.fxml
+Vamos a eliminar todos los estilos en línea (style=..., font=...), envolver el contenido en un VBox central para darle el efecto de "tarjeta" y vincular el archivo Caja.css.
+
+AperturaCajaView.fxml (Versión Estilizada)
+XML
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="380.0" prefWidth="450.0"
+            styleClass="root-apertura" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.AperturaCajaController">
+
+    <VBox alignment="CENTER" spacing="15.0" styleClass="vbox-apertura"
+          AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="30.0">
+
+        <Label styleClass="label-titulo" text="APERTURA DE CAJA" />
+
+        <HBox alignment="CENTER_LEFT" spacing="20.0">
+            <Label text="Fecha:" styleClass="label-fecha-hora" />
+            <Label fx:id="lblFecha" styleClass="label-valor" />
+            <Label text="Hora:" styleClass="label-fecha-hora" />
+            <Label fx:id="lblHora" styleClass="label-valor" />
+        </HBox>
+
+        <Label text="Monto de Apertura:" styleClass="label-input-titulo" />
+        <TextField fx:id="txtMontoInicial" promptText="0.00" styleClass="text-field-caja" />
+
+        <Button fx:id="btnAceptar" onAction="#onAceptar" prefWidth="120.0" styleClass="button-aceptar" text="Aceptar" />
+
+    </VBox>
+
+    <stylesheets>
+        <URL value="@Css/Caja.css" />
+    </stylesheets>
+</AnchorPane>
+🎨 2. Estilos para Caja.css
+Este archivo CSS aplica los estilos de fondo, el contenedor central y da un estilo uniforme a los campos, similar al login.
+
+Caja.css
+CSS
+
+/* Caja.css */
+
+/* Estilo base para el Root (Fondo de la ventana) */
+.root-apertura {
+    -fx-background-color: #F0F4F8; /* Gris muy claro/Azul pálido (Coherente con Login) */
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+
+
+/* Título de la ventana */
+.label-titulo {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495E; /* Azul oscuro */
+}
+
+/* Estilos para las etiquetas de Fecha/Hora */
+.label-fecha-hora {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6C757D;
+}
+.label-valor {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495E;
+}
+
+/* Campo de Monto Inicial */
+.text-field-caja {
+    -fx-font-size: 16px;
+    -fx-padding: 10px;
+    -fx-border-color: #BDC3C7;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-alignment: CENTER_RIGHT; /* Alinea el monto a la derecha */
+}
+
+/* Botón Aceptar */
+.button-aceptar {
+    -fx-background-color: #1976D2; /* Azul fuerte */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+}

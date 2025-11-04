@@ -1,0 +1,55 @@
+/* retiro.css */
+
+/* Estilo base para el Root (Fondo de la ventana) */
+.root-retiro {
+    -fx-background-color: #F8F8F8; /* Fondo claro */
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* Título */
+.label-titulo {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495E;
+    -fx-padding: 0 0 10px 0;
+}
+
+/* Títulos de los inputs */
+.label-input-titulo {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+/* Estilos de entrada (Compartidos con otros formularios) */
+.text-field, .combo-box, .text-area {
+    -fx-font-size: 14px;
+    -fx-padding: 8px;
+    -fx-border-color: #CED4DA;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-background-color: white;
+    -fx-min-height: 50px; /* Altura uniforme */
+}
+
+/* Estilo para el área de texto (TextArea) */
+.text-area {
+    -fx-padding: 5px; /* Relleno ligeramente menor para el TextArea */
+}
+
+/* Efecto al enfocar */
+.text-field:focused, .combo-box:focused, .text-area:focused {
+    -fx-border-color: #007BFF;
+    -fx-border-width: 2px;
+}
+
+/* Botón Aceptar (Similar al Login/Pago) */
+.button-aceptar {
+    -fx-background-color: #1976D2; /* Azul fuerte */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+}

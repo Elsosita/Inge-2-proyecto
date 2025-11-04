@@ -1,0 +1,47 @@
+/* pago.css */
+
+/* Fondo para el Root (similar al login/apertura) */
+.root-pago {
+    -fx-background-color: #F8F8F8; /* Fondo claro y limpio */
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* Título */
+.label-titulo {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495E;
+}
+
+/* Campos de entrada (Heredados del estilo general) */
+.text-field, .combo-box {
+    -fx-font-size: 14px;
+    -fx-padding: 8px;
+    -fx-border-color: #CED4DA;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-background-color: white;
+    /* Aseguramos la misma altura que en AgregarTrabajo */
+    -fx-min-height: 38px;
+}
+
+/* Botón Aceptar (Principal) */
+.button-aceptar {
+    -fx-background-color: #1976D2; /* Azul fuerte */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+}
+
+/* Botón Cancelar (Secundario/Advertencia) */
+.button-cancelar {
+    -fx-background-color: #EF4444; /* Rojo de advertencia */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+}

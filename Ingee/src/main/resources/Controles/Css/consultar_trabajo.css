@@ -1,0 +1,68 @@
+/* consultar_trabajo.css */
+
+/* 1. Estilo Root General */
+.root-consulta {
+    -fx-background-color: #F8F8F8; /* Fondo claro y uniforme */
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* 2. Cabecera (Top) y Título */
+.header-consulta {
+    -fx-background-color: #E8F8F5; /* Un color suave para la cabecera */
+    -fx-border-color: #CCCCCC;
+    -fx-border-width: 0 0 1 0; /* Solo borde inferior */
+}
+
+.label-titulo-principal {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #34495E;
+}
+
+/* 3. Filtros e Inputs (Consistencia con otros formularios) */
+.label-filtro {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.text-field {
+    -fx-font-size: 14px;
+    -fx-padding: 8px;
+    -fx-border-color: #CED4DA;
+    -fx-border-radius: 6px;
+    -fx-background-color: white;
+    -fx-min-height: 38px;
+}
+
+.text-field:focused {
+    -fx-border-color: #007BFF;
+    -fx-border-width: 2px;
+}
+
+/* 4. TableView */
+.tabla-trabajos {
+    -fx-border-color: #CCCCCC;
+    -fx-border-width: 1px;
+    -fx-background-color: white;
+}
+
+/* 5. Botones */
+.button {
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-padding: 10px 15px;
+    -fx-cursor: hand;
+    -fx-text-fill: white;
+}
+
+.button-principal {
+    -fx-background-color: #1976D2; /* Azul para la acción principal (Modificar) */
+}
+
+.button-secundario {
+    -fx-background-color: #6C757D; /* Gris para la acción de búsqueda */
+}
+
+.button-cancelar {
+    -fx-background-color: #DC3545; /* Rojo para cerrar */
+}

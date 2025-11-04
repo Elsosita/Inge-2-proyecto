@@ -11,7 +11,7 @@ public class ConexionBD {
 
     private static final String URL = "jdbc:mysql://localhost:3306/GestionVehicular?serverTimezone=UTC";
     private static final String USER = "root";
-    private static final String PASSWORD = "mysql";
+    private static final String PASSWORD = "1234";
 
     private ConexionBD() {
         try {

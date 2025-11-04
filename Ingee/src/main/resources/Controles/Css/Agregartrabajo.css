@@ -1,8 +1,14 @@
 /* Agregartrabajo.css */
 
-/* Estilo base (el root debe tener una clase si no usas .root) */
-.root {
-    -fx-background-color: #E8F8F5; /* Fondo blanco-gris */
+/* 1. Definimos el estilo por ID (Máxima prioridad) */
+#rootAgregarTrabajo {
+    -fx-background-color: #E8F8F5; /* Su color deseado */
+    -fx-padding: 15px;
+}
+
+/* 2. También definimos la clase única (Alta prioridad) */
+.ventana-agregar {
+    -fx-background-color: #E8F8F5; /* Su color deseado */
     -fx-padding: 15px;
 }
 
@@ -55,12 +61,12 @@
 
 /* Botón Guardar */
 .button-guardar {
-    -fx-background-color: #007BFF; /* Verde */
+    -fx-background-color: #007BFF;
 }
 
 /* Botón Cancelar/Secundario */
 .button-cancelar, .button-secundario {
-    -fx-background-color: #6C757D; /* Gris */
+    -fx-background-color: #DC3545;
 }
 
 
