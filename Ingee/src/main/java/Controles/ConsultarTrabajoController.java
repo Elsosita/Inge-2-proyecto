@@ -88,7 +88,6 @@ public class ConsultarTrabajoController {
     @FXML
     private void onModificar() {
         Trabajo trabajoSeleccionado = tablaTrabajos.getSelectionModel().getSelectedItem();
-        //trabajoSeleccionado.setEstadodefacturacion();
         if (trabajoSeleccionado == null) {
             mostrarAlerta("Debe seleccionar un trabajo para modificar.");
             return;
@@ -100,7 +99,7 @@ public class ConsultarTrabajoController {
 
             // obtener el controller de la nueva ventana
             ModificarTrabajoController controller = loader.getController();
-            controller.setTrabajo(trabajoSeleccionado); // le pasamos el trabajo
+            controller.setTrabajo(trabajoSeleccionado);
 
             Stage stage = new Stage();
             stage.setTitle("Modificar trabajo");
@@ -108,7 +107,6 @@ public class ConsultarTrabajoController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
 
-            // refrescar la tabla después de cerrar
             cargarTrabajos();
 
         } catch (IOException e) {
@@ -152,7 +150,7 @@ public class ConsultarTrabajoController {
 
     @FXML
     private void onCerrarVentana() {
-        // 🔹 Cierra la ventana actual
+        //Cierra la ventana actual
         Stage stage = (Stage) txtBuscar.getScene().getWindow();
         stage.close();
     }

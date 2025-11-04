@@ -73,7 +73,7 @@ public class AperturaCajaController {
             CajaDao cajaDao = CajaDao.getInstancia();
             cajaDao.abrirCaja(caja);
 
-            // 🔥 Guarda la caja abierta para toda la sesión
+            //Guarda la caja abierta para toda la sesión
             CajaManager.setCajaAbierta(caja);
 
             ((Stage) btnAceptar.getScene().getWindow()).close();

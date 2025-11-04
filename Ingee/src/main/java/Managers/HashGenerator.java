@@ -8,7 +8,7 @@ public class HashGenerator {
 
     public static void main(String[] args) {
         // Establece la contraseña inicial que deseas usar para el login (ej: 'admin123')
-        String passwordPlana = "PONE TU CONTRASEÑA ACA";
+        String passwordPlana = "pirulo";
 
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");

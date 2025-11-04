@@ -20,7 +20,7 @@ public class LoginController {
     private final AuthManager authManager = AuthManager.getInstancia();
     private boolean loginExitoso = false;
 
-    // 🔥 NUEVO GETTER 🔥
+    // NUEVO GETTER
     public boolean isLoginExitoso() {
         return loginExitoso;
     }

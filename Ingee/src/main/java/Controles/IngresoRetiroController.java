@@ -44,11 +44,11 @@ public class IngresoRetiroController implements Initializable {
             retiroDao = RetiroDao.getInstancia();
             empleadoDao = EmpleadoDao.getInstancia();
 
-            // Cargar empleados en el ComboBox
+
             List<Empleado> empleados = empleadoDao.listarTodos();
             comboEmpleado.getItems().setAll(empleados);
 
-            // Mostrar nombre del empleado en el combo
+
             comboEmpleado.setConverter(new StringConverter<>() {
                 @Override
                 public String toString(Empleado empleado) {

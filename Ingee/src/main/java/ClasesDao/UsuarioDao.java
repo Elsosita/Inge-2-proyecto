@@ -10,9 +10,7 @@ public class UsuarioDao {
         this.conexion = ConexionBD.getInstance().getConnection();
     }
 
-    // --- Métodos de CRUD (Simplificados) ---
 
-    // 1. Método que necesitará el AuthManager
     public Usuario buscarPorNombreUsuario(String nombreUsuario) throws SQLException {
         String sql = "SELECT id, nombreUsuario, passwordHash, rol FROM Usuario WHERE nombreUsuario = ?";
         try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
@@ -28,10 +26,9 @@ public class UsuarioDao {
                 }
             }
         }
-        return null; // Usuario no encontrado
+        return null;
     }
 
-    // 2. Método para insertar el usuario (necesario para el primer registro)
     public void insertar(Usuario u) throws SQLException {
         String sql = "INSERT INTO Usuario (nombreUsuario, passwordHash, rol) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {

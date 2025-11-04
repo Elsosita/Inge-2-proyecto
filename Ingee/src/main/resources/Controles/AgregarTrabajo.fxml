@@ -1,54 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.Priority?>
-<?import javafx.scene.control.Separator?>
 
-<AnchorPane prefHeight="600.0" prefWidth="650.0" styleClass="root" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.AgregarTrabajoController">
+<AnchorPane prefHeight="845.0" prefWidth="655.0" styleClass="root" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controles.AgregarTrabajoController">
 
-    <VBox spacing="10" AnchorPane.topAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0">
+    <VBox spacing="10" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
 
         <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 0 0 5 0;" text="Nuevo Trabajo" />
 
         <Label style="-fx-font-weight: bold; -fx-size: 16px;" text="1. Datos del Cliente" />
         <GridPane hgap="10" vgap="5">
             <columnConstraints>
-                <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
-                <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
             </columnConstraints>
 
-            <ComboBox fx:id="cmbCliente" promptText="Seleccione el cliente" GridPane.columnIndex="0" GridPane.rowIndex="0" maxWidth="Infinity" />
-            <TextField fx:id="txtTelefono" editable="false" promptText="Teléfono del cliente" GridPane.columnIndex="1" GridPane.rowIndex="0" maxWidth="Infinity" />
+            <ComboBox fx:id="cmbCliente" maxWidth="Infinity" promptText="Seleccione el cliente" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <TextField fx:id="txtTelefono" editable="false" maxWidth="Infinity" promptText="Teléfono del cliente" GridPane.columnIndex="1" GridPane.rowIndex="0" />
             <Button mnemonicParsing="false" onAction="#onAgregarNuevoCliente" styleClass="button-guardar" text="Agregar nuevo cliente" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
         </GridPane>
 
-        <Separator/>
+        <Separator />
 
         <Label style="-fx-font-weight: bold; -fx-size: 16px;" text="2. Datos del Vehículo" />
         <GridPane hgap="10" vgap="5">
             <columnConstraints>
-                <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
-                <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
             </columnConstraints>
 
-            <ComboBox fx:id="cmbPatente" promptText="Seleccione la patente" GridPane.columnIndex="0" GridPane.rowIndex="0" maxWidth="Infinity" />
-            <TextField fx:id="txtPatente" promptText="O ingrese patente nueva aquí" GridPane.columnIndex="1" GridPane.rowIndex="0" maxWidth="Infinity" />
+            <ComboBox fx:id="cmbPatente" maxWidth="Infinity" promptText="Seleccione la patente" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <TextField fx:id="txtPatente" maxWidth="Infinity" promptText="O ingrese patente nueva aquí" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-            <TextField fx:id="txtMarca" promptText="Marca del vehículo" GridPane.columnIndex="0" GridPane.rowIndex="1" maxWidth="Infinity" />
-            <TextField fx:id="txtModelo" promptText="Modelo del vehículo" GridPane.columnIndex="1" GridPane.rowIndex="1" maxWidth="Infinity" />
+            <TextField fx:id="txtMarca" maxWidth="Infinity" promptText="Marca del vehículo" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <TextField fx:id="txtModelo" maxWidth="Infinity" promptText="Modelo del vehículo" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
         </GridPane>
 
-        <Separator/>
+        <Separator />
 
         <Label style="-fx-font-weight: bold; -fx-size: 16px;" text="3. Detalles del Trabajo" />
         <TextField fx:id="txtDescripcion" promptText="Descripción detallada del trabajo" />
@@ -58,7 +67,7 @@
             <ComboBox fx:id="cmbEmpleado" promptText="Seleccione el empleado principal" HBox.hgrow="ALWAYS" />
         </HBox>
 
-        <Separator/>
+        <Separator />
 
         <Label style="-fx-font-weight: bold; -fx-size: 16px;" text="4. Estados (Pago y Facturación)" />
         <HBox spacing="10">
@@ -80,7 +89,7 @@
             </ComboBox>
         </HBox>
 
-        <Separator/>
+        <Separator />
 
         <Label style="-fx-font-weight: bold; -fx-size: 16px;" text="5. Aseguradora y Documentación" />
         <VBox spacing="5"> <HBox alignment="CENTER_LEFT" spacing="10">

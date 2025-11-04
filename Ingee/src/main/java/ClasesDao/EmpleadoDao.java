@@ -34,7 +34,7 @@ public class EmpleadoDao {
         String sql = "INSERT INTO Empleado (nombre, telefono, sueldo) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, e.getNombreEmpleado());
-            stmt.setLong(2, e.getTelefonoEmpleado()); // 👈 mejor long por seguridad
+            stmt.setLong(2, e.getTelefonoEmpleado());
             stmt.setFloat(3, e.getSueldoEmpleado());
             stmt.executeUpdate();
 

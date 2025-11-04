@@ -13,11 +13,11 @@ public class Launcher2 extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            // 🔥 PASO 1: Cargar la vista de LOGIN 🔥
+            // PASO 1: Cargar la vista de LOGIN
             FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/Controles/LoginView.fxml"));
             Parent loginRoot = loginLoader.load();
 
-            // 🔥 1. CAPTURAR LA INSTANCIA DEL CONTROLLER 🔥
+            // 1. CAPTURAR LA INSTANCIA DEL CONTROLLER
             LoginController loginController = loginLoader.getController();
 
             Stage loginStage = new Stage();
@@ -28,7 +28,7 @@ public class Launcher2 extends Application {
 
             loginStage.showAndWait(); // Espera el cierre
 
-            // 🔥 2. COMPROBACIÓN CORREGIDA 🔥
+            // 2. COMPROBACIÓN CORREGIDA
             // Llama al método en el objeto 'loginController', no en la clase.
             if (!loginController.isLoginExitoso()) {
                 // Si el login no fue exitoso (el usuario cerró con la X o falló al ingresar)

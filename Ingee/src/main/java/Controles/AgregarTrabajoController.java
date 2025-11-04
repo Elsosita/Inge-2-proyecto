@@ -38,10 +38,7 @@ public class AgregarTrabajoController {
     @FXML private ComboBox<String> cbEstadoFacturacion;
     @FXML private ComboBox<Cliente> cmbCliente;
     @FXML private ComboBox<String> cbTieneAseguradora;
-    //@FXML private ComboBox<Aseguradora> cbAseguradora;
     @FXML private Checkbox chkOrdenDigital;
-    //@FXML private Button btnSeleccionarArchivo;
-    //@FXML private TextField txtRutaArchivo;
     @FXML private ComboBox<String> cbTipoOrden;
     @FXML private TextField txtRutaArchivo;
     @FXML private Button btnSeleccionarArchivo;
@@ -149,11 +146,11 @@ public class AgregarTrabajoController {
             });
 
 
-            // Cargar TODOS los clientes al iniciar
+
             List<Cliente> clientes = clienteManager.obtenerTodos(); // Asumo que existe este método en ClienteManager
             cmbCliente.getItems().setAll(clientes);
 
-            // Configurar cómo se muestra el objeto Cliente en el ComboBox
+
             cmbCliente.setCellFactory(param -> new ListCell<>() {
                 @Override
                 protected void updateItem(Cliente item, boolean empty) {
@@ -169,7 +166,7 @@ public class AgregarTrabajoController {
                 }
             });
 
-            // Escuchar la SELECCIÓN del cliente
+
             cmbCliente.valueProperty().addListener((obs, oldVal, newVal) -> {
                 if (newVal != null) {
                     clienteSeleccionado = newVal;
@@ -189,7 +186,7 @@ public class AgregarTrabajoController {
 
 
 
-        // Mostrar nombre de aseguradora en el ComboBox
+
         cbAseguradora.setCellFactory(param -> new ListCell<>() {
             @Override
             protected void updateItem(Aseguradora item, boolean empty) {
@@ -204,7 +201,7 @@ public class AgregarTrabajoController {
                 setText(empty || item == null ? "" : item.getNombreAseguradora());
             }
         });
-        //Agregue esto ultimo paso 6
+
         cbAseguradora.valueProperty().addListener((obs, oldVal, newVal) -> {
             boolean tieneAseguradora = newVal != null && newVal.getIdAseguradora() != 1; // 1 = "SinAseguradora"
             cbTipoOrden.setDisable(!tieneAseguradora);
@@ -216,7 +213,7 @@ public class AgregarTrabajoController {
             }
         });
 
-// Escuchar cambios en "Tiene aseguradora"
+
         cbTieneAseguradora.valueProperty().addListener((obs, oldVal, newVal) -> {
             boolean tiene = "Sí".equalsIgnoreCase(newVal);
             cbAseguradora.setDisable(!tiene);
@@ -226,11 +223,11 @@ public class AgregarTrabajoController {
         cbTipoOrden.getItems().addAll("Física", "Digital");
         cbTipoOrden.setValue("Física"); // valor por defecto
 
-// Por defecto el campo de ruta y botón de selección están deshabilitados
+
         txtRutaArchivo.setDisable(true);
         btnSeleccionarArchivo.setDisable(true);
 
-// Desactivar tipo de orden si no hay aseguradora
+
         cbTipoOrden.setDisable(true);
     }
 
@@ -265,7 +262,7 @@ public class AgregarTrabajoController {
     @FXML
     private void onGuardar() {
         try {
-            // 1️⃣ Validar que haya cliente seleccionado
+            //Validar que haya cliente seleccionado
             if (clienteSeleccionado == null) {
                 lblMensaje.setText("⚠️ Seleccione un cliente antes de continuar.");
                 return;
@@ -283,13 +280,13 @@ public class AgregarTrabajoController {
             else {
                 String patenteIngresada = txtPatente.getText().trim();
 
-                // 2️⃣ Validación de datos mínimos para el nuevo vehículo
+                //Validación de datos mínimos para el nuevo vehículo
                 if (patenteIngresada.isEmpty() || txtMarca.getText().isEmpty()) {
                     lblMensaje.setText("⚠️ Ingrese Patente y Marca si está registrando un vehículo nuevo.");
                     return;
                 }
 
-                // 3️⃣ Crear, asignar y registrar el vehículo nuevo
+                //Crear, asignar y registrar el vehículo nuevo
                 Vehiculo vehiculoExistente = vehiculoManager.buscarPorPatente(patenteIngresada);
                 if (vehiculoExistente != null) {
                     lblMensaje.setText("⚠️ Error: La patente ya existe. Seleccione el vehículo del combo.");
@@ -306,13 +303,13 @@ public class AgregarTrabajoController {
                 System.out.println("Vehículo nuevo agregado: " + vehiculo.getPatente());
             }
 
-            // 3️⃣ Crear el trabajo
+            //Crear el trabajo
             Trabajo t = new Trabajo();
             t.setDescripcion(txtDescripcion.getText());
             t.setVehiculo(vehiculo);
             t.setFecha(LocalDate.now());
 
-            // 4️⃣ Leer los valores elegidos de los ComboBox
+            //Leer los valores elegidos de los ComboBox
             String pagoSeleccionado = cbEstadoPago.getValue();
             String facturacionSeleccionada = cbEstadoFacturacion.getValue();
 
@@ -334,7 +331,7 @@ public class AgregarTrabajoController {
                 lblMensaje.setText("⚠️ El monto debe ser un número válido.");
                 return;
             }
-            // 5️⃣ Asignar los estados
+            //Asignar los estados
             t.setEstadopago(Trabajo.EstadoPago.valueOf(pagoSeleccionado));
             t.setEstadotrabajo(Trabajo.EstadoTrabajo.PENDIENTE);
             t.setEstadodefacturacion(Trabajo.Estadodefacturacion.valueOf(facturacionSeleccionada));
@@ -384,7 +381,7 @@ public class AgregarTrabajoController {
                 return;
             }
 
-            // 6️⃣ Guardar en BD
+            //Guardar en BD
             trabajoDao.agregarTrabajo(t);
             empleadoDao.agregarTrabajoAEmpleado(
                     empleadoSeleccionado.getIdEmpleado(),
@@ -445,7 +442,7 @@ public class AgregarTrabajoController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Controles/NuevoCliente.fxml"));
             Parent root = loader.load();
 
-            // 🔥 OBTENER EL CONTROLADOR
+            //OBTENER EL CONTROLADOR
             NuevoClienteController controller = loader.getController();
 
             // Crear y configurar la ventana modal
@@ -457,19 +454,19 @@ public class AgregarTrabajoController {
             // Mostrar la ventana y esperar a que se cierre
             stage.showAndWait();
 
-            // 🔥 1. CAPTURAR EL OBJETO DEVUELTO POR LA VENTANA SECUNDARIA
+            //1. CAPTURAR EL OBJETO DEVUELTO POR LA VENTANA SECUNDARIA
             Cliente nuevoCliente = controller.getClienteCreado();
 
-            // 🔥 2. VERIFICAR SI SE CREÓ UN CLIENTE Y ACTUALIZAR EL COMBO
+            //2. VERIFICAR SI SE CREÓ UN CLIENTE Y ACTUALIZAR EL COMBO
             if (nuevoCliente != null) {
 
-                // ✅ AÑADIR el nuevo cliente al ObservableList del ComboBox
+
                 cmbCliente.getItems().add(nuevoCliente);
 
-                // ✅ SELECCIONAR el nuevo cliente en el ComboBox
+
                 cmbCliente.setValue(nuevoCliente);
 
-                // ✅ Mostrar un mensaje de éxito
+
                 lblMensaje.setText("✅ Cliente " + nuevoCliente.getNombre() + " agregado y seleccionado.");
             }
 
@@ -489,11 +486,11 @@ public class AgregarTrabajoController {
         cmbPatente.getSelectionModel().clearSelection();
 
         if (cliente == null) {
-            // Cargar todos los vehículos de la lista maestra
+
             cmbPatente.getItems().setAll(this.todosLosVehiculos);
             cmbPatente.setPromptText("Seleccione la patente...");
         } else {
-            // Filtrar la lista maestra por el cliente seleccionado
+
             List<Vehiculo> patentesFiltradas = this.todosLosVehiculos.stream()
                     .filter(v -> v.getCliente() != null && v.getCliente().getIdCliente() == cliente.getIdCliente())
                     .toList();
